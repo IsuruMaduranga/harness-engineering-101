@@ -1,0 +1,27 @@
+[book]
+title = "Harness Engineering 101"
+description = "Building AI agents from first principles. The LLM is the brain; the harness is the body."
+authors = ["Isuru Wijesiri"]
+language = "en"
+src = "src"
+
+[build]
+build-dir = "book"
+create-missing = false
+
+[preprocessor.mermaid]
+command = "mdbook-mermaid"
+
+[output.html]
+default-theme = "rust"
+preferred-dark-theme = "ayu"
+git-repository-url = "https://github.com/IsuruMaduranga/harness-engineering-101"
+edit-url-template = "https://github.com/IsuruMaduranga/harness-engineering-101/edit/main/{path}"
+additional-js = ["mermaid.min.js", "mermaid-init.js"]
+
+[output.html.fold]
+enable = true
+level = 1
+
+[output.html.search]
+enable = true

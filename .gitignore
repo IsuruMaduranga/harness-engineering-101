@@ -1,0 +1,9 @@
+# mdBook build output
+/book
+
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
