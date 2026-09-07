@@ -2,6 +2,8 @@
 
 *The LLM is the brain. The harness is the body.*
 
+*Version 1.0 — September 2026.*
+
 A blog series about building AI agents from first principles, published as a
 book with [mdBook](https://rust-lang.github.io/mdBook/).
 

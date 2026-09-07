@@ -5,6 +5,8 @@
 *By [Isuru Wijesiri](https://isuruwijesiri.com) — originally published at
 [isuruwijesiri.com/blog/2026/harness-engineering-101](https://isuruwijesiri.com/blog/2026/harness-engineering-101/).*
 
+*Version 1.0 — September 2026.*
+
 Everyone talks about AI agents like they're a new kind of software: tool calls,
 memory, planning, RAG, MCP, multi-agent orchestration. Stack enough of those
 words together and it starts to feel like there's some hard machine humming
