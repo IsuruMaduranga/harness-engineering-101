@@ -5,7 +5,7 @@
 A blog series about building AI agents from first principles, published as a
 book with [mdBook](https://rust-lang.github.io/mdBook/).
 
-**📖 Read it online: <https://isurumaduranga.github.io/harness-engineering-101/>**
+**📖 Read it online: <https://isuruwijesiri.com/harness-engineering-101/>**
 
 Originally published on my blog:
 <https://isuruwijesiri.com/blog/2026/harness-engineering-101/>. More writing at
@@ -30,7 +30,7 @@ The full introduction and reading order are on the
 | `src/harness/` | The runnable toy harness — one file per stage |
 | `src/diagrams/` | Diagram generators and their generated PNGs |
 | `book.toml` | mdBook configuration |
-| `.github/workflows/deploy.yml` | Builds the book and deploys it to GitHub Pages |
+| `scripts/sync-to-blog.sh` | Builds the book and mounts it into the blog for serving |
 
 ## Building the book locally
 
