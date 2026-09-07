@@ -19,7 +19,6 @@ site-url = "/harness-engineering-101/"
 git-repository-url = "https://github.com/IsuruMaduranga/harness-engineering-101"
 edit-url-template = "https://github.com/IsuruMaduranga/harness-engineering-101/edit/main/{path}"
 additional-js = ["mermaid.min.js", "mermaid-init.js", "site-back-link.js"]
-additional-css = ["sidebar-offset-fix.css"]
 
 [output.html.fold]
 enable = true

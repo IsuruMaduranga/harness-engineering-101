@@ -21,15 +21,12 @@ fi
 echo "Building mdBook in $BOOK_REPO ..."
 ( cd "$BOOK_REPO" && mdbook build )
 
-# Pre-minify the CSS. Cloudflare Auto Minify is stuck "on" for this zone (the
-# settings API and Config Rules can't disable it) and its minifier corrupts
-# mdBook's unminified CSS - it strips required spaces in `@media only screen
-# and (...)`, invalidating the media block that offsets content past the
-# sidebar, so the menu bar overlaps the sidebar. Cloudflare SKIPS files that are
-# already minified (mdBook's own book.js is served untouched), so minifying the
-# CSS ourselves with a correct minifier keeps the media queries valid and stops
-# Cloudflare from touching it. See docs/findings.md in the blog repo.
-echo "Pre-minifying book CSS (works around Cloudflare Auto Minify) ..."
+# Pre-minify the CSS with a correct minifier, purely to cut the payload: mdBook
+# ships readable CSS, and this roughly halves it. The blog serves these files
+# verbatim - its own jekyll-minifier is configured to skip this directory,
+# because that minifier corrupts calc(var(--x)) rules. See docs/findings.md in
+# the blog repo; do not remove the `harness-engineering-101/*` exclude there.
+echo "Pre-minifying book CSS ..."
 find "$BOOK_REPO/book" -name '*.css' -print0 | while IFS= read -r -d '' f; do
   npx -y esbuild "$f" --minify --outfile="$f" --allow-overwrite >/dev/null 2>&1
 done
