@@ -7,15 +7,22 @@
 ---
 
 Chapter 1 showed the wire: a JSON array in, a continuation out. This chapter
-is about the thing on the other end. You do not need to know how to build a
-model to build a harness, the same way you do not need to be a neuroscientist
-to be a physical therapist. But you need a working model of the brain,
-because its training history predicts almost every behavior that will
-surprise you later: why it hallucinates, why it follows the system prompt,
-why tool calls come out as valid JSON, and why "thinking" works.
+is about the thing on the other end.
 
-This chapter has no code. It is the shortest mental model of an LLM that is
-still useful for harness work.
+Here's the whole model, and it is not much: **an LLM does one thing —
+given a sequence of tokens, it outputs a probability for every possible next
+token, and the API server picks one, appends it, and runs the model again.**
+That's it. No goals, no memory, no state between calls. Everything else in
+this chapter is what three stages of training bolted onto that one
+operation, and why that training history predicts almost every behavior that
+will surprise you later: why the model hallucinates, why it follows the
+system prompt, why tool calls come out as valid JSON, and why "thinking"
+works.
+
+You do not need to know how to build a model to build a harness, the same
+way you do not need to be a neuroscientist to be a physical therapist. But
+you do need this much. This chapter has no code — it is the shortest mental
+model of an LLM that is still useful for harness work.
 
 ## One operation, repeated
 

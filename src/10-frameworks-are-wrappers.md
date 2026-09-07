@@ -71,7 +71,10 @@ field points at models-plus-thin-harness, not at deep abstraction stacks.
 
 ## The real costs and the real benefits
 
-What you actually get from a framework, stated without romance:
+The rule, stated up front because the rest of this section just argues for
+it: take the small, transparent layers, and be suspicious of any layer that
+wants to own the array. Here's what that's built on, stated without
+romance:
 
 **Worth paying for:**
 

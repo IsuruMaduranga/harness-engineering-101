@@ -6,14 +6,18 @@
 
 ---
 
-Every pattern in this series was demonstrated on a coding body, but I have
-mostly kept the coding-specific machinery out of view. This chapter puts it
-in view, for two reasons. First, coding agents are where harness
-engineering is most developed, so they preview what other domains will
-build. Second, they host the best design argument in the field: how
-specialized should the body be? We will build up the specialized answer,
-then give the "a terminal is all you need" counterargument its full due,
-because it is not a strawman; it is half right.
+Every pattern in this series was demonstrated on a coding body, and this
+chapter finally puts the coding-specific machinery in view. Two things make
+that worth doing: coding agents are where harness engineering is most
+developed, so they preview what other domains will build, and they host the
+best design argument in the field — how specialized should the body need to
+be? Short answer: ship the specialized organs *and* the bare terminal, and
+let the model choose between them. The organs buy safety legibility, pushed
+feedback, and a floor for weaker models; the terminal is the irreplaceable
+escape hatch for whatever no toolset anticipated. Getting to that answer
+honestly takes the rest of the chapter, because the "a terminal is all you
+need" counterargument is not a strawman — it's half right, and it deserves
+its full due before the verdict.
 
 ## Why coding won
 
