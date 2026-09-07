@@ -82,16 +82,16 @@ make the good pattern the easy one. Tool design is behavior design.
 ## Half two: the brain gets an alarm clock
 
 Once "the harness can start a turn" exists for task completion, generalize
-it. Three escalating forms, each just a different *trigger* bolted to the
-same wake-the-brain move:
+it. Three forms, each a step up from the last, each just a different
+*trigger* attached to the same wake-the-brain move:
 
 **Monitors: wake on condition.** "Watch this log file for ERROR lines,"
 "tell me when the CI run finishes." The harness watches cheaply
 (filesystem events, a polling thread, a webhook); when the condition
 trips, it injects a description of what happened and invokes the model.
-The expensive brain sleeps; the cheap body watches. This inverts the
-polling anti-pattern precisely: polling is the brain doing the body's
-waiting, monitors are the body doing it.
+The expensive brain sleeps; the cheap body watches. This flips the polling
+problem around exactly: polling is the brain doing the body's waiting;
+monitors are the body doing it.
 
 **Schedules: wake at a time.** Cron for agents. "Every morning, summarize
 new issues"; "in an hour, check the deploy." Implementation is a timestamp
@@ -126,15 +126,15 @@ concern, so the discipline matters more here:
   watched thing actually changes; prefer condition triggers over short
   timers; make no-change wakes cheap (a short array, or a cheap model,
   Appendix A).
-- **Notifications, like all steering, must be true and attributable.** The
-  model will act on "task b1 finished." If the registry lies (a crashed
-  watcher, a dropped exit code), the model builds on a false world. Fail
-  loud in the registry.
+- **Notifications, like all steering, must be true and traceable to their
+  source.** The model will act on "task b1 finished." If the registry lies
+  (a crashed watcher, a dropped exit code), the model builds on a false
+  world. Fail loud in the registry.
 - **The user must be able to see and kill everything.** A background
   registry without a management surface ("what is running on my machine
   right now, stop it") is how agents earn distrust. This is a chapter 13
   concern arriving early: autonomy is granted, and the grant must be
-  visible and revocable.
+  visible, and you must be able to take it back.
 - **Sessions are files, again.** A scheduled wake ten hours later lands in
   a process that may have restarted. Background work forces you to make the
   chapter 1 point literal: the array, the task registry, and the pending

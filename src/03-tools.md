@@ -159,9 +159,9 @@ you after one call. That failure is chapter 4.
 
 ## The user is a tool too
 
-Here is a reframe that pays off for the rest of the series. Once you see
-tools as "the model requests, the world responds," you notice the human
-sitting inside the world.
+Here is a new way to look at tools that helps for the rest of the series.
+Once you see tools as "the model requests, the world responds," you notice
+the human sitting inside the world.
 
 Production agents expose a tool that looks like this:
 

@@ -77,8 +77,8 @@ works. That is prose, not code.
 The naive place for prose is the system prompt or the memory file (chapter
 6), and for small stable facts, that is right. But procedures are long, and
 most are irrelevant to most sessions. Pasting your 3,000-token release
-runbook into every array, on the chance the user says "cut a release," is
-budget vandalism.
+runbook into every array, on the chance the user says "cut a release," is a
+serious waste of budget.
 
 A **skill** is the budget-respecting version: a folder with a markdown file
 of instructions (plus optional scripts and templates), with a **name and a

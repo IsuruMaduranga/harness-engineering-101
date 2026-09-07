@@ -28,7 +28,7 @@ This chapter is the practice, so you can skip the week.
 
 ## Capture: log the bytes on the wire
 
-The foundational tool is embarrassingly small: intercept every request your
+The most basic tool is surprisingly small: intercept every request your
 harness sends and write it to disk, whole. In the toy harness it is three
 lines in `call_llm`:
 
@@ -88,7 +88,7 @@ a vital sign belongs on the dashboard, not in a postmortem.
 
 ## Replay: the experiment the architecture gives you for free
 
-Here is where statelessness (chapter 1) pays its debugging dividend. The
+Here is where statelessness (chapter 1) pays off for debugging. The
 provider keeps nothing; the request is the entire world state. Therefore: a
 captured request is a *perfect reproduction case*. Load the JSON, resend
 it, and you re-run the exact moment of the bug, no setup, no session, no
@@ -106,7 +106,7 @@ the experimental method for prompts:
 This is chapter 1's "you can edit assistant messages and the model can't
 tell," graduated into a lab technique: you can edit *history itself* and
 ask "what would you have done if the past were this instead?" (Sampling is
-stochastic, so run the interesting cases a few times; temperature 0 tightens
+random, so run the interesting cases a few times; temperature 0 tightens
 it further.) A `replay.py` that loads, optionally tweaks, and resends a
 captured request is thirty lines, and it converts prompt debugging from
 folklore ("try rewording it?") into experiments.
@@ -119,7 +119,7 @@ of a bill.
 
 The trick is to fake only the API and keep everything else real: run the
 harness against a mock that records requests, drive a scripted turn, then
-assert on what got assembled. Three tiers, in increasing strictness, all
+assert on what got assembled. Three levels, from loose to strict, all
 cheap because no real model is involved:
 
 - **Presence:** memory injected on the first message; the reminder drained
@@ -177,7 +177,8 @@ convenience.
 - Statelessness makes captures perfectly replayable and *editable*: prompt
   debugging becomes controlled experiments.
 - Pin the array in CI: presence, placement, bytes. Persist subagent
-  transcripts and the steering queue, or those subsystems are unfalsifiable.
+  transcripts and the steering queue, or you have no way to check those
+  subsystems.
 
 Part III closed the ecosystem: what wraps the array, what extends it, and
 how to see it. Part IV starts with the question all this visibility was

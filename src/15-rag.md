@@ -12,11 +12,11 @@ frozen at a cutoff. Your company wiki, your codebase, yesterday's support
 tickets: not in the weights, and (chapter 6) too big to paste into the
 array whole.
 
-Around 2023 the standard answer to this acquired a name, an ecosystem, and
-an intimidating literature: **RAG**, Retrieval-Augmented Generation. Vector
-databases, embeddings, chunking strategies, and then the taxonomy: naive
-RAG, advanced RAG, hybrid RAG, graph RAG, corrective RAG, self-RAG,
-re-ranking pipelines. Entire conference tracks. If you came into this
+Around 2023 the standard answer to this got a name, an ecosystem, and a
+scary-looking body of research: **RAG**, Retrieval-Augmented Generation.
+Vector databases, embeddings, chunking strategies, and then the long list of
+types: naive RAG, advanced RAG, hybrid RAG, graph RAG, corrective RAG,
+self-RAG, re-ranking pipelines. Entire conference tracks. If you came into this
 series with anxiety about that list, this chapter is the payoff, because
 you now have the one sentence that organizes all of it:
 
@@ -61,8 +61,8 @@ identifiers and rare tokens (which is why production search is usually
 
 ## The zoo, decoded
 
-Now the taxonomy. Each celebrated variant answers "which text, chosen how"
-with one extra trick, and in this series' terms they decode instantly:
+Now the list of types. Each celebrated variant answers "which text, chosen
+how" with one extra trick, and in this series' terms they decode instantly:
 
 | The name | What it actually is |
 |---|---|
@@ -125,7 +125,7 @@ to pull.
 **Push wins on cost and latency.** One search, one model call, done. A
 pull loop is several rounds of an expensive brain. For a
 high-volume support chatbot answering single-hop questions over a clean
-corpus, classic push RAG remains the correct engineering answer, and
+document set, classic push RAG remains the correct engineering answer, and
 "agentic" would be waste. Push is also the only option when there is no
 loop at all: batch pipelines, one-shot API products, strict latency
 budgets.
@@ -137,8 +137,8 @@ everything else. A coding agent already works this way: the memory file is
 push; grep is pull.
 
 One more connection, promised in chapter 7: when the pulling gets long, do
-it in a subagent. Deep research over a big corpus is high-volume,
-low-residue exploration: fork it, let the child burn its own array
+it in a subagent. Deep research over a big document set is high in
+volume and leaves little behind: fork it, let the child burn its own array
 searching and reading, keep the cited summary. "Deep research" products
 are approximately this pattern, productized.
 
@@ -147,7 +147,7 @@ are approximately this pattern, productized.
 I picked RAG for the finale not because you will build one tomorrow but
 because it is the cleanest demonstration of what this series has tried to
 install in you. From outside, RAG looks like a subfield: its own acronym,
-its own vendor landscape, its own taxonomy to memorize. From inside the
+its own vendor landscape, its own list of types to memorize. From inside the
 harness view, it is fifteen chapters of familiar parts: the stateless
 array (ch. 1) that must be filled; a budget (ch. 6) that forces selection;
 push injection (ch. 6 memory, ch. 8 steering) or pull tools (ch. 3) in a
@@ -168,14 +168,14 @@ what does it cost, and what enforces it?* The answers locate anything.
   choosing. Embeddings are grep-for-meaning; the rest of the machinery is
   search engineering.
 - The variant zoo is knob-naming: index tricks, rankers, retries. Learn the
-  knobs, ignore the taxonomy.
+  knobs, ignore the classification.
 - The real axis is push (harness guesses up front; cheap, one-shot,
-  guessable corpora) versus pull (model steers retrieval mid-reasoning;
+  guessable document sets) versus pull (model steers retrieval mid-reasoning;
   better on hard questions, costs a loop). Compose them; fork the long
   pulls.
-- The meta-lesson: harness eyes collapse the field's proper nouns into
-  array decisions. That skill, not any single pattern, was the point of
-  101.
+- The bigger lesson: the harness view turns the field's proper nouns into
+  simple questions about the array. That skill, not any single pattern, was
+  the point of 101.
 
 What remains is to put the whole body on the table: the epilogue walks the
 complete toy harness, all fifteen chapters in ~300 lines you can run,

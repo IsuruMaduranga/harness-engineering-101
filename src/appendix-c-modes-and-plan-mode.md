@@ -40,7 +40,7 @@ modes work in practice:
 - **Switching must be one keystroke.** Modes fight approval fatigue only
   if changing them is cheaper than clicking "yes" repeatedly
   (Claude Code cycles modes on a single hotkey). A buried setting becomes
-  a permanent setting, and users end up in the wrong trust posture for
+  a permanent setting, and users end up in the wrong trust setting for
   the task at hand.
 - **Mode is policy, so it lives in visible config** with sane defaults
   per project (chapter 13's rule). A repository can ship "this project
@@ -58,27 +58,27 @@ mode moves the trade to a better place: **separate deciding from doing.**
 The flow: the user poses a substantial task with the body in a read-only
 state. The agent explores freely (reads, searches, subagents: all safe),
 then produces a *plan*: the files it will change, the approach, the
-risks. The plan is presented as an artifact; the human reviews and
+risks. The plan is presented as a document; the human reviews and
 approves *it*, once; the body switches to an execution mode and the loop
 carries the plan out, usually with edit-level prompts now waved through
 because the intention was already reviewed.
 
-Why this is the highest-value mode, in the terms this series built:
+Why this is the most valuable mode, in the terms this series built:
 
 - **Humans are better at judging plans than diffs at 40 actions per
   turn.** One review of "rename the module and update 12 call sites"
   beats twelve interruptions asking about call site #7 with attention
-  already spent. Approval moves up an abstraction level, where human
+  already spent. Approval moves up to a higher level, where human
   judgment is actually good (chapter 13's scoped autonomy, realized).
 - **Exploration is free when writing is impossible.** In plan mode the
-  gate refuses writes *by construction*, so the agent can be given full
+  gate refuses writes *by design*, so the agent can be given full
   autonomy to read: no fatigue at all during the phase that generates
   most tool calls on a hard task. The read-only Explore subagent
   (chapter 7) was this same trick at the agent level; plan mode applies
   it to a session phase.
-- **The plan is a steering artifact.** Once approved, the plan text
+- **The plan is a steering document.** Once approved, the plan text
   enters the array and works like the todo list (chapter 8): a standing,
-  re-injectable statement of intent that execution rounds are anchored
+  re-injectable statement of intent that execution rounds stay anchored
   to. Drift from an approved plan is also *detectable*: a hook or
   reflex can flag "editing a file the plan never mentioned."
 - **Interruption becomes cheap.** Approve-then-execute has a natural
@@ -92,14 +92,14 @@ world (a teammate's push, a failing dependency install). Execution still
 needs chapter 13's reflexes live: the plan authorizes intent, not stale
 assumptions. Production plan modes re-verify as they go, and treat "the
 plan no longer matches reality" as a stop-and-replan event, not something
-to power through.
+to push past.
 
 ## What to remember
 
-Modes are the gate parameterized by trust, switched cheaply, mirrored to
-the brain as steering but enforced in the body. Plan mode is the
+Modes are the gate controlled by a trust setting, switched cheaply, mirrored
+to the brain as steering but enforced in the body. Plan mode is the
 standout: make writing impossible, let the agent think at full autonomy,
-review the intention once, then execute against the approved artifact.
+review the intention once, then execute against the approved plan.
 It converts the human from a click-through checkpoint into a reviewer of
 intentions, which is the job they were always better at.
 

@@ -42,7 +42,7 @@ on exactly this pattern. Multi-step work, observe result, decide next step.
 The intelligence is in the brain. The loop's job is to *not get in the way*:
 keep feeding results back and let the trained behavior express itself.
 
-This is worth internalizing because it predicts where effort pays off. When
+This is worth remembering, because it tells you where effort pays off. When
 an agent performs badly, beginners add orchestration: hardcoded step
 sequences, planner modules, state machines around the model. Usually the
 better fix is in the array: clearer tool descriptions, better error
@@ -84,7 +84,7 @@ flowchart TD
 
 ## Errors are fuel
 
-The most counterintuitive habit in agent building: **when a tool fails, you
+The most surprising habit in agent building: **when a tool fails, you
 are not handling an error. You are delivering information.**
 
 In normal software, an exception is a problem for the *programmer*. In an

@@ -9,38 +9,50 @@
 Chapter 1 showed the wire: a JSON array in, a continuation out. This chapter
 is about the thing on the other end.
 
-Here's the whole model, and it is not much: **an LLM does one thing —
-given a sequence of tokens, it outputs a probability for every possible next
-token, and the API server picks one, appends it, and runs the model again.**
-That's it. No goals, no memory, no state between calls. Everything else in
-this chapter is what three stages of training bolted onto that one
-operation, and why that training history predicts almost every behavior that
-will surprise you later: why the model hallucinates, why it follows the
-system prompt, why tool calls come out as valid JSON, and why "thinking"
-works.
+Here's the whole model, and it is not much: **an LLM does one thing. You
+give it a sequence of tokens, and it gives back a probability for every
+possible next token. The serving layer then picks one, adds it to the
+sequence, and runs the model again.** That's it. No goals, no memory,
+nothing saved between calls.
+
+(By "serving layer" I mean the code that runs the model for you: the
+provider's inference stack. The model itself only outputs the
+probabilities; choosing a token from them is a separate step done by that
+code, which is why you can change how random it is per request. More on
+that below.)
+
+The rest of this chapter explains one idea: three stages of training were
+added on top of that single operation, and that training history predicts
+almost every behavior that will surprise you later. Why the model
+hallucinates. Why it follows the system prompt. Why tool calls come out as
+valid JSON. Why "thinking" works.
 
 You do not need to know how to build a model to build a harness, the same
-way you do not need to be a neuroscientist to be a physical therapist. But
-you do need this much. This chapter has no code — it is the shortest mental
+way you do not need to be a brain surgeon to be a physical therapist. But
+you do need this much. This chapter has no code. It is the shortest mental
 model of an LLM that is still useful for harness work.
 
 ## One operation, repeated
 
 An LLM does exactly one thing: given a sequence of tokens, it outputs a
-probability for every possible next token. The API server picks one
+probability for every possible next token. The serving layer picks one
 (weighted by those probabilities), appends it to the sequence, and runs the
 model again. And again. That loop, run until a stop condition, is text
-generation.
+generation. The model produces the probabilities; the code around it does
+the picking and the looping.
 
 A few terms, quickly:
 
 - **Token**: a chunk of text, usually 3 to 4 characters of English. "harness
   engineering" is about 4 tokens. Everything is measured in tokens: context
   windows, prices, speed.
-- **Temperature**: how randomly the server picks from the probabilities.
-  Temperature 0 means always pick the most likely token. Higher values mean
-  more variety. For agents you usually want low temperature; you want the
-  probable action, not the creative one.
+- **Temperature**: how randomly the serving layer picks from the
+  probabilities. Temperature 0 means always pick the most likely token.
+  Higher values mean more variety. For agents you usually want low
+  temperature; you want the probable action, not the creative one. (This is
+  the proof that the picking happens outside the model: temperature is a
+  setting you send with each request, so the same model can pick
+  differently from the same probabilities.)
 - **Context window**: the maximum number of tokens the model can take as
   input. This is the hard size limit on your array from chapter 1.
 
@@ -75,14 +87,14 @@ What this stage explains for you:
 
 - **Why the model knows things.** Facts, APIs, idioms: they were in the
   training text.
-- **Why it hallucinates.** The model learned to produce *plausible
-  continuations*, not true ones. When the true answer was not in its
-  training data, or is not retrievable from its weights, the most probable
-  continuation is still a fluent, confident sentence. Hallucination is not a
-  bug or a lie. It is the training objective working as designed on a
-  question it cannot answer. You cannot prompt this away. You can only
-  design around it, which is why harnesses feed the model ground truth (file
-  contents, tool results) instead of trusting recall.
+- **Why it hallucinates.** The model learned to produce text that *sounds
+  likely*, not text that is true. When the real answer was not in its
+  training data, or it cannot recall it, the most likely next words are
+  still a smooth, confident sentence. Hallucination is not a bug or a lie.
+  It is the training goal working exactly as designed on a question the
+  model cannot answer. You cannot remove this with a clever prompt. You can
+  only design around it, which is why harnesses feed the model facts (file
+  contents, tool results) instead of trusting its memory.
 - **Why the knowledge cutoff exists.** The training text was collected up to
   some date. Everything after that date must come in through the array.
 
@@ -91,9 +103,10 @@ What this stage explains for you:
 A raw pre-trained model does not answer questions. If you type "What is the
 capital of France?" it might continue with "What is the capital of Germany?"
 because lists of questions were common in its training data. Post-training
-fixes this. The model is further trained on curated conversations and tuned
-against human (and AI) preference judgments until it reliably behaves as an
-assistant: answers the question, follows instructions, refuses some things.
+fixes this. The model gets more training on hand-picked conversations, and
+it is adjusted using human (and AI) judgments about which answers are
+better, until it reliably acts like an assistant: it answers the question,
+follows instructions, and refuses some things.
 
 What this stage explains for you:
 
@@ -117,7 +130,7 @@ from. Three learned skills matter most for this series:
 - **Tool use.** Models emit tool calls as clean, schema-matching JSON
   because they were explicitly trained on millions of examples of doing so.
   The API does not enforce your schema with a parser. The model *learned*
-  the format. This is why chapter 3 will look suspiciously easy.
+  the format. This is why chapter 3 will look surprisingly easy.
 - **Thinking.** Modern models can emit reasoning before their answer,
   wrapped in special blocks (Anthropic calls it extended thinking; you may
   see `<thinking>` tags in older setups). There is no separate reasoning
@@ -154,11 +167,11 @@ This is why a large image costs context window space, and why a model can
 answer questions that mix text and image so naturally. There is one brain,
 one sequence.
 
-PDFs are more revealing. When a model "reads a PDF," the typical pipeline
-is: the *harness or the provider's API layer* extracts the text and renders
-each page to an image, then inserts both into the array as ordinary text and
-image blocks. The brain never sees a PDF. It sees tokens that used to be a
-PDF.
+PDFs make this even clearer. When a model "reads a PDF," here is what
+usually happens: the *harness or the provider's API layer* pulls out the
+text and turns each page into an image, then puts both into the array as
+ordinary text and image blocks. The brain never sees a PDF. It sees tokens
+that used to be a PDF.
 
 Note what just happened: a thing marketed as a model capability turned out
 to be mostly body work. Preprocessing, extraction, and rendering happen in

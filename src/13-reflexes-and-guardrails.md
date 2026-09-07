@@ -62,8 +62,8 @@ harnesses:
   re-read it first"). That single rule deterministically kills a whole
   genre of accidents (overwriting human edits, editing from a stale
   picture) that no amount of prompting reliably prevents.
-- **Anti-footgun checks.** Block foreground `sleep` (chapter 9), block
-  `git push --force` to main, cap output sizes.
+- **Checks against obvious mistakes.** Block foreground `sleep` (chapter 9),
+  block `git push --force` to main, cap output sizes.
 
 Two properties make this layer precious. It is *free* (microseconds, no
 tokens), and it is *certain*: chapter 11's hooks distinction again. The
@@ -110,8 +110,8 @@ Rules decide the clear cases; the classifier catches "the user asked for a
 README fix and the agent is somehow curling a shell script from the
 internet."
 
-This works better than it has any right to, but the fine print matters,
-and it generalizes beyond this feature:
+This works better than you would expect, but the details matter,
+and they apply well beyond this feature:
 
 - **The classifier is also chapter 2.** It hallucinates and it can be
   prompt-injected by the very text it is judging. So treat its verdict as
@@ -147,7 +147,7 @@ gets through and shrinks what it can destroy:
   tasks need real access), so sandboxes come with an escalation path:
   "this command needs network; approve?"
 - **Credentials.** The dumbest blast-radius win: the agent's environment
-  should hold the minimum secrets. An injected model cannot exfiltrate a
+  should hold the minimum secrets. An injected model cannot leak a
   token it was never given.
 
 ```mermaid
@@ -173,7 +173,7 @@ the 97%). But a system-prompt rule is a *preference in a probability
 machine*, standing against context rot (chapter 6), against injected text
 pushing the other way, and against plain sampling variance. The hierarchy
 of this chapter is the honest version: prompts advise, reflexes enforce,
-humans arbitrate, classifiers triage, sandboxes contain. Anything that
+humans decide, classifiers screen, sandboxes contain. Anything that
 must be true with probability 1 cannot live in the prompt.
 
 ## What you now know

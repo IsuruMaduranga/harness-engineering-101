@@ -17,8 +17,8 @@ build yourself.
 
 You have spent nine chapters building what they contain. This chapter is a
 decoder ring: for each kind of framework vocabulary, what it maps to in the
-toy harness. Not a takedown; several of these libraries are good, and I will
-say when to use them. But you should evaluate them the way you would
+toy harness. This is not an attack on them; several of these libraries are
+good, and I will say when to use them. But you should evaluate them the way you would
 evaluate any dependency, from a position of knowing what the job is, rather
 than adopting one because the job looks mysterious.
 
@@ -41,8 +41,8 @@ than adopting one because the job looks mysterious.
 | Chain / graph / workflow | ordinary control flow (function calls, ifs) around model calls | everywhere |
 
 The last row deserves a sentence, because "chains" and "graphs" carry the
-most aura. A LangChain chain is function composition: do A, feed its output
-to B. A LangGraph graph is a state machine whose nodes call models. Both are
+most mystery. A LangChain chain is function composition: do A, feed its
+output to B. A LangGraph graph is a state machine whose nodes call models. Both are
 things Python already does with functions and `if`. The frameworks add
 observability hooks, retries, and parallelism conveniences on top; useful,
 but the *concept* is control flow you have written since your first year of
@@ -73,8 +73,7 @@ field points at models-plus-thin-harness, not at deep abstraction stacks.
 
 The rule, stated up front because the rest of this section just argues for
 it: take the small, transparent layers, and be suspicious of any layer that
-wants to own the array. Here's what that's built on, stated without
-romance:
+wants to own the array. Here's what that's built on, stated plainly:
 
 **Worth paying for:**
 

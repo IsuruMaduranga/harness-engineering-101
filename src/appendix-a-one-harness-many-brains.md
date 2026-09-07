@@ -39,14 +39,14 @@ Two principles generate the table, and they matter more than the table:
 **Route by consequence, not by difficulty alone.** A compaction summary
 that is 10% worse loses a little context. A safety verdict that is 10%
 worse approves `rm -rf`. The classifier job *looks* small (one yes/no) but
-sits on an asymmetric loss, which is why chapter 13 wrapped it in
-verification and fail-closed defaults; cheap brains are allowed in
-dangerous seats only with those seatbelts. Meanwhile the recap job can be
+carries a lopsided risk (a wrong "yes" is far worse than a wrong "no"),
+which is why chapter 13 wrapped it in verification and fail-closed defaults;
+cheap brains are allowed in dangerous seats only with those seatbelts. Meanwhile the recap job can be
 wrong daily and nobody is harmed. Consequence, not token count, sets the
 floor.
 
-**A delegated task worth doing is worth a capable model.** The seductive
-error is routing subagent work to the cheapest tier because it is
+**A delegated task worth doing is worth a capable model.** The tempting
+mistake is routing subagent work to the cheapest tier because it is
 "background." Then the search agent returns a confidently wrong answer,
 the main loop builds on it, and you spend frontier tokens debugging a
 haiku-sized mistake. My working rule after being burned: route *down* for
@@ -67,7 +67,7 @@ frontier models and on cheap local ones), the request itself is tiered:
 - **System prompt tiers.** The frontier model gets the lean prompt; it
   does not need three paragraphs on how to use tools. The mid-tier prompt
   adds worked examples and firmer procedural scaffolding; the low-tier
-  prompt is close to a checklist. Same policies, different altitude of
+  prompt is close to a checklist. Same policies, different level of
   instruction.
 - **Tool set tiers.** Frontier models are happy driving everything through
   a shell (chapter 14's terminal argument is *almost* true up there).
@@ -94,7 +94,7 @@ it is an appendix.
   a routing layer silently swap providers on a safety-relevant call.
 - **Account for the invisible calls.** Classifier, summarizer, recap: none
   of them appear in the conversation, but all of them appear on the bill.
-  Meter every out-of-band call into the same usage accounting as the main
+  Count every out-of-band call into the same usage accounting as the main
   loop (chapter 12's capture should see them too), or your cost dashboard
   is fiction.
 - **Pin versions per job.** "Upgrade the main model" should not silently

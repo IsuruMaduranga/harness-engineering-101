@@ -26,9 +26,9 @@ That's it. Chapter 4's loop, called as a function.
 
 ## Subagents are a context tool, not an org chart
 
-The framing you will often see is anthropomorphic: a "team" of specialist
-agents, a "researcher" talking to a "planner" talking to a "coder." That
-framing hides the actual engineering reason subagents exist:
+The framing you will often see treats them like people: a "team" of
+specialist agents, a "researcher" talking to a "planner" talking to a
+"coder." That framing hides the actual engineering reason subagents exist:
 
 **Subagents exist to protect the main agent's context.**
 
@@ -105,9 +105,8 @@ Poor delegation targets:
 - **Tiny lookups.** Spawning a loop costs several API round trips. If one
   grep answers it, run one grep in the main loop.
 - **Long chains of dependent edits.** Each handoff loses context. Depth is
-  where multi-agent systems go to die; production experience keeps
-  converging on one coordinator with shallow, disposable workers, not
-  hierarchies.
+  where multi-agent systems fail; real-world experience keeps landing on
+  one coordinator with shallow, disposable workers, not deep hierarchies.
 
 ## The toy harness, v4
 

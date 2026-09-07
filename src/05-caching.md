@@ -6,7 +6,7 @@
 
 ---
 
-**The failure:** the agent loop works, and it is quietly ruinous. Every
+**The failure:** the agent loop works, and it quietly burns money. Every
 round resends the entire array, and the array grows every round. Let me put
 numbers on it. Suppose a coding task runs 40 rounds and each round adds
 about 2,000 tokens (a tool call plus its result). The array starts at
@@ -67,7 +67,7 @@ price, even if the remaining 80,000 tokens are identical. So the rule is:
 > **Appending is cheap. Editing anything above the append point costs you
 > everything below it.**
 
-This sounds easy to follow and is genuinely easy to violate. The classic
+This sounds easy to follow, and it is genuinely easy to break. The classic
 accidental cache-busters, all of which I have shipped or reviewed:
 
 - **A timestamp in the system prompt.** `Current time: 14:32:07` at the top
@@ -84,8 +84,8 @@ accidental cache-busters, all of which I have shipped or reviewed:
 - **Removing old messages from the middle** to save space. This is the
   painful one: trimming the array to make it *smaller* can make it *more
   expensive*, because the trim invalidates the prefix. Context reduction has
-  to be done in deliberate, infrequent jumps (chapter 6), not continuous
-  nibbles.
+  to be done in deliberate, occasional jumps (chapter 6), not in small
+  continuous trims.
 
 The design consequence runs deeper than avoiding bugs: **information wants
 to enter the array at the bottom.** When the harness must tell the model
@@ -148,8 +148,8 @@ It is a property your architecture either has or lacks.
 
 Caches expire. Anthropic's default entries live about 5 minutes (refreshed
 on every hit; a paid 1-hour option exists), OpenAI's several minutes to an
-hour depending on load. For an active agent loop this is irrelevant: rounds
-are seconds apart, so the cache stays hot. Where it bites is the *human*
+hour depending on load. For an active agent loop this does not matter: rounds
+are seconds apart, so the cache stays hot. The place it hurts is the *human*
 pause. A user who reads your agent's answer for ten minutes and then replies
 pays a full-price re-read of the whole array. Nothing you can do in the
 harness fixes economics you do not control; just know that the first

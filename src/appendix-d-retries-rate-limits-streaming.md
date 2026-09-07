@@ -9,24 +9,24 @@ The main series pretended two things: that `call_llm` always returns, and
 (chapter 1's sidebar) that streaming is someone else's problem. In
 production the first is false constantly, and the second is false the day
 your users watch a spinner for ninety seconds. This appendix is the
-unglamorous checklist: what fails, what to do about it, how streaming
+boring checklist: what fails, what to do about it, how streaming
 actually works on the wire, and the failure modes specific to LLM APIs
 that generic retry wisdom gets wrong. It is an appendix because none of it
 changes the mental model; it is also the difference between a demo and a
 service.
 
-## The failure taxonomy
+## The kinds of failure
 
 | Failure | Signal | Correct reaction |
 |---|---|---|
 | Overloaded / server error | 500/529, or Anthropic's `overloaded_error` | retry with backoff |
 | Rate limited | 429, often with `retry-after` | wait *what the header says*, then retry |
-| Timeout / connection drop | no response | retry, idempotent (see below) |
+| Timeout / connection drop | no response | retry, but safely (see below) |
 | Context too long | 400 with explicit message | **do not retry**: compact (ch. 6) or fail up |
 | Invalid request | other 400s | **do not retry**: it's your bug; capture it (ch. 12) |
 | Auth / billing | 401/403 | stop, tell the human |
 
-The first discipline is just the split: **transient vs deterministic.**
+The first discipline is just the split: **temporary vs permanent.**
 Retrying a 529 is correct; retrying a 400 is a loop that burns budget and
 buries the real error. Your wrapper should distinguish them on day one.
 
@@ -99,8 +99,8 @@ Four things the generic checklist misses:
 **Retries are only safe because the API is stateless.** Chapter 1's
 property earns its keep here: a retried request is *identical* in effect
 to the first attempt, because the server holds nothing. There is no
-"did my first attempt half-apply?" problem at the API layer. The place
-idempotency *does* bite is your own loop: never execute tools twice
+"did my first attempt half-apply?" problem at the API layer. The place this
+*does* cause trouble is your own loop: never execute tools twice
 because a retry returned a duplicate-looking reply, so retry at the
 `call_llm` layer, below the loop, never by re-running a round.
 
@@ -110,7 +110,7 @@ array exhausts limits at a *request rate that looks tiny*. This couples
 Appendix D to chapter 6: context bloat manifests as 429s. It also means
 parallel fan-out (chapter 7) multiplies pressure by array size, so
 production harnesses put a concurrency cap and a shared token-budget
-governor above the subagent spawner, not just backoff below it.
+limiter above the subagent spawner, not just backoff below it.
 
 **A streaming failure is a *mid-reply* failure.** The chapter 1 sidebar
 deferred exactly one real problem: with `"stream": true`, the connection
@@ -161,10 +161,10 @@ the policies stay yours either way.
 
 ## What to remember
 
-Split transient from deterministic and only retry the former. Statelessness
-makes API-level retries free of side effects; keep them below the loop so
-tools never re-run. Rate limits are token-denominated, so context size and
-fan-out, not request count, are what exhaust them. Partial streamed output
+Split temporary failures from permanent ones and only retry the temporary.
+Statelessness makes API-level retries free of side effects; keep them below
+the loop so tools never re-run. Rate limits are measured in tokens, so
+context size and fan-out, not request count, are what exhaust them. Partial streamed output
 is not output. And capture failures like you capture requests, because
 "the model is being weird" is sometimes a half-dead socket.
 

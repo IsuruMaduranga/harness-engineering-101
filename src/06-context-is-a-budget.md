@@ -14,16 +14,16 @@ API call is rejected. Task dies mid-flight.
 
 But the hard limit is only the visible half of the failure. The invisible
 half arrives earlier: **models get worse before they get full.** Long before
-the window limit, a bloated array degrades the model's attention. Details
+the window limit, an overfull array weakens the model's attention. Details
 from the middle of a 150,000-token conversation get missed or half-recalled.
 Instructions given early stop being followed. People call this **context
 rot**, and it means the practical budget is smaller than the advertised
 window. A 200,000-token window is not 200,000 tokens of dependable
 attention.
 
-**The patch** is a change of posture, not one mechanism: stop treating the
+**The patch** is a change of mindset, not one mechanism: stop treating the
 array as a bag you throw things into, and start treating it as a budget you
-spend. Part II of this series is that posture, developed over four chapters.
+spend. Part II of this series is that mindset, developed over four chapters.
 This one covers the accounting and the two basic moves: forgetting well
 (compaction) and remembering outside the array (memory files).
 
@@ -97,7 +97,7 @@ structure; "summarize the above" is not enough.
 Chapter 5 warned against trimming the array continuously. Compaction is the
 opposite pattern: one deliberate, infrequent jump. You pay one full-price
 re-read of a much smaller array, then return to append-only cached
-operation. Big rare jumps beat constant nibbling in both cost and
+operation. Big rare jumps beat constant small trims in both cost and
 simplicity.
 
 The user-facing version of this is Claude Code's `/compact`, and its
@@ -122,8 +122,8 @@ gets cleared, compacted, and truncated. And once memory is a file, the brain
 can maintain it with the tools it already has. When the user says "remember
 that we use pnpm here," the harness needs no memory feature at all: the
 model appends a line to the memory file with `write_file`, and every future
-session inherits the fact through injection. Self-maintaining memory falls
-out of the tool loop plus one convention.
+session inherits the fact through injection. You get self-maintaining memory
+from the tool loop plus one convention.
 
 Two design details from production worth copying:
 
