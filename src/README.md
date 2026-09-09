@@ -100,18 +100,6 @@ Python 3.10+, zero dependencies (raw `urllib`), Anthropic Messages API by
 default. Swapping the wire format for OpenAI's is chapter 1 homework, and the
 point of the whole series is that it's *only* the wire format you'd swap.
 
-## Diagrams
-
-Flow and structure diagrams are inline [mermaid](https://mermaid.js.org/)
-blocks (GitHub renders them natively). Quantitative plots are PNGs generated
-by the scripts in [`diagrams/`](diagrams/):
-
-```bash
-cd diagrams && python3 gen_all.py   # regenerates every PNG
-```
-
-Edit a script, rerun, and the chapter picks up the new image.
-
 ## Out of scope
 
 Training or fine-tuning models, TUI implementation, provider billing and
