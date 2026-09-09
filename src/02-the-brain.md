@@ -35,11 +35,10 @@ model of an LLM that is still useful for harness work.
 ## One operation, repeated
 
 An LLM does exactly one thing: given a sequence of tokens, it outputs a
-probability for every possible next token. The serving layer picks one
-(weighted by those probabilities), appends it to the sequence, and runs the
-model again. And again. That loop, run until a stop condition, is text
-generation. The model produces the probabilities; the code around it does
-the picking and the looping.
+probability for every possible next token. The serving layer does the rest —
+pick one, append it, run the model again. And again. That loop, run until a
+stop condition, is text generation. The model produces the probabilities;
+the code around it does the picking and the looping.
 
 A few terms, quickly:
 
@@ -49,10 +48,9 @@ A few terms, quickly:
 - **Temperature**: how randomly the serving layer picks from the
   probabilities. Temperature 0 means always pick the most likely token.
   Higher values mean more variety. For agents you usually want low
-  temperature; you want the probable action, not the creative one. (This is
-  the proof that the picking happens outside the model: temperature is a
-  setting you send with each request, so the same model can pick
-  differently from the same probabilities.)
+  temperature; you want the probable action, not the creative one. (That's
+  the proof the picking happens outside the model: temperature is a setting
+  you send with each request, so the same model can pick differently.)
 - **Context window**: the maximum number of tokens the model can take as
   input. This is the hard size limit on your array from chapter 1.
 
@@ -103,9 +101,9 @@ What this stage explains for you:
 A raw pre-trained model does not answer questions. If you type "What is the
 capital of France?" it might continue with "What is the capital of Germany?"
 because lists of questions were common in its training data. Post-training
-fixes this. The model gets more training on hand-picked conversations, and
-it is adjusted using human (and AI) judgments about which answers are
-better, until it reliably acts like an assistant: it answers the question,
+fixes this. The model gets more training on hand-picked conversations.
+Humans (and AI) judge which answers are better, and the model is tuned
+toward those. The result acts like an assistant: it answers the question,
 follows instructions, and refuses some things.
 
 What this stage explains for you:
@@ -158,9 +156,9 @@ Modern models accept images and documents. It is natural to assume there is
 a separate vision system involved. There is not, in any sense that matters
 to you.
 
-When you send an image block, the image is cut into small patches, and each
-patch is encoded into tokens by a vision encoder that was trained alongside
-the language model. Those image tokens go into the same sequence as your
+When you send an image block, the provider cuts the image into small
+patches. A vision encoder, trained alongside the language model, turns each
+patch into tokens. Those image tokens go into the same sequence as your
 text tokens, and the same next-token machinery runs over all of it. The
 model "sees" the way it "reads": everything becomes tokens in one sequence.
 This is why a large image costs context window space, and why a model can

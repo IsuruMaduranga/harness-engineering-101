@@ -9,10 +9,10 @@ The main series pretended two things: that `call_llm` always returns, and
 (chapter 1's sidebar) that streaming is someone else's problem. In
 production the first is false constantly, and the second is false the day
 your users watch a spinner for ninety seconds. This appendix is the
-boring checklist: what fails, what to do about it, how streaming
-actually works on the wire, and the failure modes specific to LLM APIs
-that generic retry wisdom gets wrong. It is an appendix because none of it
-changes the mental model; it is also the difference between a demo and a
+boring checklist: what fails, what to do about it, how streaming works on
+the wire, and where generic retry advice gets LLM APIs wrong. It is an
+appendix because none of it changes the mental model; it is also the
+difference between a demo and a
 service.
 
 ## The kinds of failure
@@ -99,27 +99,27 @@ Four things the generic checklist misses:
 **Retries are only safe because the API is stateless.** Chapter 1's
 property earns its keep here: a retried request is *identical* in effect
 to the first attempt, because the server holds nothing. There is no
-"did my first attempt half-apply?" problem at the API layer. The place this
-*does* cause trouble is your own loop: never execute tools twice
-because a retry returned a duplicate-looking reply, so retry at the
-`call_llm` layer, below the loop, never by re-running a round.
+"did my first attempt half-apply?" problem at the API layer. The trouble
+shows up in your own loop instead: don't execute a tool twice just because a
+retry returned a duplicate-looking reply. Retry at the `call_llm` layer,
+below the loop, never by re-running a whole round.
 
 **Rate limits are measured in tokens, not requests.** Providers meter
 tokens per minute (input and output separately), so an agent with a fat
 array exhausts limits at a *request rate that looks tiny*. This couples
 Appendix D to chapter 6: context bloat manifests as 429s. It also means
-parallel fan-out (chapter 7) multiplies pressure by array size, so
-production harnesses put a concurrency cap and a shared token-budget
-limiter above the subagent spawner, not just backoff below it.
+parallel fan-out (chapter 7) multiplies the pressure by array size. So
+production harnesses cap concurrency and share a token budget above the
+subagent spawner, not just backoff below it.
 
 **A streaming failure is a *mid-reply* failure.** The chapter 1 sidebar
 deferred exactly one real problem: with `"stream": true`, the connection
 can die after you have received half an answer, or half a tool call.
 The rule that keeps this simple: **partial output is not output.** Treat
-a broken stream as a failed request: discard the fragment (never append
-it to the array as if the model said it: a truncated tool call executed
-"best effort" is chapter 13's nightmare made of plumbing), then retry
-the whole call. Providers make this affordable: on a retry, the prefix
+a broken stream as a failed request. Discard the fragment: never append it
+to the array as if the model said it. (A truncated tool call executed "best
+effort" is chapter 13's nightmare made of plumbing.) Then retry the whole
+call. Providers make this affordable: on a retry, the prefix
 you already sent is cache-hit (chapter 5), so re-asking costs a fraction
 of the original. Statelessness plus caching is what makes "just retry
 the whole thing" the right architecture rather than a waste.

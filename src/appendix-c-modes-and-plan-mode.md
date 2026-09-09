@@ -44,11 +44,10 @@ modes work in practice:
   the task at hand.
 - **Mode is policy, so it lives in visible config** with sane defaults
   per project (chapter 13's rule). A repository can ship "this project
-  defaults to ask" the same way it ships a linter config; note the trust
-  question, though: project-level config that *grants* autonomy is config
-  an attacker can commit, so production harnesses deliberately refuse to
-  read permission *grants* from files a repo can carry, or gate them
-  behind user confirmation.
+  defaults to ask" the same way it ships a linter config. But watch the
+  trust question: config that *grants* autonomy is config an attacker can
+  commit. So production harnesses refuse to read permission grants from repo
+  files, or gate them behind user confirmation.
 
 ## Plan mode: approve the intention, not the keystrokes
 
@@ -58,9 +57,9 @@ mode moves the trade to a better place: **separate deciding from doing.**
 The flow: the user poses a substantial task with the body in a read-only
 state. The agent explores freely (reads, searches, subagents: all safe),
 then produces a *plan*: the files it will change, the approach, the
-risks. The plan is presented as a document; the human reviews and
-approves *it*, once; the body switches to an execution mode and the loop
-carries the plan out, usually with edit-level prompts now waved through
+risks. The plan is presented as a document. The human reviews and
+approves *it*, once. Then the body switches to an execution mode, and the
+loop carries the plan out, usually with edit-level prompts waved through
 because the intention was already reviewed.
 
 Why this is the most valuable mode, in the terms this series built:
@@ -77,10 +76,10 @@ Why this is the most valuable mode, in the terms this series built:
   (chapter 7) was this same trick at the agent level; plan mode applies
   it to a session phase.
 - **The plan is a steering document.** Once approved, the plan text
-  enters the array and works like the todo list (chapter 8): a standing,
-  re-injectable statement of intent that execution rounds stay anchored
-  to. Drift from an approved plan is also *detectable*: a hook or
-  reflex can flag "editing a file the plan never mentioned."
+  enters the array and works like the todo list (chapter 8): a standing
+  reminder that execution keeps coming back to. Drift from an approved plan
+  is also *detectable*: a hook or reflex can flag "editing a file the plan
+  never mentioned."
 - **Interruption becomes cheap.** Approve-then-execute has a natural
   checkpoint: rejecting the plan costs nothing, versus unwinding a
   half-applied change. In transaction terms (Appendix B): plan mode makes
@@ -96,9 +95,10 @@ to push past.
 
 ## What to remember
 
-Modes are the gate controlled by a trust setting, switched cheaply, mirrored
-to the brain as steering but enforced in the body. Plan mode is the
-standout: make writing impossible, let the agent think at full autonomy,
+Modes are the gate. A trust setting controls them, switching is cheap, and
+the brain hears about it as steering — but the body is what enforces it.
+Plan mode is the standout: make writing impossible, let the agent think at
+full autonomy,
 review the intention once, then execute against the approved plan.
 It converts the human from a click-through checkpoint into a reviewer of
 intentions, which is the job they were always better at.

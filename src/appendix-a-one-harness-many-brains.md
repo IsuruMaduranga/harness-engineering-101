@@ -38,11 +38,12 @@ Two principles generate the table, and they matter more than the table:
 
 **Route by consequence, not by difficulty alone.** A compaction summary
 that is 10% worse loses a little context. A safety verdict that is 10%
-worse approves `rm -rf`. The classifier job *looks* small (one yes/no) but
-carries a lopsided risk (a wrong "yes" is far worse than a wrong "no"),
-which is why chapter 13 wrapped it in verification and fail-closed defaults;
-cheap brains are allowed in dangerous seats only with those seatbelts. Meanwhile the recap job can be
-wrong daily and nobody is harmed. Consequence, not token count, sets the
+worse approves `rm -rf`. The classifier job *looks* small (one yes/no),
+but the risk is lopsided: a wrong "yes" is far worse than a wrong "no."
+That's why chapter 13 wraps it in verification and fail-closed defaults.
+Cheap brains get dangerous seats only with those seatbelts. Meanwhile the
+recap job can be wrong daily and nobody is harmed. Consequence, not token
+count, sets the
 floor.
 
 **A delegated task worth doing is worth a capable model.** The tempting

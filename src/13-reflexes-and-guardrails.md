@@ -24,7 +24,7 @@ is the body's spinal cord: the layers between "the model asked" and "the
 machine did," ordered from the most reliable to the least.
 
 One framing note before the layers. The single most important safety
-decision was made back in chapter 3 and is worth restating as a principle:
+decision was made back in chapter 3, and it bears repeating:
 **the model never executes anything; it requests.** Everything below is
 just the body deciding how to answer requests. If you remember nothing
 else: capability lives in the harness, so responsibility does too. There is
@@ -115,10 +115,10 @@ and they apply well beyond this feature:
 
 - **The classifier is also chapter 2.** It hallucinates and it can be
   prompt-injected by the very text it is judging. So treat its verdict as
-  *evidence, not authority*: production implementations ground-check
-  verdicts (a "block" must cite a rule that exists; an "allow because the
-  user asked" must quote words the user actually said) and fail toward
-  asking the human when anything is off.
+  *evidence, not authority*. Production systems ground-check it: a "block"
+  must cite a rule that actually exists, and an "allow because the user
+  asked" must quote words the user actually said. Fail toward asking the
+  human when anything looks off.
 - **Bias it one way.** A false "ask the human" costs a click; a false
   "allow" costs whatever the command costs. Asymmetric errors want
   asymmetric thresholds.
@@ -170,8 +170,8 @@ common safety mistake I see: writing "NEVER delete files outside the
 project" in the system prompt and considering the matter handled. Trained
 deference is strong, and you should absolutely state the rules (they steer
 the 97%). But a system-prompt rule is a *preference in a probability
-machine*, standing against context rot (chapter 6), against injected text
-pushing the other way, and against plain sampling variance. The hierarchy
+machine*. It loses to context rot (chapter 6), to injected text pushing the
+other way, and to plain sampling variance. The hierarchy
 of this chapter is the honest version: prompts advise, reflexes enforce,
 humans decide, classifiers screen, sandboxes contain. Anything that
 must be true with probability 1 cannot live in the prompt.

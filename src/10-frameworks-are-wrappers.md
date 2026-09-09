@@ -10,17 +10,16 @@
 anxiety. Open any "how to build an agent" tutorial and you meet a wall of
 proper nouns: LangChain, LangGraph, LlamaIndex, CrewAI, AutoGen, the OpenAI
 Agents SDK, the Claude Agent SDK, Vercel's AI SDK. Each with its own
-vocabulary: chains, runnables, graphs, crews, executors. The impression a
-newcomer gets is that agents are a specialist technology with a steep
-learning curve, and that the frameworks contain something you could not
-build yourself.
+vocabulary: chains, runnables, graphs, crews, executors. A newcomer comes away
+thinking agents are a specialist skill with a steep learning curve, and
+that these frameworks hold something you couldn't build yourself.
 
 You have spent nine chapters building what they contain. This chapter is a
 decoder ring: for each kind of framework vocabulary, what it maps to in the
 toy harness. This is not an attack on them; several of these libraries are
-good, and I will say when to use them. But you should evaluate them the way you would
-evaluate any dependency, from a position of knowing what the job is, rather
-than adopting one because the job looks mysterious.
+good, and I will say when to use them. But evaluate them the way you'd
+evaluate any dependency: know what the job is first, instead of adopting one
+because it looks mysterious.
 
 ## The decoder ring
 
@@ -66,8 +65,9 @@ Meanwhile, notice what the strongest production agents do. Claude Code is a
 bespoke harness over the raw API. So are most serious coding agents, and so
 is One Code (over a minimal general-purpose runtime, pi). When Anthropic
 ships the Claude Agent SDK, it is a *thin* layer: the loop, tool dispatch,
-context management: chapter 4 and 6, productized. The trend line of the
-field points at models-plus-thin-harness, not at deep abstraction stacks.
+context management: chapter 4 and 6, productized. And the field is
+moving toward models plus a thin harness, not toward deep abstraction
+stacks.
 
 ## The real costs and the real benefits
 
@@ -96,10 +96,10 @@ steering (ch. 8), and your context budget (ch. 6), according to its idea of
 what those should be, often invisibly. The classic experience: your agent
 misbehaves, and the fix requires knowing exactly what was sent to the
 model, and you spend a day digging through abstraction layers to find the
-actual bytes on the wire. If the framework you choose makes the outgoing
-request easy to see and shape, the price is small; if it hides the request
-as an implementation detail, the price is your ability to do the job this
-series describes.
+actual bytes on the wire. Pick a framework that makes the outgoing
+request easy to see and shape, and the price is small. Pick one that hides
+the request as an implementation detail, and the price is your ability to do
+this job at all.
 
 So my rule, having built harnesses both ways:
 

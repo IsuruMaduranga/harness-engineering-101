@@ -89,18 +89,18 @@ accidental cache-busters, all of which I have shipped or reviewed:
 
 The design consequence runs deeper than avoiding bugs: **information wants
 to enter the array at the bottom.** When the harness must tell the model
-something mid-session ("a file changed on disk," "here is the current todo
-list"), the cache-respecting way is to append it as a new message near the
-end, not to update some canonical block near the top. Chapter 8 builds a
+something mid-session (a file changed on disk, the current todo list),
+append it as a new message near the end. Don't update some canonical block
+near the top. Chapter 8 builds a
 whole steering mechanism on this principle, and it exists *because* of this
 chapter.
 
 Production harnesses treat prefix stability as an invariant with tests. In
-One Code, the system prompt is required to be byte-stable across turns
-unless something genuinely changed, and payload-capture tests (chapter 12)
-verify it, because a single careless byte up top is an invisible 10x price
-increase. Nothing breaks. No error appears. You just quietly pay full price
-on every request, and only notice if you are measuring cache-hit rate.
+One Code, the system prompt stays byte-stable across turns unless something
+genuinely changed. Payload-capture tests (chapter 12) check this, because
+one careless byte up top is an invisible 10x price increase. Nothing breaks.
+No error appears. You just quietly pay full price on every request, and only
+notice if you are measuring cache-hit rate.
 Measure cache-hit rate. The API tells you: responses report
 `cache_read_input_tokens`, and that number should be most of your input on
 every round after the first.
@@ -151,10 +151,10 @@ on every hit; a paid 1-hour option exists), OpenAI's several minutes to an
 hour depending on load. For an active agent loop this does not matter: rounds
 are seconds apart, so the cache stays hot. The place it hurts is the *human*
 pause. A user who reads your agent's answer for ten minutes and then replies
-pays a full-price re-read of the whole array. Nothing you can do in the
-harness fixes economics you do not control; just know that the first
-request after a long pause is the expensive one, and that "why was this
-turn 10x the price of the last one" usually has a boring answer.
+pays a full-price re-read of the whole array. Nothing in the harness
+fixes economics you don't control. Just know this: the first request after
+a long pause is the expensive one. "Why was this turn 10x the price of the
+last one?" usually has a boring answer.
 
 ## What this changes about your thinking
 

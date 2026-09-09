@@ -8,12 +8,12 @@
 
 **The failure:** everything we have built is synchronous. The model calls a
 tool; the loop *waits*; the result comes back; the loop continues. Now let
-the agent start a 20-minute build. The choices are all bad: block the whole
-loop for 20 minutes (the agent can do nothing else, the user watches a
-spinner), time the tool out (the model learns "builds fail here"), or worst
-and most common, the model decides to *poll*: `sleep 30` then check, `sleep
-30` then check, forty API round trips of a very expensive brain doing the
-job of a kitchen timer.
+the agent start a 20-minute build. The choices are all bad. Block the
+whole loop for 20 minutes, and the agent can do nothing else while the user
+watches a spinner. Time the tool out, and the model learns "builds fail
+here." Or, worst and most common, the model polls: `sleep 30`, check,
+`sleep 30`, check — forty API round trips of an expensive brain doing a
+kitchen timer's job.
 
 And beyond the single slow command sits the bigger version: work that should
 happen *when something happens* ("tell me when CI goes green") or *at a

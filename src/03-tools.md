@@ -195,9 +195,9 @@ decision, not a tool, and it gets its own chapter (13).
 > **Sidebar: structured output.** Sometimes you do not want actions; you
 > want the model's *answer* as machine-readable data, like
 > `{"sentiment": "negative", "score": 0.87}`. Providers offer JSON modes
-> for this, but the oldest reliable trick is to define one tool named
-> `report_answer` whose input schema is your desired output format, and
-> force the model to call it. The tool executes nothing; its arguments
+> for this. But the oldest reliable trick still works: define one tool
+> named `report_answer` whose input schema is your desired output format,
+> and force the model to call it. The tool executes nothing; its arguments
 > *are* the output. Structured output and tool calling are the same trained
 > skill pointed at different goals: one asks for action, the other for
 > shape.

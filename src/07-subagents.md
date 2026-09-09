@@ -10,9 +10,9 @@
 agent "where is the retry logic implemented in this codebase?" and answering
 honestly might take fifteen file reads and twenty searches: 50,000 tokens of
 exploration. The *answer* is one sentence. If the main loop does this work
-itself, the 50,000 tokens of dead ends sit in its array for the rest of the
-session, spending budget (chapter 6) and feeding context rot, all to carry
-one sentence of value.
+itself, those 50,000 tokens of dead ends sit in its array for the rest of
+the session. They spend budget (chapter 6) and feed context rot, just to
+carry one sentence of value.
 
 **The patch:** do the messy work in a different array, and keep only the
 conclusion. That is a **subagent**, and I want to define it precisely,
@@ -64,8 +64,8 @@ practical questions about subagents:
 instructions and the task string the parent wrote. It has not seen the
 conversation, the user, or the plan. So the parent's task description must
 be self-contained: what to find, where to look, what shape of answer to
-return. Vague delegation produces vague results, not because the model is
-weak but because you sent a colleague into a room with no briefing.
+return. Vague delegation produces vague results. The model isn't weak. You
+sent a colleague into a room with no briefing.
 
 **The parent sees nothing but the report.** The child's thirty rounds of
 searching never enter the parent's array. This is the entire point, but it

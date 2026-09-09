@@ -9,11 +9,10 @@ Chapter 7 gave each subagent its own *array*. That isolates their
 attention. It does not isolate their *world*: every agent still reads and
 writes the same directory. The moment you run two agents concurrently on
 the same project (a fan-out of fixers, or just the main loop plus a
-background child), you have reinvented the race condition. Agent A edits
-`utils.py` while agent B is mid-refactor of the same file; B's
-read-before-write guard (chapter 13) starts firing constantly, or worse,
-doesn't, and the merge of their work happens by accident, in place, with
-no record.
+background child), you have reinvented the race condition. Say agent A edits
+`utils.py` while agent B is mid-refactor of the same file. B's
+read-before-write guard (chapter 13) starts firing constantly. Or worse, it
+doesn't, and their work merges by accident, in place, with no record.
 
 The fix is the same one operating systems and CI systems reached: **give
 each worker its own copy of the world, and merge deliberately.**
@@ -58,9 +57,9 @@ The remaining shared surfaces, in the order they will cause you trouble:
   the network. Two agents "isolated" in worktrees can still fight over
   port 3000 or the same test database. Worktrees isolate the *code*, not
   the *runtime*.
-- **The machine itself.** For that, you are back to chapter 13's
-  sandboxes: containers or VMs per agent, of which a worktree is the
-  lightweight, code-only special case. The spectrum is: same directory
+- **The machine itself.** For that, you're back to chapter 13's
+  sandboxes: containers or VMs per agent. A worktree is just the
+  lightweight, code-only version of one. The spectrum is: same directory
   (free, unsafe) → worktree (cheap, code-isolated) → container (heavier,
   runtime-isolated) → VM (heaviest, machine-isolated). Pick per task
   risk, and remember the spectrum composes: a worktree *inside* a
@@ -68,8 +67,8 @@ The remaining shared surfaces, in the order they will cause you trouble:
 
 ## The non-coding version
 
-The pattern goes beyond git, and it is worth stating because it is
-the actual principle: **agents should work on transactions, not on the
+The pattern goes beyond git. It's the actual principle:
+**agents should work on transactions, not on the
 live world.** A draft email, not the send button. A staging table, not
 production. A proposed diff, not an applied one. The worktree is just the
 coding domain's excellent built-in transaction. When you build a harness

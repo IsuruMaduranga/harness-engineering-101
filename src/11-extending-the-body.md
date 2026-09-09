@@ -90,9 +90,9 @@ instructions enter the array, where the model follows it.
 
 The mechanism deserves a name because you will use it constantly:
 **progressive disclosure**. Keep the index in context, pull the detail on
-demand. It is chapter 6's "pull beats push" applied to instructions, the
-same shape as memory-file indexes pointing at deeper docs, and the same
-shape as the next section applies to tool schemas. A skill can even bundle
+demand. It's chapter 6's "pull beats push," applied to instructions. Memory-file
+indexes point at deeper docs the same way. The next section shows the same
+trick again, for tool schemas. A skill can even bundle
 executable scripts, which the model runs with its ordinary shell tool; the
 skill teaches *when and how*, existing tools do the work. Instructions
 compose with capabilities.
@@ -117,17 +117,17 @@ matching schemas and, on providers that support it, activates them for
 subsequent requests. A hundred connected tools ride as a hundred short
 lines plus one searcher, instead of a hundred full JSON schemas.
 
-The design has a wrinkle worth knowing even if you never implement it: once
-a tool's schema has been *activated* into the conversation, it must stay
-available and stable for the rest of the session (the model may call it
-twenty rounds later, and chapter 5 punishes churn in the request). Deferred
+There's a wrinkle worth knowing, even if you never implement it. Once a
+tool's schema is *activated* into the conversation, it has to stay available
+and stable for the rest of the session (the model might call it twenty
+rounds later, and chapter 5 punishes churn in the request). Deferred
 loading is an append-only reveal, not a swap. One-way doors again; the
 array's physics show up in every feature.
 
 Step back and see the pattern across all three mechanisms so far. MCP,
 skills, and deferred loading are the same idea at three altitudes: **an
-index in the array, a body of detail outside it, and a fetch when
-relevance is established.** Tools, instructions, schemas. If you remember
+index in the array, a body of detail outside it, and a fetch once you know
+you need it.** Tools, instructions, schemas. If you remember
 one thing from this chapter, remember the shape.
 
 ## Hooks: deterministic reflexes
@@ -141,11 +141,10 @@ A hook is a user-supplied script bound to a lifecycle event of the loop.
 The harness defines the events; Claude Code's set is a good reference:
 before a tool call, after a tool call, when the user submits a prompt, when
 the turn ends, when the session starts, and so on. At each event, the
-harness runs the configured script with a JSON description of what is
-happening on stdin, and the script's exit code and output can *observe*
-(log it), *augment* (add a message; its output can be injected as chapter 8
-steering), or *veto* (block the tool call, with the reason fed back to the
-model as an error).
+harness runs the script and hands it a JSON description of what's happening
+on stdin. Its exit code and output can do one of three things: *observe*
+(log it), *augment* (add a message, injected as chapter 8 steering), or
+*veto* (block the tool call and tell the model why).
 
 Why does this matter when the model could be *asked* to do the same things?
 Chapter 2's lesson, from the other side: the model is probabilistic.

@@ -148,12 +148,11 @@ I picked RAG for the finale not because you will build one tomorrow but
 because it is the cleanest demonstration of what this series has tried to
 install in you. From outside, RAG looks like a subfield: its own acronym,
 its own vendor landscape, its own list of types to memorize. From inside the
-harness view, it is fifteen chapters of familiar parts: the stateless
-array (ch. 1) that must be filled; a budget (ch. 6) that forces selection;
-push injection (ch. 6 memory, ch. 8 steering) or pull tools (ch. 3) in a
-loop (ch. 4), maybe forked (ch. 7); plus a search index with quality knobs,
-which is the only genuinely new component and is not an AI component at
-all.
+harness view, it's fifteen chapters of familiar parts. A stateless array
+(ch. 1) that must be filled. A budget (ch. 6) that forces selection. Push
+injection (ch. 6 memory, ch. 8 steering) or pull tools (ch. 3) in a loop
+(ch. 4), maybe forked (ch. 7). The only genuinely new piece is the search
+index with its quality knobs, and that isn't an AI component at all.
 
 That collapse is not special to RAG. It is what most of the field's proper
 nouns look like from in here: frameworks (ch. 10), MCP and skills (ch.

@@ -8,14 +8,14 @@
 
 Every pattern in this series was demonstrated on a coding body, and this
 chapter finally puts the coding-specific machinery in view. Two things make
-that worth doing: coding agents are where harness engineering is most
-developed, so they preview what other domains will build, and they host the
-best design argument in the field — how specialized should the body need to
-be? Short answer: ship the specialized organs *and* the bare terminal, and
-let the model choose between them. The organs make safety easy to check,
+that worth doing. Coding agents are where harness engineering is most
+developed, so they preview what other domains will build. And they host the
+field's best design argument — how specialized should the body need to be?
+Short answer: ship the specialized organs *and* the bare terminal, and let
+the model choose between them. The organs make safety easy to check,
 push feedback to the model automatically, and give weaker models a floor to
-stand on; the terminal is the escape hatch you cannot replace, for whatever
-no toolset planned for. Getting to that answer honestly takes the rest of
+stand on; the terminal is the escape hatch: whatever no toolset planned
+for, it's still there. Getting to that answer honestly takes the rest of
 the chapter, because the "a terminal is all you need" counterargument is not
 a strawman — it's half right, and it deserves a fair hearing before the
 verdict.
@@ -83,11 +83,11 @@ agent quality between "finds out at test time" and "finds out immediately"
 is large. Go-to-definition and find-references similarly replace expensive
 grep-and-read trips with precise single answers: budget again.
 
-**Git as an organ.** Not just "the agent can run git" (the terminal gives
-that), but the harness *itself* leaning on git: snapshot state so chapter
-13's recoverability holds, show the user diffs of what the agent changed,
-gate auto-approval on whether damage would be recoverable, fence parallel
-agents into worktrees (Appendix B).
+**Git as an organ.** The terminal already lets the agent run git. The
+harness goes further, leaning on git *itself*: it snapshots state so chapter
+13's recoverability holds, shows the user diffs of what changed, gates
+auto-approval on recoverability, and fences parallel agents into worktrees
+(Appendix B).
 
 Beyond these come the coding-specific deployments of everything else you
 have seen: read-tracking reflexes on edits (chapter 13's file tracker),
@@ -108,10 +108,10 @@ practitioners holds it and ships on it:
 > a million shell transcripts, and every organ above is redundant plumbing
 > that will age badly as models improve.
 
-The strong points are genuinely strong. First, it is general: the terminal
+The strong points are genuinely strong. First: it's general. The terminal
 handles the long tail (awk one-liners, docker, obscure build systems) that
-no finite tool list covers; every curated toolset eventually meets a task
-its designer did not anticipate, and the escape hatch is always the shell.
+no finite tool list covers. Every curated toolset eventually meets a task
+its designer didn't plan for, and the shell is always the escape hatch.
 Second, it matches the training: chapter 2 says the model has seen vastly
 more `grep` usage than usage of your bespoke `search_files` schema. And the trend argument has
 history on its side: this series has already recorded harness machinery

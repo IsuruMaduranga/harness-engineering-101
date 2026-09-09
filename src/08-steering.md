@@ -58,8 +58,9 @@ information? Three reasons, all from earlier chapters:
 1. **Caching.** Editing the system prompt invalidates the entire cached
    array. Appending a block costs only itself (chapter 5).
 2. **Position.** Models attend most reliably to recent tokens. A rule
-   restated at the bottom beats a rule buried at the top; this is also why
-   reminders are a genuine *fix* for context rot, not just a message bus.
+   restated at the bottom beats a rule buried at the top. That's also why a
+   reminder actually fixes context rot, instead of just passing a message
+   along.
 3. **Timing.** The system prompt is set per request, but what you usually
    want is to react to an *event* between two rounds: precisely where the
    next user-side message is about to be built anyway.
@@ -108,8 +109,8 @@ Give the agent a `todo_write` tool: "maintain your task list; update
 statuses as you work." The tool's implementation stores a small list in
 harness state, and here is the trick: **after each update, the harness
 injects the current list back into the conversation as a reminder.** The
-model plans; the plan becomes an artifact outside the model; the artifact
-returns as fresh tokens at the bottom of the array, round after round.
+model plans. That plan becomes an artifact outside the model, and it comes
+back as fresh tokens at the bottom of the array, round after round.
 
 Why does a model need to be reminded of its own plan? Because (chapter 2,
 always chapter 2) the model has no memory: its "plan" was tokens it emitted
@@ -128,21 +129,22 @@ whiteboard stays in view. Much of harness engineering is exactly this shape.
 ## Steering the other brain: OpenAI's developer role
 
 One more thread to connect. OpenAI's newer API added a `developer` role,
-distinct from both `user` and (deprecated as a name) `system`: messages
-from the application author, with authority above the user's but below the
-platform's. If you are targeting OpenAI models, mid-conversation harness
-guidance can ride as a developer message instead of a tagged block inside a
+distinct from `user` and the now-deprecated `system` name. It carries
+messages from the application author, with authority above the user's and
+below the platform's. If you are targeting OpenAI models, mid-conversation
+harness guidance can ride as a developer message instead of a tagged block
+inside a
 user message: the same idea this chapter built by convention, promoted to a
 first-class citizen of the wire format.
 
-Two honest caveats. First, the roles' authority ordering is, as chapter 2
-keeps insisting, *trained* behavior, not enforcement; a developer message
-is not a security boundary either. Second, the promotion covers the
+Two honest caveats. First: as chapter 2 keeps insisting, the roles'
+authority ordering is *trained* behavior, not enforcement. A developer
+message isn't a security boundary either. Second, the promotion covers the
 labeling, not the machinery: you still need the queue, the events, the
 decisions about *when* to speak. The hard part of steering was never the
 role name.
 
-This is worth noticing as a recurring pattern in this field: today's
+This pattern keeps repeating: today's
 harness convention keeps becoming tomorrow's API feature (ReAct became tool
 calling; steering conventions became a role). Learning the conventions is
 not wasted effort when the feature ships; the feature is the convention,
