@@ -9,7 +9,7 @@ import subprocess
 import urllib.request
 
 API_KEY = os.environ["ANTHROPIC_API_KEY"]
-MODEL = "claude-sonnet-4-5"
+MODEL = "claude-sonnet-5"
 SYSTEM = ("You are a capable engineering agent working on the local machine. "
           "Use your tools to complete the user's task, then summarize what "
           "you did.")

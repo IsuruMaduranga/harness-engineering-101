@@ -134,24 +134,69 @@ such (chapter 12's capture should record failures and retries too), or
 your debugging sessions will chase model behavior that was actually your
 socket config.
 
-## The wrapper, sketched
+## The wrapper
 
-Everything above is thirty lines around chapter 1's function:
+You do not need a new harness for this. It is the complete harness from the
+epilogue, with one thing different: the line that used to open the connection
+now calls a version that retries. The full runnable file is
+[`harness/appendix-d/harness.py`](harness/appendix-d/harness.py), and you run
+it exactly like before — `python3 harness.py` — it just no longer falls over
+on a blip. Two small functions do the work:
 
 ```python
-def call_llm_reliable(body, max_attempts=5):
+RETRYABLE_STATUS = {408, 409, 429, 500, 502, 503, 504, 529}
+
+class ApiError(Exception):
+    def __init__(self, kind, status=None, retry_after=None, body=""):
+        super().__init__(f"{kind} error (status={status}): {body[:200]}")
+        self.kind = kind             # "http" = a status came back; "network" = nothing did
+        self.status = status
+        self.retry_after = retry_after
+        self.retryable = kind == "network" or status in RETRYABLE_STATUS
+
+def call_once(body):
+    req = urllib.request.Request(
+        "https://api.anthropic.com/v1/messages",
+        data=json.dumps(body).encode(),
+        headers={"content-type": "application/json", "x-api-key": API_KEY,
+                 "anthropic-version": "2023-06-01"})
+    try:
+        with urllib.request.urlopen(req, timeout=600) as resp:
+            return json.loads(resp.read())
+    except urllib.error.HTTPError as e:          # the server answered, with an error
+        after = e.headers.get("retry-after")
+        raise ApiError("http", status=e.code,
+                       retry_after=float(after) if after else None,
+                       body=e.read().decode(errors="replace")) from e
+    except (urllib.error.URLError, http.client.HTTPException, OSError) as e:
+        raise ApiError("network", body=str(e)) from e   # dropped, refused, timed out
+
+def call_with_retries(body, max_attempts=6):
     for attempt in range(max_attempts):
         try:
-            return call_llm_once(body)
+            return call_once(body)
         except ApiError as e:
-            if not e.retryable:                    # 400s, auth: your problem
-                raise
-            delay = min(60, 2 ** attempt) * (1 + random.random())
-            delay = e.retry_after or delay          # server knows best
-            log(f"attempt {attempt+1} failed ({e.kind}), sleeping {delay:.1f}s")
+            if not e.retryable or attempt == max_attempts - 1:
+                raise                            # your problem, or out of tries
+            delay = e.retry_after or min(30.0, 2 ** attempt) + random.random()
             time.sleep(delay)
-    raise LastError
 ```
+
+`call_once` makes one POST and sorts whatever comes back — a reply, an error
+status, or a dead socket — into either the JSON you wanted or one `ApiError`
+tagged "try again" or "give up". `call_with_retries` runs it in a loop and
+only retries the ones worth retrying. Inside the harness, `call_llm` still
+builds the body, sets the cache breakpoint, and prints the usage line; its one
+network call is now `call_with_retries(body)` instead of a bare `urlopen`.
+
+Two lines are easy to get wrong. The first is `retryable`. A network drop, or
+one of the `RETRYABLE_STATUS` codes, is worth another go; a 400 or a 401 is
+your bug or your key, so it raises on the first try instead of wasting five
+attempts and hiding the real error. The second is the `except` line: it
+catches `http.client.HTTPException`, not just `urllib.error.URLError`. The most
+common real drop — a `RemoteDisconnected` in the middle of a reply — is the
+first kind and not the second. Catch only `URLError` and you sail right past
+the exact crash you wrote this to prevent.
 
 Plus the two policies that don't fit in a function: a token-aware
 concurrency cap above your fan-out, and "discard partial streams, retry

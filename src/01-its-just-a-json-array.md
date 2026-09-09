@@ -32,7 +32,7 @@ import json, os, urllib.request
 
 def call_llm(messages, system=""):
     body = {
-        "model": "claude-sonnet-4-5",
+        "model": "claude-sonnet-5",
         "max_tokens": 4096,
         "system": system,
         "messages": messages,
@@ -166,7 +166,7 @@ cosmetic. The same exchange in both:
 ```json
 POST /v1/messages
 {
-  "model": "claude-sonnet-4-5",
+  "model": "claude-sonnet-5",
   "max_tokens": 1024,
   "system": "You are a terse assistant.",
   "messages": [
@@ -221,7 +221,7 @@ is [`harness/v1_chat.py`](harness/v1_chat.py), a working chat client with
 import json, os, urllib.request
 
 API_KEY = os.environ["ANTHROPIC_API_KEY"]
-MODEL = "claude-sonnet-4-5"
+MODEL = "claude-sonnet-5"
 SYSTEM = "You are a concise assistant."
 
 def call_llm(messages):

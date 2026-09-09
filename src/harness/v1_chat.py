@@ -9,7 +9,7 @@ import os
 import urllib.request
 
 API_KEY = os.environ["ANTHROPIC_API_KEY"]
-MODEL = "claude-sonnet-4-5"
+MODEL = "claude-sonnet-5"
 SYSTEM = "You are a concise assistant."
 
 

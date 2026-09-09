@@ -17,8 +17,11 @@ export ANTHROPIC_API_KEY=...
 python3 harness.py mysession.json
 ```
 
-It is a toy, deliberately. It has no streaming, no compaction, one
-hardcoded model, a permission gate that is more sketch than shield. But
+It is a toy, deliberately. It has no streaming, no compaction, no retries,
+one hardcoded model, a permission gate that is more sketch than shield. Run
+it against the real API long enough and a transient connection drop or an
+overloaded `529` will crash `call_llm` with a traceback. That omission is
+deliberate too: production retry and backoff are Appendix D. But
 every organ is present, real, and small enough that you can hold the whole
 organism in your head, which no production harness will ever again allow
 you to do. That is what makes it worth studying.

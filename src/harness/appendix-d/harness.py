@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Harness Engineering 101 — the complete toy harness.
+"""Harness Engineering 101 — the complete toy harness, now with retries.
 
 Every chapter's patch, in one runnable file:
   ch 1  the messages array; sessions are files
@@ -12,16 +12,20 @@ Every chapter's patch, in one runnable file:
   ch 9  background tasks + completion notices
   ch 12 request capture (HARNESS_DEBUG=1) + cache vital sign
   ch 13 reflexes: protected paths, read-before-write, approval gate
+  apx D retries + backoff around the one POST (call_with_retries)
 
 Zero dependencies. ANTHROPIC_API_KEY required.
 Usage: python3 harness.py [session.json]
 """
+import http.client
 import json
 import os
+import random
 import subprocess
 import sys
 import threading
 import time
+import urllib.error
 import urllib.request
 
 API_KEY = os.environ["ANTHROPIC_API_KEY"]
@@ -93,7 +97,53 @@ AGENT_TOOL = {
     "input_schema": schema(task="")}
 MAIN_TOOLS = BASE_TOOLS + [AGENT_TOOL]
 
-# ------------------------------------------------------------- ch 1 + 5: wire
+# ------------------------------------------------ appendix D: retry on failure
+RETRYABLE_STATUS = {408, 409, 429, 500, 502, 503, 504, 529}
+
+class ApiError(Exception):
+    """One failed attempt, already sorted into 'try again' or 'give up'."""
+    def __init__(self, kind, status=None, retry_after=None, body=""):
+        super().__init__(f"{kind} error (status={status}): {body[:200]}")
+        self.kind = kind             # "http" = a status came back; "network" = nothing did
+        self.status = status
+        self.retry_after = retry_after
+        self.retryable = kind == "network" or status in RETRYABLE_STATUS
+
+def call_once(body):
+    """One POST. Return the reply, or raise a sorted ApiError."""
+    req = urllib.request.Request(
+        "https://api.anthropic.com/v1/messages",
+        data=json.dumps(body).encode(),
+        headers={"content-type": "application/json", "x-api-key": API_KEY,
+                 "anthropic-version": "2023-06-01"})
+    try:
+        with urllib.request.urlopen(req, timeout=600) as resp:
+            return json.loads(resp.read())
+    except urllib.error.HTTPError as e:          # the server answered, with an error
+        after = e.headers.get("retry-after")
+        raise ApiError("http", status=e.code,
+                       retry_after=float(after) if after else None,
+                       body=e.read().decode(errors="replace")) from e
+    except (urllib.error.URLError, http.client.HTTPException, OSError) as e:
+        # nothing came back: dropped, refused, timed out. RemoteDisconnected
+        # (the usual mid-reply drop) lands here too, which is the whole point.
+        raise ApiError("network", body=str(e)) from e
+
+def call_with_retries(body, max_attempts=6):
+    """call_once, but keep retrying the failures worth retrying. Resending the
+    same body is safe because the API is stateless (ch 1)."""
+    for attempt in range(max_attempts):
+        try:
+            return call_once(body)
+        except ApiError as e:
+            if not e.retryable or attempt == max_attempts - 1:
+                raise                            # your problem, or out of tries
+            delay = e.retry_after or min(30.0, 2 ** attempt) + random.random()
+            print(f"  [retry] {e.kind} status={e.status}: "
+                  f"attempt {attempt + 1}/{max_attempts}, waiting {delay:.1f}s")
+            time.sleep(delay)
+
+# --------------------------------------------------------- ch 1 + 5: the wire
 def call_llm(messages, tools, system):
     body = {"model": MODEL, "max_tokens": 8192, "messages": messages,
             "system": [{"type": "text", "text": system,
@@ -103,13 +153,7 @@ def call_llm(messages, tools, system):
         os.makedirs("debug", exist_ok=True)
         with open(f"debug/req_{time.time_ns()}.json", "w") as f:
             json.dump(body, f, indent=2)
-    req = urllib.request.Request(
-        "https://api.anthropic.com/v1/messages",
-        data=json.dumps(body).encode(),
-        headers={"content-type": "application/json", "x-api-key": API_KEY,
-                 "anthropic-version": "2023-06-01"})
-    with urllib.request.urlopen(req) as resp:
-        reply = json.loads(resp.read())
+    reply = call_with_retries(body)             # appendix D: was one urlopen
     u = reply.get("usage", {})                                     # ch 12
     print(f"  [usage] in={u.get('input_tokens')} "
           f"cache_read={u.get('cache_read_input_tokens')} "
