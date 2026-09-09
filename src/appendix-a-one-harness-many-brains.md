@@ -1,7 +1,7 @@
 # Appendix A: One Harness, Many Brains
 
 *Harness Engineering 101, Appendix — Advanced Topics.
-[Series index](README.md)*
+[Series index](index.html)*
 
 ---
 
@@ -114,4 +114,4 @@ adapts to what it is driving. And both are optional until the day your
 bill or your latency says otherwise, which is why this lives in the
 appendix and not the spine.
 
-*[Series index](README.md)*
+*[Series index](index.html)*

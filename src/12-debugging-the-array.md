@@ -1,7 +1,7 @@
 # Chapter 12: Debugging the Array
 
 *Harness Engineering 101, Part III — The Ecosystem.
-[Series index](README.md) · [Prev](11-extending-the-body.md) ·
+[Series index](index.html) · [Prev](11-extending-the-body.md) ·
 [Next: Reflexes and Guardrails](13-reflexes-and-guardrails.md)*
 
 ---

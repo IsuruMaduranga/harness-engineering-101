@@ -1,7 +1,7 @@
 # Chapter 10: Every Framework Is a Wrapper Around Chapter 1
 
 *Harness Engineering 101, Part III — The Ecosystem.
-[Series index](README.md) · [Prev](09-background-work-and-time.md) ·
+[Series index](index.html) · [Prev](09-background-work-and-time.md) ·
 [Next: Extending the Body](11-extending-the-body.md)*
 
 ---

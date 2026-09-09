@@ -1,7 +1,7 @@
 # Chapter 15: RAG Was a Harness Pattern All Along
 
 *Harness Engineering 101, Part IV — Trust, Domains, and Data.
-[Series index](README.md) · [Prev](14-coding-agents.md) ·
+[Series index](index.html) · [Prev](14-coding-agents.md) ·
 [Next: Epilogue — Build Your Own](16-epilogue-build-your-own.md)*
 
 ---

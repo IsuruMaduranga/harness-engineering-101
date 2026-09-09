@@ -1,7 +1,7 @@
 # Chapter 9: Background Work and Time
 
 *Harness Engineering 101, Part II — Running Long.
-[Series index](README.md) · [Prev](08-steering.md) ·
+[Series index](index.html) · [Prev](08-steering.md) ·
 [Next: Frameworks Are Wrappers](10-frameworks-are-wrappers.md)*
 
 ---

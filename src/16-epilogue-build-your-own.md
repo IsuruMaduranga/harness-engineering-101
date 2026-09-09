@@ -1,7 +1,7 @@
 # Epilogue: Build Your Own
 
 *Harness Engineering 101.
-[Series index](README.md) · [Prev](15-rag.md) ·
+[Series index](index.html) · [Prev](15-rag.md) ·
 [Appendix A](appendix-a-one-harness-many-brains.md)*
 
 ---
@@ -9,7 +9,7 @@
 Fifteen chapters ago I claimed that an agent is a while loop around a chat
 completion, and that everything else is a patch with a reason. The honest
 way to close is to put the whole body on the table. This is a walk through
-[`harness/harness.py`](harness/harness.py): 298 lines, zero dependencies,
+[`harness/harness.py`](https://github.com/IsuruMaduranga/harness-engineering-101/blob/main/src/harness/harness.py): 298 lines, zero dependencies,
 every patch from the series, runnable against a real model right now.
 
 ```bash

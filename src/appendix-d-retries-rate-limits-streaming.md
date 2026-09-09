@@ -1,7 +1,7 @@
 # Appendix D: Retries, Rate Limits, and Streaming
 
 *Harness Engineering 101, Appendix — Advanced Topics.
-[Series index](README.md)*
+[Series index](index.html)*
 
 ---
 
@@ -139,7 +139,7 @@ socket config.
 You do not need a new harness for this. It is the complete harness from the
 epilogue, with one thing different: the line that used to open the connection
 now calls a version that retries. The full runnable file is
-[`harness/appendix-d/harness.py`](harness/appendix-d/harness.py), and you run
+[`harness/appendix-d/harness.py`](https://github.com/IsuruMaduranga/harness-engineering-101/blob/main/src/harness/appendix-d/harness.py), and you run
 it exactly like before — `python3 harness.py` — it just no longer falls over
 on a blip. Two small functions do the work:
 
@@ -213,4 +213,4 @@ context size and fan-out, not request count, are what exhaust them. Partial stre
 is not output. And capture failures like you capture requests, because
 "the model is being weird" is sometimes a half-dead socket.
 
-*[Series index](README.md)*
+*[Series index](index.html)*

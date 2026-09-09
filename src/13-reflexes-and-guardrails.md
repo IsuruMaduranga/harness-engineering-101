@@ -1,7 +1,7 @@
 # Chapter 13: Reflexes and Guardrails
 
 *Harness Engineering 101, Part IV — Trust, Domains, and Data.
-[Series index](README.md) · [Prev](12-debugging-the-array.md) ·
+[Series index](index.html) · [Prev](12-debugging-the-array.md) ·
 [Next: Coding Agents](14-coding-agents.md)*
 
 ---

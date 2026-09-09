@@ -87,8 +87,9 @@ Standalone pieces. Read them when you need them.
 
 ## The toy harness
 
-The running example lives in [`harness/`](harness/). Each version is the
-previous one plus the chapter's patch:
+The running example lives in
+[`src/harness/`](https://github.com/IsuruMaduranga/harness-engineering-101/tree/main/src/harness)
+on GitHub. Each version is the previous one plus the chapter's patch:
 
 - `harness/v1_chat.py` — chapter 1: the 30-line chat loop
 - `harness/v2_tools.py` — chapter 3: tools bolted on

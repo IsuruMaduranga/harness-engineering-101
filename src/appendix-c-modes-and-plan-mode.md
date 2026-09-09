@@ -1,7 +1,7 @@
 # Appendix C: Modes and Plan Mode
 
 *Harness Engineering 101, Appendix — Advanced Topics.
-[Series index](README.md)*
+[Series index](index.html)*
 
 ---
 
@@ -103,4 +103,4 @@ review the intention once, then execute against the approved plan.
 It converts the human from a click-through checkpoint into a reviewer of
 intentions, which is the job they were always better at.
 
-*[Series index](README.md)*
+*[Series index](index.html)*

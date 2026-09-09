@@ -1,7 +1,7 @@
 # Chapter 3: Tools: JSON Mapped to Functions
 
 *Harness Engineering 101, Part I — The Wire.
-[Series index](README.md) · [Prev](02-the-brain.md) ·
+[Series index](index.html) · [Prev](02-the-brain.md) ·
 [Next: The Agent Loop](04-the-agent-loop.md)*
 
 ---
@@ -109,7 +109,7 @@ difference.)
 
 ## The toy harness, v2
 
-[`harness/v2_tools.py`](harness/v2_tools.py) adds two tools to v1. The new
+[`harness/v2_tools.py`](https://github.com/IsuruMaduranga/harness-engineering-101/blob/main/src/harness/v2_tools.py) adds two tools to v1. The new
 parts are marked:
 
 ```python

@@ -1,7 +1,7 @@
 # Chapter 11: Extending the Body: MCP, Skills, Deferred Loading, Hooks
 
 *Harness Engineering 101, Part III — The Ecosystem.
-[Series index](README.md) · [Prev](10-frameworks-are-wrappers.md) ·
+[Series index](index.html) · [Prev](10-frameworks-are-wrappers.md) ·
 [Next: Debugging the Array](12-debugging-the-array.md)*
 
 ---

@@ -1,7 +1,7 @@
 # Chapter 8: Steering the Running Loop
 
 *Harness Engineering 101, Part II — Running Long.
-[Series index](README.md) · [Prev](07-subagents.md) ·
+[Series index](index.html) · [Prev](07-subagents.md) ·
 [Next: Background Work and Time](09-background-work-and-time.md)*
 
 ---

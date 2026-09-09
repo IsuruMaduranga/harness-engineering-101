@@ -1,7 +1,7 @@
 # Chapter 7: Subagents: Fork the Context
 
 *Harness Engineering 101, Part II — Running Long.
-[Series index](README.md) · [Prev](06-context-is-a-budget.md) ·
+[Series index](index.html) · [Prev](06-context-is-a-budget.md) ·
 [Next: Steering](08-steering.md)*
 
 ---
@@ -111,7 +111,7 @@ Poor delegation targets:
 ## The toy harness, v4
 
 The beautiful thing about implementing subagents is discovering there is
-almost nothing to implement. [`harness/v4_subagents.py`](harness/v4_subagents.py)
+almost nothing to implement. [`harness/v4_subagents.py`](https://github.com/IsuruMaduranga/harness-engineering-101/blob/main/src/harness/v4_subagents.py)
 adds one tool whose executor calls the loop we already have:
 
 ```python

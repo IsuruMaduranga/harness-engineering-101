@@ -1,6 +1,6 @@
 # Chapter 1: It's Just a JSON Array
 
-*Harness Engineering 101, Part I — The Wire. [Series index](README.md) ·
+*Harness Engineering 101, Part I — The Wire. [Series index](index.html) ·
 [Next: The Brain](02-the-brain.md)*
 
 ---
@@ -212,7 +212,7 @@ as a swappable part because everything above the wire format is identical.
 ## The toy harness, v1
 
 Everything in this chapter fits in a program you can read in a minute. This
-is [`harness/v1_chat.py`](harness/v1_chat.py), a working chat client with
+is [`harness/v1_chat.py`](https://github.com/IsuruMaduranga/harness-engineering-101/blob/main/src/harness/v1_chat.py), a working chat client with
 "memory":
 
 ```python

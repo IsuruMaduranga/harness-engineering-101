@@ -1,7 +1,7 @@
 # Chapter 2: The Brain: A Next-Token Black Box
 
 *Harness Engineering 101, Part I — The Wire.
-[Series index](README.md) · [Prev](01-its-just-a-json-array.md) ·
+[Series index](index.html) · [Prev](01-its-just-a-json-array.md) ·
 [Next: Tools](03-tools.md)*
 
 ---

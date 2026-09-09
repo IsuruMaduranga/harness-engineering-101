@@ -1,7 +1,7 @@
 # Chapter 4: The Agent Loop
 
 *Harness Engineering 101, Part I — The Wire.
-[Series index](README.md) · [Prev](03-tools.md) ·
+[Series index](index.html) · [Prev](03-tools.md) ·
 [Next: Caching](05-caching.md)*
 
 ---
@@ -145,7 +145,7 @@ thinking blocks), the Action (as tool_use blocks), and the loop, natively.
 
 ## The toy harness, v3
 
-[`harness/v3_agent.py`](harness/v3_agent.py) turns v2 into a real agent.
+[`harness/v3_agent.py`](https://github.com/IsuruMaduranga/harness-engineering-101/blob/main/src/harness/v3_agent.py) turns v2 into a real agent.
 The heart of the change:
 
 ```python
