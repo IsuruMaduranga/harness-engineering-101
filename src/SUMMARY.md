@@ -39,3 +39,7 @@
 - [B. Worktrees and Isolation](appendix-b-worktrees-and-isolation.md)
 - [C. Modes and Plan Mode](appendix-c-modes-and-plan-mode.md)
 - [D. Retries, Rate Limits, and Streaming](appendix-d-retries-rate-limits-streaming.md)
+
+---
+
+[License](license.md)

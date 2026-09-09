@@ -116,3 +116,8 @@ Edit a script, rerun, and the chapter picks up the new image.
 
 Training or fine-tuning models, TUI implementation, provider billing and
 OAuth plumbing. This series is about the body, not about growing a brain.
+
+## License
+
+The prose is CC BY-NC-ND 4.0; the code is MIT. See [License](license.md) for
+the terms.
