@@ -91,7 +91,9 @@ failed, so it sometimes re-proposes A. You cannot fix this entirely; you can
 write the summarization prompt to preserve what your domain needs most
 (current state, decisions made, files touched, next steps, constraints
 discovered). Claude Code's compaction prompt is quite specific about this
-structure; "summarize the above" is not enough.
+structure; "summarize the above" is not enough. One Code's
+[compaction prompt](https://github.com/IsuruMaduranga/one-code/blob/master/extensions/compaction/prompt.ts)
+is one you can read in full.
 
 **Compaction is a cache reset, and that is fine, because it is rare.**
 Chapter 5 warned against trimming the array continuously. Compaction is the

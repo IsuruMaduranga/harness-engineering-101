@@ -71,7 +71,7 @@ reminders": anything (a file watcher, a permission system, a memory module)
 can enqueue a note, and the queue drains into the next outgoing message in a
 stable order. Centralizing this matters because scattered injections turn
 the array into a place where no one can say what the model saw and why. In
-One Code that queue is a first-class internal channel with ordering rules,
+[One Code](https://github.com/IsuruMaduranga/one-code) that queue is a first-class internal channel with ordering rules,
 and every feature that needs to whisper to the model goes through it. When
 you build a harness, build the queue early; you will be surprised how many
 features turn out to be "enqueue a reminder."

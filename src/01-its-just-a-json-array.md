@@ -205,9 +205,10 @@ are the same thing: an ordered list of role-tagged blocks, sent whole,
 continued once.
 
 This is why "which provider" is a shallow decision for a harness. The array
-is the architecture. The dialect is a serialization detail. One Code, my
-rebuild of Claude Code on a provider-neutral runtime, can treat the provider
-as a swappable part because everything above the wire format is identical.
+is the architecture. The dialect is a serialization detail.
+[One Code](https://github.com/IsuruMaduranga/one-code), my provider-neutral
+rebuild of Claude Code, can treat the provider as a swappable part because
+everything above the wire format is identical.
 
 ## The toy harness, v1
 

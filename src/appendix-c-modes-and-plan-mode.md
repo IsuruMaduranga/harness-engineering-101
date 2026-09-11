@@ -93,6 +93,11 @@ assumptions. Production plan modes re-verify as they go, and treat "the
 plan no longer matches reality" as a stop-and-replan event, not something
 to push past.
 
+One Code's
+[plan-mode extension](https://github.com/IsuruMaduranga/one-code/tree/master/extensions/plan-mode)
+works this way: writes are blocked while planning, the plan is reviewed
+once, and execution runs against it.
+
 ## What to remember
 
 Modes are the gate. A trust setting controls them, switching is cheap, and

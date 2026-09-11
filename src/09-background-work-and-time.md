@@ -74,7 +74,7 @@ turn ever was.
 
 One steering detail from production that looks trivial and is not: the
 harness should *block* the model from foreground `sleep`. Claude Code and
-One Code both do this: a guard rejects `sleep`-style waiting with a message
+[One Code](https://github.com/IsuruMaduranga/one-code) both do this: a guard rejects `sleep`-style waiting with a message
 telling the model to use background tasks and notifications instead. Models
 poll because polling is what their training data does; the harness has to
 make the good pattern the easy one. Tool design is behavior design.

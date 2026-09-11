@@ -97,6 +97,11 @@ with the safety of none. Production harnesses manage fatigue with:
   unattended (see Appendix C for plan mode). Approval moves up an
   abstraction level, where humans are good at judging.
 
+All three live in One Code's
+[permissions extension](https://github.com/IsuruMaduranga/one-code/tree/master/extensions/permissions):
+the modes, the remembered grants, the protected paths, and a separate gate
+for what subagents are allowed to do.
+
 ## Layer 3: a cheap brain judging the big brain
 
 The tension left over: full autonomy ("auto-approve everything") is what

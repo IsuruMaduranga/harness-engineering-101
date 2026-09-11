@@ -96,7 +96,7 @@ whole steering mechanism on this principle, and it exists *because* of this
 chapter.
 
 Production harnesses treat prefix stability as an invariant with tests. In
-One Code, the system prompt stays byte-stable across turns unless something
+[One Code](https://github.com/IsuruMaduranga/one-code), the system prompt stays byte-stable across turns unless something
 genuinely changed. Payload-capture tests (chapter 12) check this, because
 one careless byte up top is an invisible 10x price increase. Nothing breaks.
 No error appears. You just quietly pay full price on every request, and only

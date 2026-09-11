@@ -176,6 +176,11 @@ do, where to look, what done looks like, what to return. Every failure I
 have seen in multi-agent systems that was blamed on "coordination" was a
 bad ticket.
 
+One Code's [subagents extension](https://github.com/IsuruMaduranga/one-code/tree/master/extensions/subagents)
+is this chapter at production size: the same recursive loop, with a live
+panel for the running children, a model you can pick per task, and a
+worktree per child.
+
 ## What you now know
 
 - A subagent is the agent loop run over a fresh, disposable array; only its

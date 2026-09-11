@@ -117,6 +117,11 @@ matching schemas and, on providers that support it, activates them for
 subsequent requests. A hundred connected tools ride as a hundred short
 lines plus one searcher, instead of a hundred full JSON schemas.
 
+One Code carries this as its
+[`tool-search` extension](https://github.com/IsuruMaduranga/one-code/tree/master/extensions/tool-search):
+a searcher tool plus the append-only activation below, if you want to read
+one wired up.
+
 There's a wrinkle worth knowing, even if you never implement it. Once a
 tool's schema is *activated* into the conversation, it has to stay available
 and stable for the rest of the session (the model might call it twenty

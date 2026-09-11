@@ -107,8 +107,10 @@ remembered grants (ch. 13, Appendix C), streaming for the human's sake
 the array (ch. 12). None of these will change the skeleton. I have built
 this same shape twice at production scale, once against the frontier and
 once as a from-scratch rebuild of Claude Code's behavior on another
-runtime, and the skeleton you are holding is genuinely the one under both:
-an array, a loop, a dispatch table, a queue, and a gate.
+runtime ([One Code](https://github.com/IsuruMaduranga/one-code), the
+full-size version of the skeleton here), and the skeleton you are holding is
+genuinely the one under both: an array, a loop, a dispatch table, a queue,
+and a gate.
 
 ## The close
 

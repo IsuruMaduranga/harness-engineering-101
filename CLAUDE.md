@@ -3,6 +3,21 @@
 The book source. An mdBook of 16 chapters plus appendices, with a runnable toy
 harness in plain Python. Rendered to static HTML and served on the blog.
 
+## Voice and goal — read before editing any prose
+
+The goal is to deliver the *intuition* behind harness engineering, with no
+buzzwords, and help people navigate what is otherwise a confusing mess. When
+writing or editing chapter prose, hold to these:
+
+- Plain, simple English. No jargon, no hype, no buzzword tours. Spell things
+  out.
+- Minto pyramid: lead with the answer/conclusion, then the support beneath it.
+- Conversational tone, written as the author's (Isuru's) first-hand
+  experience — first person, "I watched this show up one patch at a time."
+- The toy harness is the hero/spine of the series; One Code is the
+  production-scale companion, cited as evidence and for advanced examples only,
+  never promoted.
+
 ## Commands
 
 ```bash

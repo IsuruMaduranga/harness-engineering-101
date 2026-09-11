@@ -101,6 +101,12 @@ Python 3.10+, zero dependencies (raw `urllib`), Anthropic Messages API by
 default. Swapping the wire format for OpenAI's is chapter 1 homework, and the
 point of the whole series is that it's *only* the wire format you'd swap.
 
+The toy is deliberately small, so a few chapters reach for a bigger example.
+That is [One Code](https://github.com/IsuruMaduranga/one-code), my
+from-scratch rebuild of Claude Code on a provider-neutral runtime, running
+the same patterns at production scale. The toy harness is what this series
+builds; One Code is where I point when you want to see a patch grown up.
+
 ## Out of scope
 
 Training or fine-tuning models, TUI implementation, provider billing and
