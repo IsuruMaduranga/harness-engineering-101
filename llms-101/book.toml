@@ -1,0 +1,28 @@
+[book]
+title = "LLMs 101: Inside the Brain"
+description = "How large language models actually work, from first principles. The harness is the body; this is the brain."
+authors = ["Isuru Wijesiri"]
+language = "en"
+src = "src"
+
+[build]
+build-dir = "book"
+create-missing = false
+
+[preprocessor.mermaid]
+command = "mdbook-mermaid"
+
+[output.html]
+default-theme = "rust"
+preferred-dark-theme = "ayu"
+site-url = "/llms-101/"
+git-repository-url = "https://github.com/IsuruMaduranga/harness-engineering-101"
+edit-url-template = "https://github.com/IsuruMaduranga/harness-engineering-101/edit/main/llms-101/{path}"
+additional-js = ["mermaid.min.js", "mermaid-init.js", "site-back-link.js", "external-links-new-tab.js"]
+
+[output.html.fold]
+enable = true
+level = 1
+
+[output.html.search]
+enable = true
