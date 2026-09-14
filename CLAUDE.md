@@ -36,8 +36,11 @@ The same rules apply to `llms-101/`, with these additions:
   run." Every term lands on one of those three shelves.
 - Each chapter opens with a question the harness book left open (the
   "body-book question" column in `llms-101/src/README.md`) and answers it.
-- Voice: "I build the body; here is what I had to learn about the brain."
-  Cross-link the harness book by absolute URL
+- Voice: first person from eight years in AI (classical ML since 2018, thousands
+  of models trained, a few hundred LLM fine-tunes for the EnSiTa and
+  Confident-but-Wrong papers,
+  code-retrieval embedding models). Papers are cited as evidence, never
+  promoted. Cross-link the harness book by absolute URL
   (`https://isuruwijesiri.com/harness-engineering-101/<page>.html`).
 - Every number in the prose comes from a real run of the code in
   `llms-101/src/gpt/`. Do not invent outputs; run the script and paste.

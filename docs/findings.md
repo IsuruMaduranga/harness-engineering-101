@@ -33,3 +33,14 @@ in this repo. Global to both books.
   is the decode-is-bandwidth-bound point chapter 13 makes.
 - **mdbook-mermaid 0.5.0 warns when called from mdbook 0.5.4** but renders
   fine. Harmless.
+- **`ls` in this shell is `eza --icons --group-directories-first`, and eza
+  hangs when its output is not a terminal.** Commands that end in `ls` from a
+  non-interactive shell never return (two runs hit the 120 s timeout). Use
+  `command ls` or `find`.
+- **`harness.py` (the harness book's toy agent) spends most of a 50-round
+  budget polling when a tool call takes minutes.** Run against `gpt.py train`
+  (3 min), 34 of 50 rounds went to background sleeps and `task_output`; it hit
+  `MAX_ROUNDS` before reading its own result. Foreground `run_command` waits
+  up to 300 s, so telling the agent to run training synchronously fixes it.
+- **`cp` is aliased to `cp -i` in this shell**, so overwriting a file from a
+  non-interactive command blocks on a y/n prompt forever. Use `\cp -f`.
