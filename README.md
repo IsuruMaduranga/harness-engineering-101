@@ -9,10 +9,6 @@ book with [mdBook](https://rust-lang.github.io/mdBook/).
 
 **📖 Read it online: <https://isuruwijesiri.com/harness-engineering-101/>**
 
-Originally published on my blog:
-<https://isuruwijesiri.com/blog/2026/harness-engineering-101/>. More writing at
-[isuruwijesiri.com](https://isuruwijesiri.com).
-
 An LLM API is stateless. Every turn, you send the entire conversation as a JSON
 array and get text back. A *harness* is the program that builds, maintains, and
 protects that array. Everything the field calls "agents" is a set of patches to
