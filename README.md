@@ -5,7 +5,7 @@
 *Version 1.0 — September 2026.*
 
 A blog series about building AI agents from first principles, published as a
-book with [mdBook](https://rust-lang.github.io/mdBook/).
+book.
 
 **📖 Read it online: <https://isuruwijesiri.com/harness-engineering-101/>**
 
@@ -15,6 +15,10 @@ protects that array. Everything the field calls "agents" is a set of patches to
 that one loop, and each patch exists because something concrete broke. This
 series develops that one idea across 16 chapters, growing a ~300-line toy agent
 in plain Python as it goes.
+
+The patterns here are developed in full in
+[One Code](https://github.com/IsuruMaduranga/one-code), an open-source coding
+agent built on [pi](https://github.com/earendil-works/pi).
 
 The rendered book reads best online at the link above. If you'd rather read
 the source here on GitHub, follow the chapters in order below. The full
