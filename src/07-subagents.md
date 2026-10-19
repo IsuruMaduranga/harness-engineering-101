@@ -18,7 +18,7 @@ carry one sentence of value.
 conclusion. That is a **subagent**, and I want to define it precisely,
 because the industry makes it sound like distributed systems:
 
-> A subagent is a second agent loop, run with a **fresh, empty array**,
+> A subagent is a second agent loop, run with a fresh, empty array,
 > given one task, whose final answer is returned to the main loop as a tool
 > result. Then its array is thrown away.
 
@@ -83,7 +83,7 @@ tool result.
 ## What to delegate
 
 From a context-budget view, the rule is simple: delegate work whose
-**intermediate volume is high and final summary is small.**
+intermediate volume is high and final summary is small.
 
 Good delegation targets:
 
@@ -195,16 +195,12 @@ worktree per child.
 
 ## What you now know
 
-- A subagent is the agent loop run over a fresh, disposable array; only its
-  final report enters the parent, as a tool result.
-- The point is context protection: high-volume exploration for a
-  fixed-size summary. You pay in tokens and save attention.
-- The child knows nothing, and the parent sees only the report. Write
-  self-contained tasks, and demand evidence in the answers.
-- Delegate high-volume/low-residue work; keep judgment-heavy work in the
-  main loop. Fan out in parallel; avoid deep hierarchies.
-- Implementation is one tool plus a recursive call to the loop you already
-  have.
+- A subagent runs the agent loop on a fresh array, and only its final report
+  comes back to the parent.
+- It spends tokens to keep the main context clean: lots of reading goes in,
+  a short summary comes out.
+- The child knows nothing and the parent sees only the report, so write the
+  task like a ticket for a contractor.
 
 Subagents keep bulk output out of the main array, but another problem shows
 up in long sessions: the model drifts off course, forgets standing rules, or

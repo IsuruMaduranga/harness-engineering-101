@@ -63,8 +63,8 @@ generating. The loop is really a dispatch on this field:
 | `max_tokens` | reply hit the length cap | continuation is truncated; handle it (retry higher, or continue) |
 | `refusal` / safety | model declined | exit, show the message |
 
-At the core there are two states: **`tool_use` means the turn is still in
-progress; `end_turn` means the brain considers the task done.** A "turn" in
+At the core there are two states: `tool_use` means the turn is still in
+progress; `end_turn` means the brain considers the task done. A "turn" in
 an agent is one user request plus however many model+tool rounds the loop
 runs before `end_turn`, not one API call. A single "fix the tests" turn
 might be 40 API calls. The user sees one answer; the array saw 40 round
@@ -86,7 +86,7 @@ flowchart TD
 ## Errors are fuel
 
 The most surprising habit in agent building is to treat a tool failure as
-**information you deliver to the model, not an error you handle.**
+information you deliver to the model, not an error you handle.
 
 In normal software, an exception is a problem for the *programmer*. In an
 agent, a failed command is a problem for the *model*, and the model is good
@@ -201,14 +201,10 @@ expensive, or does something dumb.
 
 ## What you now know
 
-- An agent is a while loop: call the model, execute requested tools, append
-  results, repeat until `end_turn`.
-- `stop_reason` is the loop's control signal. One user turn may be dozens of
-  API calls.
-- Tool failures are input for the model, not exceptions for you. Deliver
-  them raw; cap the rounds.
-- ReAct is this loop implemented in prompt text, from before tool use was
-  trained into the models. The pattern survived; the prompting did not.
+- An agent is a while loop: call the model, run the requested tools, append
+  the results, and repeat until `end_turn`.
+- One user turn can be dozens of API calls, so cap the rounds.
+- Tool failures are input for the model. Pass them back as they are.
 
 The loop works, so now look at what it costs. Forty rounds each resend the
 entire growing array. If the array is 50,000 tokens by mid-task, forty

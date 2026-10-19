@@ -25,8 +25,8 @@ payoff, because you now have the one sentence that organizes all of it:
 
 ## Classic RAG, in harness terms
 
-In this series' vocabulary, the original pattern is that **the harness
-retrieves before the model speaks.** The user asks a question. The harness
+In this series' vocabulary, the original pattern is that the harness
+retrieves before the model speaks. The user asks a question. The harness
 (not the model) searches a document store for relevant chunks, and the
 winners get pasted into the array next to the question. The model then
 answers, now "grounded" in text it was handed.
@@ -128,8 +128,8 @@ document set, classic push RAG remains the correct engineering answer, and
 loop at all: batch pipelines, one-shot API products, strict latency
 budgets.
 
-So the design rule is to **pull when reasoning should steer the reading,
-and push when the reading is predictable.** The two also compose. A fine
+So the design rule is to pull when reasoning should steer the reading,
+and push when the reading is predictable. The two also compose. A fine
 pattern is a cheap push (paste an obviously relevant page) plus pull tools
 for everything else. A coding agent already works this way: the memory
 file is push and grep is pull.
@@ -163,18 +163,12 @@ where anything fits.
 
 ## What you now know
 
-- RAG = choosing what goes in the array, with a search index doing the
-  choosing. Embeddings are grep-for-meaning; the rest of the machinery is
-  search engineering.
-- The variant zoo is knob-naming: index tricks, rankers, retries. Learn the
-  knobs, ignore the classification.
-- The real axis is push (harness guesses up front; cheap, one-shot,
-  guessable document sets) versus pull (model steers retrieval mid-reasoning;
-  better on hard questions, costs a loop). Compose them; fork the long
-  pulls.
-- The bigger lesson is that the harness view turns the field's proper
-  nouns into simple questions about the array. That skill was the point of
-  101, more than any single pattern.
+- RAG is choosing what goes in the array, with a search index doing the
+  choosing.
+- Push means the harness guesses up front. Pull means the model searches
+  while it reasons. Most systems need both.
+- Most of the field's names turn into simple questions about the array once
+  you look at it this way.
 
 The epilogue puts all the pieces together by walking through the complete
 toy harness: fifteen chapters in about 300 lines of Python that you can

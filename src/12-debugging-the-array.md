@@ -171,18 +171,12 @@ debug, and the UI makes it more convenient to look at.
 
 ## What you now know
 
-- Harness bugs live in the assembled request, and mostly divide into "not
-  in the array" / "in the array but wrong" / actual model failure, in
-  roughly that order. Look at the bytes first.
-- Capture requests and responses at the last point before the wire; many
-  bugs come from the drift between what you meant and what was sent.
-- `cache_read_input_tokens` is the number to watch. Zero after round one is
-  a silent 10x cost bug, and only this number tells you.
-- Statelessness makes captures perfectly replayable and *editable*: prompt
-  debugging becomes controlled experiments.
-- Pin the array in CI: presence, placement, bytes. Persist subagent
-  transcripts and the steering queue, or you have no way to check those
-  subsystems.
+- When the model misbehaves, look at the request it actually received before
+  blaming the model.
+- Capture requests and responses at the last point before the wire. Captures
+  replay exactly, so you can edit one and rerun it.
+- Pin the array in tests, and watch `cache_read_input_tokens` for silent
+  cost bugs.
 
 Part III covered the ecosystem: what wraps the array, what extends it, and
 how to see it. Part IV starts with the question all this visibility was

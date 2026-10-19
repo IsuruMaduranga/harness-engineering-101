@@ -51,8 +51,8 @@ flowchart LR
     H -->|tool_result| B
 ```
 
-So the entire trick is that **the dispatch table from chapter 3 got a
-network hop.** The model cannot tell a built-in tool from an MCP tool; both
+So the entire trick is that the dispatch table from chapter 3 got a
+network hop. The model cannot tell a built-in tool from an MCP tool; both
 are schemas in, results out. What MCP actually bought the ecosystem is the
 economics: the Jira integration is written once, by anyone, and works in
 every MCP-speaking harness. Tools became an ecosystem instead of a feature
@@ -81,8 +81,8 @@ runbook into every array, on the chance the user says "cut a release," is a
 serious waste of budget.
 
 A **skill** is the budget-respecting version: a folder with a markdown file
-of instructions (plus optional scripts and templates), with a **name and a
-one-line description**. At session start, the harness injects *only the
+of instructions (plus optional scripts and templates), with a name and a
+one-line description. At session start, the harness injects *only the
 names and descriptions*: a menu, a few hundred tokens for dozens of skills.
 When the task matches one, the model asks for it (via a `skill` tool call,
 or the user types `/release`), and only *then* does the full body of
@@ -172,17 +172,13 @@ mechanism is this:
 
 ## What you now know
 
-- MCP is chapter 3's dispatch table with a network hop and a discovery
-  handshake: tools as an ecosystem. Treat servers as trusted limbs, because
-  that is what they are.
-- Skills are instructions behind a menu: index in context, prose on demand,
-  executable extras via existing tools.
-- Deferred loading does the same for tool schemas, with an append-only
-  reveal to respect caching.
-- All three are one shape: progressive disclosure against the context
-  budget.
-- Hooks are deterministic scripts attached to loop events, used for
-  behavior that must run every time rather than almost every time.
+- MCP is chapter 3's dispatch table over the network. An MCP server runs
+  with your harness's trust, so choose servers as carefully as code you
+  install.
+- Skills and deferred tool loading keep a short index in the array and load
+  the detail only when needed.
+- Hooks are scripts that run on loop events, for things that must happen
+  every time.
 
 Strangers can now extend the body with their tools, instructions and
 reflexes. That sharpens a question that has been building since chapter 5.

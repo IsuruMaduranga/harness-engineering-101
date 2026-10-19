@@ -134,16 +134,11 @@ telling you where the complexity will hurt.
 
 ## What you now know
 
-- Framework vocabulary maps one-to-one onto things you built in chapters 1
-  through 9. Chains and graphs are control flow; memory is the array;
-  executors are the loop.
-- The heaviness is historical: the tricks weak models needed became the
-  abstractions, and then the models absorbed the tricks.
-- Frameworks genuinely offer plumbing, provider abstraction, tracing, and
-  team legibility. Their one real cost is distance from the array, which is
-  where all the engineering in this series happens.
-- Evaluate any framework with four questions, starting with: can I see the
-  bytes going to the model?
+- Framework terms map onto things you built in chapters 1 to 9: chains are
+  control flow, memory is the array, executors are the loop.
+- Frameworks give real value in plumbing, provider abstraction and tracing.
+- Their cost is distance from the array, so first ask whether you can see
+  the bytes sent to the model.
 
 The next chapter covers the parts of the ecosystem that are *not*
 wrappers: the standards and mechanisms for getting new capabilities into

@@ -161,17 +161,11 @@ and feedback, the terminal for the long tail, and guardrails around both.**
 
 ## What you now know
 
-- Coding won because its world is text, its feedback is free and honest,
-  and its mistakes are undoable. Use those three tests as a measure for any
-  other domain.
-- The coding body's organs: mismatch-refusing edit tools (tool shape as
-  guardrail), cheap search senses, LSP diagnostics injected as steering,
-  git as recoverability infrastructure.
-- The terminal-only argument is half right: the shell is the irreplaceable
-  long tail, and history favors bodies dissolving into brains. It underrates
-  what structure buys *now*: the ability to permission actions, automatic
-  feedback, and a floor for weak models.
-- Ship both, let the model choose, and gate everything.
+- Coding suited agents first: the world is text, feedback is free, and
+  mistakes can be undone. Use those three tests for any other domain.
+- Coding harnesses add edit tools that refuse bad edits, fast search,
+  diagnostics after edits, and git for undo.
+- Ship structured tools and a terminal, let the model choose, and gate both.
 
 One chapter of the main sequence remains, and it is the retrospective one:
 the pattern this whole series has been circling (put the right data in the

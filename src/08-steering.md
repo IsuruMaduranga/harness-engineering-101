@@ -65,7 +65,7 @@ in the system prompt. There are three reasons, all from earlier chapters:
    want is to react to an *event* between two rounds, which is exactly
    where the next user-side message is about to be built anyway.
 
-The important discipline is to send all steering through a **queue**
+The important discipline is to send all steering through a queue
 instead of pasting strings into the array one at a time. A production
 harness has one component that owns "pending reminders": anything (a file
 watcher, a permission system, a memory module) can enqueue a note, and the
@@ -109,8 +109,8 @@ writes *to itself*.
 
 Give the agent a `todo_write` tool: "maintain your task list; update
 statuses as you work." The tool's implementation stores a small list in
-harness state. **After each update, the harness injects the current list
-back into the conversation as a reminder.** So the model's plan becomes an
+harness state. After each update, the harness injects the current list
+back into the conversation as a reminder. So the model's plan becomes an
 artifact outside the model, and it comes back as fresh tokens at the
 bottom of the array, round after round.
 
@@ -173,17 +173,12 @@ can edit it straight away.
 
 ## What you now know
 
-- The harness talks to a running loop by appending labeled blocks
-  (`<system-reminder>`) to user-side messages: bottom of the array, cache
-  respected, recency exploited.
-- Steering goes through a central queue; events in the body become
-  sentences in the array.
-- The todo tool is self-steering: the model's plan is externalized, then
-  re-injected so it cannot fade. It is a whiteboard kept in view.
-- OpenAI's developer role is the same pattern with official wire support.
-  Harness conventions tend to become API features.
-- Steer on events, sparingly. A constant reminder is a sign of a design
-  problem.
+- The harness steers a running loop by appending reminders near the bottom
+  of the array, which keeps the cache.
+- The todo tool keeps the model's own plan in view by injecting it back
+  after each update.
+- Steer on events, and rarely. A reminder you need every round belongs in
+  the system prompt.
 
 The loop can now be informed and re-aimed while it runs. The next failure
 is time itself. Everything so far happens *inside* one synchronous turn,

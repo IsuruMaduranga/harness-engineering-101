@@ -60,8 +60,8 @@ sequenceDiagram
     H-->>B: tool_result: build log tail
 ```
 
-The subtle part is the last arrow before the peek, where **completion
-arrives as a steering event**. When the process exits, the harness does
+The subtle part is the last arrow before the peek, where completion
+arrives as a steering event. When the process exits, the harness does
 not interrupt anything; it enqueues a chapter 8 reminder ("task b1
 finished, exit 0"), which rides into the next round's user-side message.
 If no round is running because the turn already ended, the harness
@@ -157,15 +157,12 @@ Python. The epilogue's full harness includes a minimal version.
 
 ## What you now know
 
-- Slow work becomes a background task: start detached, return an ID,
-  collect output in a registry. `task_output` to peek, `task_stop` to kill.
-- Completions and conditions come back as steering events (chapter 8's
-  queue), and if no turn is running, the harness starts one: the body can
-  now invoke the brain.
-- Monitors, schedules, and model-set wakeups are one mechanism with three
-  triggers. The brain sleeps while the body watches, and polling goes away.
-- Keep the wakes affordable, make sure notifications are accurate, keep
-  background jobs visible and killable, and persist the state to disk.
+- Slow work runs as a background task with an ID the model can check or
+  stop.
+- When a task finishes, the harness tells the model through the steering
+  queue, and starts a turn if none is running.
+- Monitors, schedules and model-set wakeups are one mechanism with three
+  triggers. Keep every job visible and killable.
 
 That finishes Part II, which covered context budgets, subagents, steering,
 and background tasks. Part III steps back to look at the broader ecosystem,

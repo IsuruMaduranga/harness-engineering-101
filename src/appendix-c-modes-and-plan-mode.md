@@ -25,7 +25,7 @@ coding agent:
 | default / ask | auto | prompt | prompt | trust nothing yet |
 | accept-edits | auto | auto | prompt | trust its editing, not its shell |
 | auto / full | auto | auto | classifier + reflexes (ch. 13) | flow state |
-| plan | auto | **refused** | **refused** | think, don't touch |
+| plan | auto | refused | refused | think, don't touch |
 
 The implementation is exactly where you would put it: the gate from
 chapter 13 takes the mode as an input. Three engineering notes make modes
@@ -54,8 +54,8 @@ work in practice:
 ## Plan mode: approve the intention, not the keystrokes
 
 The dial above trades safety against interruptions action by action. Plan
-mode moves the trade to a better place: it **separates deciding from
-doing.**
+mode moves the trade to a better place: it separates deciding from
+doing.
 
 In plan mode, the user poses a substantial task with the body in a
 read-only state. The agent explores freely (reads, searches and subagents

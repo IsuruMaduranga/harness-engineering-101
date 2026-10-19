@@ -2,7 +2,7 @@
 
 *The LLM is the brain. The harness is the body.*
 
-*By [Isuru Wijesiri](https://isuruwijesiri.com). Version 1.0, September 2026.*
+*By [Isuru Wijesiri](https://isuruwijesiri.com). Version 1.1, October 2026.*
 
 > AI usage disclosure: I drafted every chapter myself, from what I learned
 > building the projects described below. I used Claude Code and One Code to reorder each

@@ -217,15 +217,10 @@ decision, not a tool, and it gets its own chapter (13).
 ## What you now know
 
 - A tool is three pieces of JSON: a schema in the request, a `tool_use`
-  block in the reply, a `tool_result` block in the next message.
-- The model asks; the harness acts. Every agent capability is a function
-  you chose to expose, which is why capability and safety are both harness
-  properties.
-- Tool errors should be returned as strings in the tool result, not raised
-  as exceptions.
-- The human is a tool (clarifying questions) and a gate (approvals).
-- Structured output is tool calling pointed at data. Server-side tools are
-  tool calling executed by the provider.
+  block in the reply, and a `tool_result` block in the next message.
+- The model asks and the harness acts, so capability and safety both live in
+  the harness.
+- Return tool errors as text in the tool result, not as exceptions.
 
 v2 can act only once, but real tasks need the model to act, look at the
 result, and act again, without a human pressing enter between steps. That

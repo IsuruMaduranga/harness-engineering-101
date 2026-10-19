@@ -147,9 +147,9 @@ behavior comes from. Three learned skills matter most for this series:
   during training. Chapter 4 leans on this: feeding failures back into the
   array is half of what makes agents work.
 
-In practice, across all three stages, **when the model behaves well, it is
+In practice, across all three stages, when the model behaves well, it is
 because someone trained it to; when it behaves badly, no message in your
-array fully overrides that.** A harness works *with* those trained
+array fully overrides that. A harness works *with* those trained
 behaviors, because it cannot install new ones.
 
 ## More than text: modalities

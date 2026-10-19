@@ -69,7 +69,7 @@ Here is what stays shared, in the order it will cause you trouble:
 ## The non-coding version
 
 The pattern goes beyond git, and the principle underneath it is that
-**agents should work on transactions, not on the live world**: a draft
+agents should work on transactions, not on the live world: a draft
 email instead of the send button, a staging table instead of production,
 a proposed diff instead of an applied one. The worktree is just the
 coding domain's excellent built-in transaction. When you build a harness

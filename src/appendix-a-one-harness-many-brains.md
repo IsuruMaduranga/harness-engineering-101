@@ -63,8 +63,8 @@ models.
 
 ## Prompt tiers: the body adapts to the brain
 
-Routing is only half of the work. The other half is that **the same harness
-should not send the exact same array to different models.**
+Routing is only half of the work. The other half is that the same harness
+should not send the exact same array to different models.
 
 Chapter 14 touched on the reason: weaker models need more body. Concretely,
 in a harness that runs on multiple tiers

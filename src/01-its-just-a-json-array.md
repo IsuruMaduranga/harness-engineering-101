@@ -13,7 +13,7 @@ agents and no caching, and hardly anyone used tool calls. You sent an array
 of messages to an HTTP endpoint and got formatted text back, and that was
 all. Our array held the user's whole project, sent again with every message.
 
-**That is still all that happens**, and this whole series is built on that
+That is still all that happens, and this whole series is built on that
 fact. Every agent you have seen, including the one that edits your code and
 files your pull requests, is a program that builds a JSON array, POSTs it,
 reads the reply, updates the array, and POSTs it again.
@@ -106,7 +106,7 @@ Once this clicks, a lot of the field gets simpler:
 - Cost scales with the array, and you resend it every turn. That becomes
   chapter 5.
 
-One useful consequence is that **sessions are just files.** When a coding
+One useful consequence is that sessions are just files. When a coding
 agent offers `--resume`, it loads a JSON array from disk and keeps
 appending. When you type `/clear`, the implementation is essentially:
 
@@ -141,7 +141,7 @@ models are *trained* to treat each role differently (chapter 2 explains what
 ## Content is blocks, not strings
 
 Originally, `content` was a string. It still can be, but in modern APIs it
-is a **list of typed blocks**:
+is a list of typed blocks:
 
 ```json
 {
@@ -157,8 +157,8 @@ Text, images (base64 bytes, right in the JSON), PDFs, tool calls and the
 model's thinking are all blocks. When models learned to see, the array kept
 its shape and the blocks got new types. Chapter 2 covers what the brain does
 with an image block; chapter 3 covers tool blocks. The main thing to
-remember is that **whatever modality or feature ships next year will arrive
-as a new block type in the same array.**
+remember is that whatever modality or feature ships next year will arrive
+as a new block type in the same array.
 
 ## Two dialects, one language
 
@@ -201,7 +201,7 @@ The differences worth knowing:
 | Tool results | `tool_result` block in a `user` message | separate `tool` role message |
 | Turn rules | roles must alternate user/assistant | freeform |
 
-OpenAI's newer **Responses API** reshuffles this again: `input` instead of
+OpenAI's newer Responses API reshuffles this again: `input` instead of
 `messages`, a `developer` role, and an optional server-side conversation
 store. That store is the one real departure from statelessness: the provider
 offers to keep the array for you. Gemini has its own spelling. All of them
@@ -308,16 +308,12 @@ because it is the easiest to demo in text, but every pattern transfers.
 
 ## What you now know
 
-- Talking to an LLM is one stateless HTTP POST: role-tagged messages in, one
-  continuation out.
-- All memory, sessions, and "context" live in your program's array. `/clear`
-  is `messages = []`. Resume is a file read.
-- Content is typed blocks (text, images, documents, and later tool calls and
-  thinking), not strings.
-- Provider APIs are dialects of the same structure. A harness above the wire
-  format is portable.
-- The harness is the body that builds and maintains the array, and every
-  feature in the rest of this series is a piece of that body.
+- Talking to an LLM is one stateless HTTP POST. You send the whole array
+  every time.
+- Memory, sessions and context all live in your program's array. `/clear` is
+  `messages = []`, and resume is a file read.
+- Content is a list of typed blocks, and every provider's API is a dialect
+  of the same structure.
 
 Before we add any features to the harness, we should look at what sits on
 the other end of that POST, and why how it is trained explains most of its

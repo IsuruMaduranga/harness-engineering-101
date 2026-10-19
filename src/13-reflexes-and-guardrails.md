@@ -110,7 +110,7 @@ for what subagents are allowed to do.
 The tension that remains is that full autonomy ("auto-approve everything")
 is what users actually want for flow, and rules cannot cover the long tail
 of `bash` one-liners. The industry's emerging answer, which I find
-charming, is to **use a model to check the model.** Before executing a risky-looking action in auto mode,
+charming, is to use a model to check the model. Before executing a risky-looking action in auto mode,
 the harness makes a *side call* to a small, fast model with a narrow
 question: "Given this user request and this proposed command, is executing
 it consistent with what the user asked? Answer with a category." Rules
@@ -187,16 +187,12 @@ prompt.
 
 ## What you now know
 
-- Two threat sources: an honest probability machine, and untrusted text in
-  the array steering it. Design for both; assume injection.
-- Safety is layered, cheapest and most certain first: don't expose the
-  tool; deterministic reflexes (with reasons fed back); human gates tuned
-  against approval fatigue; verified cheap-model classifiers for the
-  autonomy long tail; recoverability and sandboxes for whatever slips
-  through.
-- Guardrails that explain themselves double as steering. Every approval
-  should teach the config.
-- The prompt only advises; the body enforces.
+- There are two threats: a model that sometimes gets it wrong, and untrusted
+  text in the array that pushes it.
+- Layer the defenses, cheapest and most certain first: don't expose the
+  tool, add rules the harness enforces, ask a human, then sandbox what is
+  left.
+- A rule in the system prompt is advice. Only the harness can enforce it.
 
 Next, the case study chapter: why coding became *the* agent domain, what a
 coding body has that a generic one lacks, and the argument (which deserves

@@ -21,11 +21,11 @@ difference between a demo and a service.
 | Overloaded / server error | 500/529, or Anthropic's `overloaded_error` | retry with backoff |
 | Rate limited | 429, often with `retry-after` | wait *what the header says*, then retry |
 | Timeout / connection drop | no response | retry, but safely (see below) |
-| Context too long | 400 with explicit message | **do not retry**: compact (ch. 6) or fail up |
-| Invalid request | other 400s | **do not retry**: it's your bug; capture it (ch. 12) |
+| Context too long | 400 with explicit message | do not retry: compact (ch. 6) or fail up |
+| Invalid request | other 400s | do not retry: it's your bug; capture it (ch. 12) |
 | Auth / billing | 401/403 | stop, tell the human |
 
-The first discipline is the split between **temporary and permanent**
+The first discipline is the split between temporary and permanent
 failures. Retrying a 529 is correct; retrying a 400 is a loop that burns
 budget and buries the real error. Your wrapper should distinguish them on
 day one.
@@ -86,8 +86,8 @@ Two wrinkles worth knowing before you meet them:
   even when no UI wants the deltas. The toy harness gets away without it
   only because its outputs are modest.
 
-The engineering reason to stream even a headless call is that **first-token
-latency becomes your health signal.** A stream that has produced nothing
+The engineering reason to stream even a headless call is that first-token
+latency becomes your health signal. A stream that has produced nothing
 for 60 seconds is distinguishable from a model thinking hard (thinking
 deltas and fine-grained events keep arriving); one connection carries both
 the answer and the liveness check.
@@ -115,7 +115,7 @@ subagent spawner, as well as backing off below it.
 **A streaming failure is a *mid-reply* failure.** The chapter 1 sidebar
 deferred exactly one real problem: with `"stream": true`, the connection
 can die after you have received half an answer, or half a tool call.
-The rule that keeps this simple is that **partial output is not output.**
+The rule that keeps this simple is that partial output is not output.
 Treat a broken stream as a failed request. Discard the fragment, and never
 append it to the array as if the model said it. (Executing a truncated
 tool call "best effort" is chapter 13's worst case, caused by plumbing.)
