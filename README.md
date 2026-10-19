@@ -4,6 +4,15 @@
 
 *Version 1.1, October 2026.*
 
+> AI usage disclosure: I drafted every chapter myself, from what I learned
+> building
+> [WSO2 MI Copilot](https://mi.docs.wso2.com/en/latest/develop/mi-for-vscode/wso2-integrator-copilot/overview/),
+> [WSO2 BI Copilot](https://wso2.com/integration-platform/docs/saas/editor/copilot)
+> and [One Code](https://github.com/IsuruMaduranga/one-code). I used Claude
+> Code and One Code to reorder each chapter so it leads with the answer (the
+> Minto pyramid), to polish the English, to generate the diagrams, and to
+> write the code that draws the charts.
+
 A blog series about building AI agents from first principles, published as a
 book.
 
