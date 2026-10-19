@@ -9,7 +9,7 @@
 **The failure this chapter patches is in you, not the software:** abstraction
 anxiety. Open any "how to build an agent" tutorial and you meet a wall of
 proper nouns: LangChain, LangGraph, LlamaIndex, CrewAI, AutoGen, the OpenAI
-Agents SDK, the Claude Agent SDK, Vercel's AI SDK. Each with its own
+Agents SDK, the Claude Agent SDK, Vercel's AI SDK. Each has its own
 vocabulary: chains, runnables, graphs, crews, executors. A newcomer comes away
 thinking agents are a specialist skill with a steep learning curve, and
 that these frameworks hold something you couldn't build yourself.
@@ -49,7 +49,7 @@ programming.
 
 ## Why frameworks look bigger than they are
 
-The honest reason the ecosystem feels heavy is history. In the GPT-3.5 era,
+The ecosystem feels heavy because of its history. In the GPT-3.5 era,
 the models were much less capable, so the harness had to do more:
 ReAct-style output parsing with regex (ch. 4), few-shot templates for every
 task, chains of small calls because one call could not carry a multi-step
@@ -61,19 +61,19 @@ replaced hand-built planning loops. The frameworks did not shrink when the
 models grew; they pivoted to orchestration, observability, and enterprise
 integration, and the vocabulary stayed.
 
-Meanwhile, notice what the strongest production agents do. Claude Code is a
-bespoke harness over the raw API. So are most serious coding agents, and so
-is [One Code](https://github.com/IsuruMaduranga/one-code) (over a minimal general-purpose runtime, pi). When Anthropic
-ships the Claude Agent SDK, it is a *thin* layer: the loop, tool dispatch,
-context management: chapter 4 and 6, productized. And the field is
-moving toward models plus a thin harness, not toward deep abstraction
-stacks.
+Meanwhile, look at what the strongest production agents do. Claude Code is
+a custom harness over the raw API. So are most serious coding agents, and
+so is [One Code](https://github.com/IsuruMaduranga/one-code) (over a
+minimal general-purpose runtime, pi). The Claude Agent SDK that Anthropic
+ships is a *thin* layer: the loop, tool dispatch and context management,
+which is chapters 4 and 6 productized. And the field is moving toward
+models plus a thin harness, and away from deep abstraction stacks.
 
 ## The real costs and the real benefits
 
-The rule, stated up front because the rest of this section just argues for
-it: take the small, transparent layers, and be suspicious of any layer that
-wants to own the array. Here's what that's built on, stated plainly:
+My rule is to use small, transparent layers and stay skeptical of any layer
+that wants to own the array. Here is what you actually get from a framework,
+and what it costs.
 
 **Worth paying for:**
 
@@ -88,20 +88,19 @@ wants to own the array. Here's what that's built on, stated plainly:
 - **Team legibility**: a known framework is documentation. A new hire who
   knows LangGraph reads your LangGraph app.
 
-**The price, and it is exactly one thing:** the framework stands between
-you and the array. Every chapter of this series has been about controlling
-what enters the array, in what order, with what byte stability. A framework
-that "manages the prompt for you" is managing your caching (ch. 5), your
-steering (ch. 8), and your context budget (ch. 6), according to its idea of
-what those should be, often invisibly. The classic experience: your agent
-misbehaves, and the fix requires knowing exactly what was sent to the
-model, and you spend a day digging through abstraction layers to find the
-actual bytes on the wire. Pick a framework that makes the outgoing
-request easy to see and shape, and the price is small. Pick one that hides
-the request as an implementation detail, and the price is your ability to do
-this job at all.
+**What it costs:** the framework stands between you and the array. Every
+chapter of this series has been about controlling what enters the array, in
+what order, with what byte stability. A framework that "manages the prompt
+for you" is managing your caching (ch. 5), your steering (ch. 8), and your
+context budget (ch. 6), according to its idea of what those should be, often
+invisibly. A common failure goes like this: your agent misbehaves, the fix
+requires knowing exactly what was sent to the model, and you spend a day
+digging through abstraction layers to find the actual bytes on the wire. If
+the framework makes the outgoing request easy to see and shape, the price is
+small. If it hides the request as an implementation detail, it makes
+debugging and tuning the harness much harder.
 
-So my rule, having built harnesses both ways:
+I have built harnesses both ways, and this is my rule:
 
 > Take small, transparent layers for plumbing (an SDK; a provider-dialect
 > wrapper). Be suspicious of layers that want to own the array. And never
@@ -110,8 +109,8 @@ So my rule, having built harnesses both ways:
 
 ## How to read an unfamiliar framework in ten minutes
 
-The skill this chapter is really teaching: when the next framework arrives
-(there will be a next one), you can locate it instead of learning it from
+What this chapter is really teaching is how to place the next framework
+when it arrives (there will be a next one), instead of learning it from
 scratch. Ask four questions of its documentation:
 
 1. **Where is the loop?** Find the code that calls the model repeatedly on
@@ -120,8 +119,9 @@ scratch. Ask four questions of its documentation:
    (messages, order, system prompt) before it is sent? This is the
    transparency question, and it is the make-or-break one.
 3. **What is its unit of composition?** Chains (function composition),
-   graphs (state machines), agents-as-tools (ch. 7): all fine, all just
-   control flow. You are checking whether the unit fits your task's shape.
+   graphs (state machines) and agents-as-tools (ch. 7) are all fine, and
+   all of them are control flow. You are checking whether the unit fits
+   your task's shape.
 4. **What does it do that is *not* in this series?** Usually the honest
    answers are integrations, tracing, and deployment plumbing. Those are
    real; weigh them against the transparency answer from question 2.
@@ -143,9 +143,10 @@ telling you where the complexity will hurt.
 - Evaluate any framework with four questions, starting with: can I see the
   bytes going to the model?
 
-Next: the parts of the ecosystem that are *not* wrappers: the standards and
-mechanisms for getting new capabilities into the array from outside your
-codebase. Tools someone else hosts, instructions loaded on demand, and what
-to do when the tool list itself outgrows the context budget.
+The next chapter covers the parts of the ecosystem that are *not*
+wrappers: the standards and mechanisms for getting new capabilities into
+the array from outside your codebase. That means tools someone else hosts,
+instructions loaded on demand, and what to do when the tool list itself
+outgrows the context budget.
 
 *[Next: Chapter 11 — Extending the Body: MCP, Skills, Deferred Loading, Hooks](11-extending-the-body.md)*

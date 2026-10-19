@@ -8,28 +8,28 @@
 
 **The failure, one last time:** the model doesn't know your stuff. Chapter
 2 explained why: its knowledge is a compression of public training text,
-frozen at a cutoff. Your company wiki, your codebase, yesterday's support
-tickets: not in the weights, and (chapter 6) too big to paste into the
-array whole.
+frozen at a cutoff. Your company wiki, your codebase, and yesterday's
+support tickets aren't in the weights, and (chapter 6) they're too big to
+paste into the array whole.
 
 Around 2023 the standard answer to this got a name, an ecosystem, and a
 scary-looking body of research: **RAG**, Retrieval-Augmented Generation.
 Vector databases, embeddings, chunking strategies, and then the long list of
 types: naive RAG, advanced RAG, hybrid RAG, graph RAG, corrective RAG,
-self-RAG, re-ranking pipelines. Entire conference tracks. If you came into this
-series with anxiety about that list, this chapter is the payoff, because
-you now have the one sentence that organizes all of it:
+self-RAG, re-ranking pipelines. There are entire conference tracks on it. If
+you came into this series with anxiety about that list, this chapter is the
+payoff, because you now have the one sentence that organizes all of it:
 
-> **RAG is deciding what goes in the array. That's it. Every variant is a
+> **RAG is deciding what goes in the array, nothing more. Every variant is a
 > different answer to "which text, chosen how."**
 
 ## Classic RAG, in harness terms
 
-The original pattern, stated in this series' vocabulary: **the harness
-retrieves before the model speaks.** The user asks a question; the harness
-(not the model) searches a document store for relevant chunks; the winners
-get pasted into the array next to the question; the model answers, now
-"grounded" in text it was handed.
+In this series' vocabulary, the original pattern is that **the harness
+retrieves before the model speaks.** The user asks a question. The harness
+(not the model) searches a document store for relevant chunks, and the
+winners get pasted into the array next to the question. The model then
+answers, now "grounded" in text it was handed.
 
 ```python
 def rag_answer(question):
@@ -40,20 +40,20 @@ def rag_answer(question):
     return call_llm(messages)
 ```
 
-Note what this is: chapter 6's memory-file injection, with a search step
-choosing what to inject. There is no loop, no tools, no agent. RAG predates
-all of them; it was invented for the GPT-3.5-era chatbot, where the model
-got exactly one shot at the array, so the harness had to guess, up front,
+This is chapter 6's memory-file injection, with a search step choosing
+what to inject. There is no loop, no tools, no agent. RAG predates all of
+them; it was invented for the GPT-3.5-era chatbot, where the model got
+exactly one shot at the array, so the harness had to guess, up front,
 everything the model might need. Call this the **push** model: the body
-guesses, and stuffs.
+guesses what's needed and stuffs it into the array.
 
 The famous machinery all lives inside that `search()` call. **Embeddings**:
 turn text into vectors such that similar meanings land near each other, so
 "how do I get my money back" finds the refunds policy despite sharing no
 words. **Chunking**: split documents into retrievable pieces. **Vector
-database**: store the vectors, find nearest neighbors fast. All real
-engineering, and all of it is *search-index engineering*: none of it
-touches the model or the loop. Embedding search is one search method among
+database**: store the vectors, find nearest neighbors fast. This is all
+real engineering, but it's *search-index engineering*: none of it touches
+the model or the loop. Embedding search is one search method among
 several, better than keyword search at synonyms and fuzz, worse at exact
 identifiers and rare tokens (which is why production search is usually
 **hybrid**: run both, merge). If you remember that an embedding index is
@@ -61,8 +61,8 @@ identifiers and rare tokens (which is why production search is usually
 
 ## The zoo, decoded
 
-Now the list of types. Each celebrated variant answers "which text, chosen
-how" with one extra trick, and in this series' terms they decode instantly:
+Each variant in that list answers "which text, chosen how" with one extra
+step:
 
 | The name | What it actually is |
 |---|---|
@@ -73,15 +73,14 @@ how" with one extra trick, and in this series' terms they decode instantly:
 | Corrective / self-RAG | check the retrieved text (often with a model call) and re-search if weak |
 | Agentic RAG | give the model the search as a *tool* and let it drive |
 
-Read the right-hand column again: index choices, ranking choices, and
-retry logic. Legitimate search engineering, none of it conceptually new,
-and *nothing* in the left column deserves the anxiety of a proper noun.
-You do not need to memorize a thousand RAG types. You need to know that a
-search index has quality knobs, and that someone will keep naming the
-knobs.
+The right-hand column holds index choices, ranking choices, and retry
+logic. That's legitimate search engineering, but none of it is
+conceptually new. There is no need to memorize a dozen RAG names when you
+can remember that a search index has quality knobs, and people keep naming
+the knobs.
 
-The last row, though, is the one that changed the game, because it moves
-the decision.
+The last row matters more than the others, though, because it moves the
+decision to the model.
 
 ## Push vs pull: the real dividing line
 
@@ -114,52 +113,53 @@ what the model can fetch"):
 
 **Pull wins on quality**, for the same reason a librarian beats a
 conveyor belt. The push harness must guess relevance from the question
-alone, in one shot, before any reasoning happens; wrong guess, wrong
-grounding, and the model answers confidently from the wrong pages. The
-pull model formulates its *own* queries mid-reasoning, sees the results,
-notices they are off, and searches again: retrieval with a feedback loop
-in it. Multi-hop questions ("compare our refund policy with the one we
-had before the rebrand") are nearly impossible to pre-fetch and natural
-to pull.
+alone, in one shot, before any reasoning happens, and if it guesses wrong,
+the model answers confidently from the wrong pages. The pull model
+formulates its *own* queries mid-reasoning, sees the results, notices they
+are off, and searches again, so the retrieval has a feedback loop in it.
+Multi-hop questions ("compare our refund policy with the one we had before
+the rebrand") are nearly impossible to pre-fetch and natural to pull.
 
-**Push wins on cost and latency.** One search, one model call, done. A
-pull loop is several rounds of an expensive brain. For a
+**Push wins on cost and latency.** It takes one search and one model call.
+A pull loop is several rounds of an expensive brain. For a
 high-volume support chatbot answering single-hop questions over a clean
 document set, classic push RAG remains the correct engineering answer, and
 "agentic" would be waste. Push is also the only option when there is no
 loop at all: batch pipelines, one-shot API products, strict latency
 budgets.
 
-So the design rule: **pull when reasoning should steer the reading; push
-when the reading is predictable.** And they compose: a fine pattern is a
-cheap push (paste an obviously relevant page) plus pull tools for
-everything else. A coding agent already works this way: the memory file is
-push; grep is pull.
+So the design rule is to **pull when reasoning should steer the reading,
+and push when the reading is predictable.** The two also compose. A fine
+pattern is a cheap push (paste an obviously relevant page) plus pull tools
+for everything else. A coding agent already works this way: the memory
+file is push and grep is pull.
 
-One more connection, promised in chapter 7: when the pulling gets long, do
-it in a subagent. Deep research over a big document set is high in
-volume and leaves little behind: fork it, let the child burn its own array
-searching and reading, keep the cited summary. "Deep research" products
-are approximately this pattern, productized.
+The last connection is one chapter 7 promised: when the pulling gets long,
+do it in a subagent. Searching a large document set produces a lot of
+intermediate text and a short final answer, so fork a subagent, let the
+child spend its own context searching and reading, and keep the cited
+summary. "Deep research" products are roughly this pattern, packaged and
+sold.
 
 ## What this chapter is really about
 
-I picked RAG for the finale not because you will build one tomorrow but
-because it is the cleanest demonstration of what this series has tried to
-install in you. From outside, RAG looks like a subfield: its own acronym,
-its own vendor landscape, its own list of types to memorize. From inside the
-harness view, it's fifteen chapters of familiar parts. A stateless array
-(ch. 1) that must be filled. A budget (ch. 6) that forces selection. Push
-injection (ch. 6 memory, ch. 8 steering) or pull tools (ch. 3) in a loop
-(ch. 4), maybe forked (ch. 7). The only genuinely new piece is the search
-index with its quality knobs, and that isn't an AI component at all.
+I picked RAG for the finale because it's the cleanest demonstration of
+what this series has tried to teach, even if you won't build one tomorrow.
+From outside, RAG looks like a subfield, with its own acronym, vendors,
+and list of types to memorize. From inside the harness view, it's fifteen
+chapters of familiar parts. There's a stateless array (ch. 1) that must be
+filled and a budget (ch. 6) that forces selection, then push injection
+(ch. 6 memory, ch. 8 steering) or pull tools (ch. 3) in a loop (ch. 4),
+maybe forked (ch. 7). The only genuinely new piece is the search index
+with its quality knobs, and that isn't an AI component at all.
 
-That collapse is not special to RAG. It is what most of the field's proper
-nouns look like from in here: frameworks (ch. 10), MCP and skills (ch.
-11), multi-agent systems (ch. 7), agentic this and autonomous that. The
-next acronym will arrive on schedule. When it does, ask the questions this
-series trained: *what ends up in the array? who decides, brain or body?
-what does it cost, and what enforces it?* The answers locate anything.
+The same collapse happens to most of the field's proper nouns when you
+look from in here: frameworks (ch. 10), MCP and skills (ch. 11),
+multi-agent systems (ch. 7), agentic this and autonomous that. The next
+acronym will arrive on schedule. When it does, ask the questions this
+series trained you to ask: *what ends up in the array? who decides, brain
+or body? what does it cost, and what enforces it?* Their answers tell you
+where anything fits.
 
 ## What you now know
 
@@ -172,12 +172,12 @@ what does it cost, and what enforces it?* The answers locate anything.
   guessable document sets) versus pull (model steers retrieval mid-reasoning;
   better on hard questions, costs a loop). Compose them; fork the long
   pulls.
-- The bigger lesson: the harness view turns the field's proper nouns into
-  simple questions about the array. That skill, not any single pattern, was
-  the point of 101.
+- The bigger lesson is that the harness view turns the field's proper
+  nouns into simple questions about the array. That skill was the point of
+  101, more than any single pattern.
 
-What remains is to put the whole body on the table: the epilogue walks the
-complete toy harness, all fifteen chapters in ~300 lines you can run,
-break, and rebuild.
+The epilogue puts all the pieces together by walking through the complete
+toy harness: fifteen chapters in about 300 lines of Python that you can
+run, break, and rebuild.
 
 *[Next: Epilogue — Build Your Own](16-epilogue-build-your-own.md)*

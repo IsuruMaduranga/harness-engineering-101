@@ -22,24 +22,24 @@ because the industry makes it sound like distributed systems:
 > given one task, whose final answer is returned to the main loop as a tool
 > result. Then its array is thrown away.
 
-That's it. Chapter 4's loop, called as a function.
+So a subagent is chapter 4's loop, called as a function.
 
 ## Subagents are a context tool, not an org chart
 
 The framing you will often see treats them like people: a "team" of
 specialist agents, a "researcher" talking to a "planner" talking to a
-"coder." That framing hides the actual engineering reason subagents exist:
+"coder." That framing hides the actual engineering reason subagents exist.
 
 **Subagents exist to protect the main agent's context.**
 
 The main loop's array is the project's working memory: the task, the plan,
 the decisions so far. It is precious and finite. A subagent is a way to buy
 50,000 tokens of exploration for the price of a 200-token summary in that
-precious array. The child spends its own budget, in its own window, and dies.
-The parent pays real money for the child's tokens (every subagent call is
-ordinary API calls underneath) but keeps its *attention* clean. You are not
-saving cost. You are saving working memory, which by chapter 6's argument is
-the scarcer resource.
+precious array. The child spends its own budget, in its own window, and
+then it's thrown away. The parent pays real money for the child's tokens
+(every subagent call is ordinary API calls underneath) but keeps its
+*attention* clean. The cost doesn't go down. What you save is working
+memory, which by chapter 6's argument is the scarcer resource.
 
 ```mermaid
 flowchart TD
@@ -64,38 +64,40 @@ practical questions about subagents:
 instructions and the task string the parent wrote. It has not seen the
 conversation, the user, or the plan. So the parent's task description must
 be self-contained: what to find, where to look, what shape of answer to
-return. Vague delegation produces vague results. The model isn't weak. You
-sent a colleague into a room with no briefing.
+return. Vague delegation produces vague results, and that isn't because the
+model is weak. It's like sending a colleague into a room with no briefing.
 
 **The parent sees nothing but the report.** The child's thirty rounds of
 searching never enter the parent's array. This is the entire point, but it
-has a consequence: if the child's answer is wrong, the parent has no
-transcript to check. Trust but verify: good harnesses let you inspect child
+also means that if the child's answer is wrong, the parent has no
+transcript to check. Because of that, good harnesses let you inspect child
 transcripts out-of-band (chapter 12), and good parents ask for evidence in
 the report ("cite file paths and line numbers").
 
 **Results return on the tool channel.** To the parent, `agent` is just
-another tool: request out, result in. Everything from chapter 3 applies,
+another tool that sends a request out and gets a result back. Everything
+from chapter 3 applies,
 including error handling. A subagent that fails should fail loudly in its
 tool result.
 
 ## What to delegate
 
-The budget framing gives you the rule directly: delegate work whose
-**intermediate volume is high and final value is small.**
+From a context-budget view, the rule is simple: delegate work whose
+**intermediate volume is high and final summary is small.**
 
 Good delegation targets:
 
-- **Search and exploration.** "Find where X happens." Huge intermediate
-  reads, one-line answer. This is the canonical case, and it is why Claude
-  Code ships a read-only Explore agent.
-- **Verification.** "Run the test suite and summarize failures." Thousands
-  of lines of output, a table of value.
+- **Search and exploration.** "Find where X happens" means huge
+  intermediate reads for a one-line answer. This is the canonical case, and
+  it is why Claude Code ships a read-only Explore agent.
+- **Verification.** "Run the test suite and summarize failures" produces
+  thousands of lines of output, and the part worth keeping is one table.
 - **Research.** "Read these three docs pages and tell me the migration
   steps." (Web pages are the worst context polluters of all.)
-- **Parallel independent chunks.** Review five files for the same issue: five
-  subagents, five clean summaries, and they can run concurrently, because
-  each has its own array. Fan-out is free architecture once subagents exist.
+- **Parallel independent chunks.** To review five files for the same issue,
+  you run five subagents and get five clean summaries. They can run
+  concurrently, because each has its own array. Once subagents exist, you
+  get fan-out for free.
 
 Poor delegation targets:
 
@@ -104,14 +106,15 @@ Poor delegation targets:
   the one thing that cannot be summarized into a task string.
 - **Tiny lookups.** Spawning a loop costs several API round trips. If one
   grep answers it, run one grep in the main loop.
-- **Long chains of dependent edits.** Each handoff loses context. Depth is
-  where multi-agent systems fail; real-world experience keeps landing on
-  one coordinator with shallow, disposable workers, not deep hierarchies.
+- **Long chains of dependent edits.** Each handoff loses context.
+  Multi-agent systems fail when they go deep, and real-world experience
+  keeps landing on one coordinator with shallow, disposable workers instead
+  of deep hierarchies.
 
 ## The toy harness, v4
 
-The beautiful thing about implementing subagents is discovering there is
-almost nothing to implement. [`harness/v4_subagents.py`](https://github.com/IsuruMaduranga/harness-engineering-101/blob/main/src/harness/v4_subagents.py)
+When you go to implement subagents, there is almost nothing new to write.
+[`harness/v4_subagents.py`](https://github.com/IsuruMaduranga/harness-engineering-101/blob/main/src/harness/v4_subagents.py)
 adds one tool whose executor calls the loop we already have:
 
 ```python
@@ -138,9 +141,10 @@ def run_subagent(task):
 
 The parent's `execute_tool` gains one branch: `if name == "agent": return
 run_subagent(args["task"])`. The child gets the read-and-run tools but *not*
-the `agent` tool itself (no grandchildren; recursion is where toy budgets
-die), and a system prompt telling it to end with a report. Maybe twenty new
-lines in total, and the program now does fan-out context management.
+the `agent` tool itself (no grandchildren, because recursion is where toy
+budgets run out), and a system prompt telling it to end with a report.
+With about twenty new lines, the program can now delegate work to keep its
+main context clean.
 
 Try it: give v4 a question that requires reading many files, and watch the
 parent's array stay small while the child grinds. Then print
@@ -148,8 +152,9 @@ parent's array stay small while the child grinds. Then print
 
 ## Production notes
 
-What separates the toy from Claude Code's Agent tool is quality-of-life, not
-concept, and each item is a preview of a later chapter:
+The toy and Claude Code's Agent tool share the same concept. What separates
+them is quality-of-life features, and each item below previews a later
+chapter:
 
 - **Named agent types.** Production harnesses define profiles (an explorer
   that cannot write files, a planner, a reviewer): different system prompts
@@ -163,16 +168,17 @@ concept, and each item is a preview of a later chapter:
   follow-ups to a child that stays resident, which begins to blur into
   chapter 9's background tasks.
 - **A fork variant.** One special child type starts with a *copy* of the
-  parent's array instead of an empty one: full context, disposable
-  continuation. Useful when the task needs everything the parent knows;
-  costs the entire context re-read that a fresh child avoids. Both exist
-  because both trade-offs are real: fresh children protect budget,
-  forked children preserve judgment.
+  parent's array instead of an empty one, so it has the full context but is
+  still thrown away when it finishes. It's useful when the task needs
+  everything the parent knows, but it costs the entire context re-read that
+  a fresh child avoids. Both exist because each solves a different problem:
+  fresh children save context budget, while forked children keep the
+  parent's context.
 
-One habit transfers directly from this chapter regardless of harness: when
-you (a human) write a subagent task, or a tool description for the `agent`
-tool, write it like a ticket for a contractor with no Slack access. What to
-do, where to look, what done looks like, what to return. Every failure I
+One habit from this chapter carries over to any harness. When you (a human)
+write a subagent task, or a tool description for the `agent` tool, write it
+like a ticket for a contractor with no Slack access. Say what to do, where
+to look, what done looks like, and what to return. Every failure I
 have seen in multi-agent systems that was blamed on "coordination" was a
 bad ticket.
 
@@ -186,17 +192,17 @@ worktree per child.
 - A subagent is the agent loop run over a fresh, disposable array; only its
   final report enters the parent, as a tool result.
 - The point is context protection: high-volume exploration for a
-  fixed-size summary. Cost in tokens, savings in attention.
-- The child knows nothing; the parent sees only the report. Write
-  self-contained tasks, demand evidence in answers.
+  fixed-size summary. You pay in tokens and save attention.
+- The child knows nothing, and the parent sees only the report. Write
+  self-contained tasks, and demand evidence in the answers.
 - Delegate high-volume/low-residue work; keep judgment-heavy work in the
   main loop. Fan out in parallel; avoid deep hierarchies.
 - Implementation is one tool plus a recursive call to the loop you already
   have.
 
-The main array is now protected from bulk. The next threat is subtler: over
-a long session, the *brain* drifts off course, forgets standing rules, and
-misses changes in the world. The harness needs a way to whisper to a running
-loop without breaking chapter 5's caching rules.
+Subagents keep bulk output out of the main array, but another problem shows
+up in long sessions: the model drifts off course, forgets standing rules, or
+misses changes in the world. The harness needs a way to nudge a running loop
+without breaking chapter 5's caching rules.
 
 *[Next: Chapter 8 — Steering the Running Loop](08-steering.md)*

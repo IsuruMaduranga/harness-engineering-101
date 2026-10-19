@@ -8,7 +8,7 @@
 - [The Brain: A Next-Token Black Box](02-the-brain.md)
 - [Tools: JSON Mapped to Functions](03-tools.md)
 - [The Agent Loop](04-the-agent-loop.md)
-- [Caching: Why Order Is Load-Bearing](05-caching.md)
+- [Caching: Why Order Matters](05-caching.md)
 
 # Part II — Running Long (the array under pressure)
 

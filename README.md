@@ -2,7 +2,7 @@
 
 *The LLM is the brain. The harness is the body.*
 
-*Version 1.0 — September 2026.*
+*Version 1.0, September 2026.*
 
 A blog series about building AI agents from first principles, published as a
 book.
@@ -16,9 +16,8 @@ that one loop, and each patch exists because something concrete broke. This
 series develops that one idea across 16 chapters, growing a ~300-line toy agent
 in plain Python as it goes.
 
-The patterns here are developed in full in
-[One Code](https://github.com/IsuruMaduranga/one-code), an open-source coding
-agent built on [pi](https://github.com/earendil-works/pi).
+I use the same ideas in [One Code](https://github.com/IsuruMaduranga/one-code),
+an open-source coding agent built on [pi](https://github.com/earendil-works/pi).
 
 The rendered book reads best online at the link above. If you'd rather read
 the source here on GitHub, follow the chapters in order below. The full
@@ -37,7 +36,7 @@ patch costs.
 | 2 | [The Brain: A Next-Token Black Box](src/02-the-brain.md) | "Why does it behave like that?" |
 | 3 | [Tools: JSON Mapped to Functions](src/03-tools.md) | The brain can't touch the world |
 | 4 | [The Agent Loop](src/04-the-agent-loop.md) | One tool call isn't enough |
-| 5 | [Caching: Why Order Is Load-Bearing](src/05-caching.md) | Resending the array gets expensive |
+| 5 | [Caching: Why Order Matters](src/05-caching.md) | Resending the array gets expensive |
 
 ### Part II — Running Long (the array under pressure)
 
@@ -66,16 +65,16 @@ patch costs.
 
 ### Epilogue
 
-- [Build Your Own](src/16-epilogue-build-your-own.md) — the complete toy harness, annotated
+- [Build Your Own](src/16-epilogue-build-your-own.md): the complete toy harness, annotated
 
 ### Appendix — Advanced Topics
 
 Standalone pieces. Read them when you need them.
 
-- [A. One Harness, Many Brains](src/appendix-a-one-harness-many-brains.md) — model routing, prompt tiers, cost engineering
-- [B. Worktrees and Isolation](src/appendix-b-worktrees-and-isolation.md) — giving parallel agents separate copies of the world
-- [C. Modes and Plan Mode](src/appendix-c-modes-and-plan-mode.md) — harness-enforced operating states (coding-specific)
-- [D. Retries, Rate Limits, and Streaming](src/appendix-d-retries-rate-limits-streaming.md) — the unglamorous plumbing, plus how streaming works on the wire
+- [A. One Harness, Many Brains](src/appendix-a-one-harness-many-brains.md): model routing, prompt tiers, cost engineering
+- [B. Worktrees and Isolation](src/appendix-b-worktrees-and-isolation.md): giving parallel agents separate copies of the world
+- [C. Modes and Plan Mode](src/appendix-c-modes-and-plan-mode.md): harness-enforced operating states (coding-specific)
+- [D. Retries, Rate Limits, and Streaming](src/appendix-d-retries-rate-limits-streaming.md): the unglamorous plumbing, plus how streaming works on the wire
 
 ## Repository layout
 
@@ -83,7 +82,7 @@ Standalone pieces. Read them when you need them.
 |---|---|
 | `src/*.md` | The chapters and appendices (the book source) |
 | `src/SUMMARY.md` | The book's table of contents |
-| `src/harness/` | The runnable toy harness — one file per stage |
+| `src/harness/` | The runnable toy harness, one file per stage |
 | `src/diagrams/` | Diagram generators and their generated PNGs |
 | `book.toml` | mdBook configuration |
 | `scripts/sync-to-blog.sh` | Builds the book and mounts it into the blog for serving |
@@ -109,14 +108,14 @@ cd src/diagrams && python3 gen_all.py   # Python 3.10+, matplotlib
 
 This repository is dual-licensed:
 
-- **The prose** — every chapter and appendix (the `.md` files under `src/`) —
-  is licensed under
+- **The prose** (every chapter and appendix, the `.md` files under `src/`) is
+  licensed under
   [Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International
   (CC BY-NC-ND 4.0)](https://creativecommons.org/licenses/by-nc-nd/4.0/). You
   may share it with credit, but not use it commercially or publish modified
   versions. Full text in [`LICENSE`](LICENSE).
-- **The code** — the `.py` files under `src/harness/` and `src/diagrams/`, and
-  code snippets reproduced from them in the chapters — is licensed under the
+- **The code** (the `.py` files under `src/harness/` and `src/diagrams/`, and
+  code snippets reproduced from them in the chapters) is licensed under the
   [MIT License](LICENSE-CODE). Use it freely, with attribution.
 
 © 2026 Isuru Wijesiri.

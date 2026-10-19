@@ -7,12 +7,12 @@
 ---
 
 **The failure:** the brain can only emit text. Ask it to "check whether the
-tests pass" and the best it can do is guess. It cannot run anything, read
-anything, or touch anything.
+tests pass" and the best it can do is guess. It cannot run, read or touch
+anything.
 
 **The patch:** let the model emit a structured request, and have your
-program execute it. That is the entire idea behind tools, and it is the
-single most load-bearing trick in modern AI. This chapter shows that it is
+program execute it. That is the entire idea behind tools, and more of
+modern AI rests on it than on any other trick. This chapter shows that it is
 just JSON on both ends.
 
 ## The contract
@@ -39,11 +39,11 @@ sequenceDiagram
     B-->>H: "The bug is on line 12: ..."
 ```
 
-Hold on to the key point: **the model never executes anything. It asks.**
-The tool call is a polite, machine-readable request. Your harness decides
-whether to honor it, runs the code, and reports back. Every capability an
-agent has is a function you wrote and chose to expose. This is also why
-safety lives in the harness (chapter 13): the body owns the hands.
+**The model never executes anything; it only asks.** The tool call is a
+polite, machine-readable request. Your harness decides whether to honor it,
+runs the code, and reports back. Every capability an agent has is a function
+you wrote and chose to expose. This is also why safety lives in the harness
+(chapter 13): the body owns the hands.
 
 ## What it looks like on the wire
 
@@ -64,9 +64,9 @@ arguments:
 }
 ```
 
-The description is not decoration. It is the only documentation the model
-gets, and writing good tool descriptions is real prompt engineering. Vague
-description, wrong usage.
+The description is the only documentation the model gets, and writing good
+tool descriptions is real prompt engineering. A vague description leads to
+wrong usage.
 
 When the model wants the tool, its reply contains a `tool_use` block instead
 of (or alongside) text:
@@ -94,18 +94,19 @@ You run the function, then append the result as the next `user` message:
 }
 ```
 
-Then you POST the whole array again. Notice two things. First, the tool
-result travels in a `user` message; from the model's point of view, the
-world answers on the user's channel. Second, this is chapter 1's loop with
-one new block type. Nothing about the wire changed.
+Then you POST the whole array again. Two details are worth noting here.
+First, the tool result travels in a `user` message, so from the model's
+point of view the world answers on the user's channel. Second, this is
+chapter 1's loop with one new block type, and nothing about the wire
+changed.
 
-Why does the model produce clean, schema-matching JSON? Chapter 2's answer:
-it was RL-trained on millions of tool-call examples. You are not parsing
-free text and hoping. Modern providers even guarantee the arguments parse as
-JSON. (In the GPT-3.5 days, we begged the model in the prompt to "respond
-ONLY with JSON" and wrote regex fallbacks for when it apologized first.
-Function calling moved that trick into training, and that is the entire
-difference.)
+The model produces clean, schema-matching JSON because, as chapter 2
+explained, it was RL-trained on millions of tool-call examples. You are not
+parsing free text and hoping. Modern providers even guarantee the arguments
+parse as JSON. (In the GPT-3.5 days, we begged the model in the prompt to
+"respond ONLY with JSON" and wrote regex fallbacks for when it apologized
+first. Function calling moved that trick into training, and that is the
+entire difference.)
 
 ## The toy harness, v2
 
@@ -140,15 +141,16 @@ def execute_tool(name, args):                        # NEW: the dispatch
         return f"ERROR: {e}"                         # errors go BACK to the model
 ```
 
-And `call_llm` now sends `"tools": TOOLS` in the body. That is the whole
-patch: a menu, and a dispatch table from names to functions. "Tool" sounds
-like infrastructure. It is a dict lookup.
+And `call_llm` now sends `"tools": TOOLS` in the body. The whole patch is a
+menu and a dispatch table from names to functions. "Tool" sounds like
+infrastructure, but it is a dict lookup.
 
-One detail that matters more than it looks: `execute_tool` never raises. A
-failed tool call becomes an error *string*, sent back to the model as the
-tool result. Chapter 2 said models are trained to react to failure; chapter
-4 builds the loop that lets them. Swallowing a tool error, or crashing on
-it, throws away the model's best recovery signal.
+One detail in `execute_tool` matters more than it looks: it catches
+exceptions and returns an error *string* instead of raising. That error
+string goes back to the model as the tool result. Chapter 2 said models are
+trained to react to failure; chapter 4 builds the loop that lets them.
+Swallowing a tool error, or crashing on it, throws away the model's best
+recovery signal.
 
 v2 handles exactly one tool call per turn, then returns to the prompt. Try
 it: ask "what files are in this directory?" and watch the model call
@@ -159,9 +161,8 @@ you after one call. That failure is chapter 4.
 
 ## The user is a tool too
 
-Here is a new way to look at tools that helps for the rest of the series.
-Once you see tools as "the model requests, the world responds," you notice
-the human sitting inside the world.
+Once you see tools as "the model requests, the world responds," you can
+treat the human as part of that world too.
 
 Production agents expose a tool that looks like this:
 
@@ -181,12 +182,12 @@ Production agents expose a tool that looks like this:
 ```
 
 The implementation renders the question, waits for input, and returns the
-answer as an ordinary tool result. That is **human-in-the-loop** in its
-purest form: the person is one more thing the body can consult, on the same
+answer as an ordinary tool result. That is **human-in-the-loop** at its
+simplest. The person is one more thing the body can consult, on the same
 wire format as the filesystem. Claude Code's multiple-choice question
-dialogs are exactly this tool. No special mechanism, no separate channel.
-The model learned when to ask a person the same way it learned when to read
-a file.
+dialogs are exactly this tool, with no special mechanism or separate
+channel. The model learned when to ask a person the same way it learned when
+to read a file.
 
 There is a second, more important place humans enter the loop: approval.
 "The model asked to run `rm -rf`; should the body obey?" That is a harness
@@ -206,11 +207,12 @@ decision, not a tool, and it gets its own chapter (13).
 > Ask Anthropic's API for `web_search` and the *provider's* infrastructure
 > executes the search during the request, splices the results into the
 > conversation, and bills you for the tokens. The array you get back shows
-> the tool round already resolved. Same contract, but the provider's body
-> did the work: limbs you did not build. The trade is control. You cannot
-> gate, log, or modify a server-side tool call. Your permission system
-> (chapter 13) never sees it. Convenient for search; think twice before
-> accepting it for anything that touches your systems.
+> the tool round already resolved. The contract is the same, but the
+> provider's body did the work, with limbs you did not build. The tradeoff
+> is control: you cannot gate, log, or modify a server-side tool call, and
+> your permission system (chapter 13) never sees it. It's convenient for
+> search; think twice before accepting it for anything that touches your
+> systems.
 
 ## What you now know
 
@@ -219,13 +221,15 @@ decision, not a tool, and it gets its own chapter (13).
 - The model asks; the harness acts. Every agent capability is a function
   you chose to expose, which is why capability and safety are both harness
   properties.
-- Tool errors are input, not exceptions. Send them back.
+- Tool errors should be returned as strings in the tool result, not raised
+  as exceptions.
 - The human is a tool (clarifying questions) and a gate (approvals).
 - Structured output is tool calling pointed at data. Server-side tools are
   tool calling executed by the provider.
 
-v2 can act, once. The obvious next failure: real tasks need the model to
-act, look at the result, and act again, without a human pressing enter
-between steps. That loop has a grand name. It is four lines of code.
+v2 can act only once, but real tasks need the model to act, look at the
+result, and act again, without a human pressing enter between steps. That
+is the next failure. The loop that fixes it has a grand name, but it is four
+lines of code.
 
 *[Next: Chapter 4 — The Agent Loop](04-the-agent-loop.md)*

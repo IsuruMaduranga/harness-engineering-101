@@ -6,18 +6,18 @@
 ---
 
 In 2023 I was building generative AI systems on GPT-3.5. There were no
-agents, no tool calls, no caching. There was one thing: you sent an array of
-messages to an HTTP endpoint and got formatted text back.
+agents, tool calls or caching. You sent an array of messages to an HTTP
+endpoint and got formatted text back, and that was all.
 
-Here is the key fact this series is built on: **that is still all that
-happens.** Every agent you have seen, including the one that edits your code
-and files your pull requests, is a program that builds a JSON array, POSTs
-it, reads the reply, updates the array, and POSTs it again.
+**That is still all that happens**, and this whole series is built on that
+fact. Every agent you have seen, including the one that edits your code and
+files your pull requests, is a program that builds a JSON array, POSTs it,
+reads the reply, updates the array, and POSTs it again.
 
-The LLM is the brain. The brain can receive text and emit text, and nothing
-else. Everything it appears to *do* in the world, some other program did for
-it. That program is the **harness**: the body around the brain. The only
-channel between brain and body is the JSON array.
+The LLM is the brain, and it can receive text and emit text, nothing else.
+Whenever it appears to *do* something in the world, some other program
+actually did it. That program is the **harness**: the body around the brain.
+The only channel between brain and body is the JSON array.
 
 Harness engineering is the work of building and maintaining that array. This
 chapter is about the array itself.
@@ -50,8 +50,8 @@ def call_llm(messages, system=""):
         return json.loads(resp.read())
 ```
 
-That is the whole interface. A list of dicts in, a dict out. No sockets, no
-sessions, no handshake. One HTTP POST.
+The whole interface is one HTTP POST. A list of dicts goes in and a dict
+comes out, with no sockets, sessions or handshake.
 
 The `messages` array is a transcript. Each entry has a `role` and `content`:
 
@@ -63,8 +63,8 @@ The `messages` array is a transcript. Each entry has a `role` and `content`:
 ]
 ```
 
-You send the array. The model continues it. The response is the next
-`assistant` message. That's it.
+You send the array, the model continues it, and the response is the next
+`assistant` message.
 
 ## The most important sentence in this series
 
@@ -102,9 +102,9 @@ Once this clicks, a lot of the field gets simpler:
 - Cost scales with the array, and you resend it every turn. That becomes
   chapter 5.
 
-One useful consequence: **sessions are just files.** When a coding agent
-offers `--resume`, it loads a JSON array from disk and keeps appending. When
-you type `/clear`, the implementation is essentially:
+One useful consequence is that **sessions are just files.** When a coding
+agent offers `--resume`, it loads a JSON array from disk and keeps
+appending. When you type `/clear`, the implementation is essentially:
 
 ```python
 messages = []
@@ -120,19 +120,19 @@ The array has a small set of speakers. The distinction matters because
 models are *trained* to treat each role differently (chapter 2 explains what
 "trained" means here):
 
-- **`system`** — instructions from the developer to the model: who it is,
-  what rules it follows. The model is trained to weight this above user
-  text. Anthropic puts it in a top-level `system` field. OpenAI uses a
-  message with role `system`, renamed `developer` in its newer Responses
-  API. Same concept, three spellings: a privileged channel for the harness
-  author.
-- **`user`** — the human's turn. Later in the series you will see the
+- **`system`**: instructions from the developer to the model, such as who
+  it is and what rules it follows. The model is trained to weight this
+  above user text. Anthropic puts it in a top-level `system` field. OpenAI
+  uses a message with role `system`, renamed `developer` in its newer
+  Responses API. All three spellings mean the same thing, a privileged
+  channel for the harness author.
+- **`user`**: the human's turn. Later in the series you will see the
   harness itself use this channel to inject information mid-conversation.
-- **`assistant`** — the model's own earlier turns. You wrote none of these,
+- **`assistant`**: the model's own earlier turns. You wrote none of these,
   but you store and resend all of them. You can even edit them before
   resending, and the model can't tell. That fact becomes a debugging tool in
   chapter 12 and a safety question in chapter 13.
-- **Tool results** — the outcome of actions. Chapter 3.
+- **Tool results**: the outcome of actions, which we will add in chapter 3.
 
 ## Content is blocks, not strings
 
@@ -149,17 +149,17 @@ is a **list of typed blocks**:
 }
 ```
 
-Text is a block. An image is a block (base64 bytes, right in the JSON). A
-PDF is a block. A tool call is a block. The model's thinking is a block. The
-array did not change shape when models learned to see. The blocks got new
-types. Chapter 2 covers what the brain does with an image block; chapter 3
-covers tool blocks. The intuition to keep: **whatever modality or feature
-ships next year, it arrives as a new block type in the same array.**
+Text, images (base64 bytes, right in the JSON), PDFs, tool calls and the
+model's thinking are all blocks. When models learned to see, the array kept
+its shape and the blocks got new types. Chapter 2 covers what the brain does
+with an image block; chapter 3 covers tool blocks. The main thing to
+remember is that **whatever modality or feature ships next year will arrive
+as a new block type in the same array.**
 
 ## Two dialects, one language
 
 You will meet two wire formats in practice, and the differences are
-cosmetic. The same exchange in both:
+cosmetic. Here is the same exchange in both:
 
 **Anthropic Messages API:**
 
@@ -201,11 +201,11 @@ OpenAI's newer **Responses API** reshuffles this again: `input` instead of
 `messages`, a `developer` role, and an optional server-side conversation
 store. That store is the one real departure from statelessness: the provider
 offers to keep the array for you. Gemini has its own spelling. All of them
-are the same thing: an ordered list of role-tagged blocks, sent whole,
-continued once.
+are an ordered list of role-tagged blocks that is sent whole and continued
+once.
 
 This is why "which provider" is a shallow decision for a harness. The array
-is the architecture. The dialect is a serialization detail.
+is the architecture, and the dialect is a serialization detail.
 [One Code](https://github.com/IsuruMaduranga/one-code), my provider-neutral
 rebuild of Claude Code, can treat the provider as a swappable part because
 everything above the wire format is identical.
@@ -257,19 +257,20 @@ if __name__ == "__main__":
     main()
 ```
 
-About thirty lines, and it already has the shape of every harness you will
-ever build: a loop that appends to an array, sends it whole, and appends the
-reply. Run it, talk to it, then add `print(len(json.dumps(messages)))` after
-each turn and watch the array grow. You are watching your future API bill.
+It is about thirty lines of code, and it already has the shape of every
+harness you will ever build: a loop that appends to an array, sends it
+whole, and appends the reply. Run it, talk to it, then add
+`print(len(json.dumps(messages)))` after each turn and watch the array grow.
+You are watching your future API bill.
 
 **Homework:** port `call_llm` to OpenAI's Chat Completions format. It is a
-ten-minute change. Noticing how little changes is the point.
+ten-minute change, and the point is to notice how little changes.
 
 > **Sidebar: what about streaming?** When a chat UI shows the reply
 > appearing word by word, that is the same POST with `"stream": true`. The
-> server sends the reply in chunks as it generates them. Streaming is
-> *presentation*, not architecture. The array and the statelessness are
-> unchanged; the reply just arrives in pieces. This series ignores streaming
+> server sends the reply in chunks as it generates them. Streaming only
+> changes the presentation. The array and the statelessness are unchanged;
+> the reply just arrives in pieces. This series ignores streaming
 > from here on and loses nothing. When you need it for real (the wire
 > format, assembling the pieces, connections dying mid-reply, and why long
 > requests end up requiring it), Appendix D covers the mechanics.
@@ -277,29 +278,29 @@ ten-minute change. Noticing how little changes is the point.
 ## What the body does
 
 So a harness is "a program that maintains a JSON array." That sounds like a
-clerk's job. Here is the actual job description, as it unfolds over this
-series. The harness decides:
+clerk's job, but in practice the harness has to decide:
 
-- **What enters the array** — user text, file contents, tool results,
+- **What enters the array**: user text, file contents, tool results,
   injected instructions (chapters 3, 6, 8).
-- **What leaves the array** — compaction, summarization, forgetting
+- **What leaves the array**: compaction, summarization, forgetting
   (chapter 6).
-- **What the array's structure must preserve** — ordering and byte
+- **What the array's structure must preserve**: ordering and byte
   stability, because cost depends on it (chapter 5).
-- **Which of the brain's requests to actually execute** — permissions,
+- **Which of the brain's requests to actually execute**: permissions,
   guardrails, sandboxes (chapter 13).
 - **When to interrupt the brain, and when to wake it** (chapters 8 and 9).
 
-This is not passive plumbing. The body decides what the brain gets to see,
-when to interrupt it, and which of its commands to refuse. A harness is not
-a set of obedient limbs. It is a body with reflexes.
+None of this is passive plumbing, because the body decides what the brain
+gets to see, when to interrupt it, and which of its commands to refuse. It
+behaves less like a set of obedient limbs and more like a body with
+reflexes.
 
 That framing also explains why this series is not only about coding agents.
-A coding harness gives the brain hands that edit files and run shells. A
-robotics harness gives it motors. A support-desk harness gives it a ticket
-queue. The bodies differ. The nervous system, the JSON array and the loop
-around it, is the same everywhere. This series builds a coding body because
-it is the easiest to demo in text, but every pattern transfers.
+A coding harness gives the brain hands that edit files and run shells, a
+robotics harness gives it motors, and a support-desk harness gives it a
+ticket queue. The bodies differ, but the nervous system (the JSON array and
+the loop around it) is the same everywhere. This series builds a coding body
+because it is the easiest to demo in text, but every pattern transfers.
 
 ## What you now know
 
@@ -311,11 +312,11 @@ it is the easiest to demo in text, but every pattern transfers.
   thinking), not strings.
 - Provider APIs are dialects of the same structure. A harness above the wire
   format is portable.
-- The harness is the body. It builds the array. Everything else in this
-  series is one of its organs.
+- The harness is the body that builds and maintains the array, and every
+  feature in the rest of this series is a piece of that body.
 
-Next question, before we add a single feature: what exactly is on the other
-end of that POST, and why does knowing how it was trained predict most of
-its strange behavior?
+Before we add any features to the harness, we should look at what sits on
+the other end of that POST, and why how it is trained explains most of its
+strange behavior.
 
 *[Next: Chapter 2 — The Brain: A Next-Token Black Box](02-the-brain.md)*

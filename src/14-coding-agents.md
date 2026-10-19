@@ -10,15 +10,14 @@ Every pattern in this series was demonstrated on a coding body, and this
 chapter finally puts the coding-specific machinery in view. Two things make
 that worth doing. Coding agents are where harness engineering is most
 developed, so they preview what other domains will build. And they host the
-field's best design argument — how specialized should the body need to be?
-Short answer: ship the specialized organs *and* the bare terminal, and let
-the model choose between them. The organs make safety easy to check,
+field's best design argument, about how specialized the body needs to be.
+My answer is to ship the specialized organs *and* the bare terminal, and
+let the model choose between them. The organs make safety easy to check,
 push feedback to the model automatically, and give weaker models a floor to
-stand on; the terminal is the escape hatch: whatever no toolset planned
-for, it's still there. Getting to that answer honestly takes the rest of
-the chapter, because the "a terminal is all you need" counterargument is not
-a strawman — it's half right, and it deserves a fair hearing before the
-verdict.
+stand on. The terminal is the fallback that's still there for whatever no
+toolset planned for. Getting to that answer honestly takes the rest of the
+chapter, because the "a terminal is all you need" counterargument is half
+right, and it deserves a fair hearing before the verdict.
 
 ## Why coding won
 
@@ -26,8 +25,9 @@ It is not an accident that agents got good at coding first. The domain is
 almost surprisingly well suited to the loop from chapter 4:
 
 - **The world is text.** Code, configs, logs, diffs, docs: everything the
-  agent must perceive serializes losslessly into the array. No cameras, no
-  robots. A coding agent's "perception problem" was solved by `cat`.
+  agent must perceive serializes losslessly into the array. There are no
+  cameras or robots, and a coding agent's "perception problem" was solved
+  by `cat`.
 - **The world pushes back, cheaply and honestly.** Compilers, test suites,
   linters, and type checkers are free sources of truth: run them and the
   array receives an objective, detailed verdict on the agent's last action.
@@ -49,20 +49,20 @@ estimate of the harness work ahead.
 
 ## The organs of a coding body
 
-What Claude Code-class harnesses actually add on top of the generic loop.
-Each is a chapter of this series, specialized:
+Here is what Claude Code-class harnesses actually add on top of the generic
+loop. Each one is a chapter of this series, specialized:
 
 **Edit tools shaped for how models fail.** The naive write tool (chapter
-3's `write_file`) makes the model retype whole files: slow, expensive, and
-an invitation to transcription errors in the 900 lines it did *not* mean to
-change. Production harnesses use targeted edits: the model supplies an
-exact existing snippet and its replacement, and the *harness* refuses the
-edit if the snippet does not match the file exactly (or matches twice).
-Notice what that constraint does: it converts hallucination into a loud,
-harmless error. The edit tool's design *is* a guardrail; tool shape is
-behavior shape.
+3's `write_file`) makes the model retype whole files, which is slow and
+expensive and invites transcription errors in the 900 lines it did *not*
+mean to change. Production harnesses use targeted edits: the model
+supplies an exact existing snippet and its replacement, and the *harness*
+refuses the edit if the snippet does not match the file exactly (or
+matches twice). That constraint turns hallucination into a loud, harmless
+error. The edit tool's design *is* a guardrail, because the shape of a tool
+shapes how the model behaves.
 
-**Search as a first-class sense.** Real repositories dwarf the context
+**Search as a core sense.** Real repositories dwarf the context
 budget (chapter 6), so the body ships fast, targeted perception: glob by
 name, grep by content, with results as compact hit-lists rather than file
 dumps. Cheap senses are what make "pull, don't push" (chapters 6 and 15)
@@ -76,12 +76,13 @@ harness is one too. The headline use is the **diagnostics delta**: after
 each edit, ask the language server what is *newly* broken, and inject the
 answer as a chapter 8 reminder ("your last edit introduced: line 42, `foo`
 possibly undefined"). The agent hears about the type error it just created
-in seconds, without compiling, without being told to check, in exactly the
-event-triggered, bottom-of-array form steering wants. It closes the same
-feedback loop a human closes by seeing red squiggles, and the difference in
-agent quality between "finds out at test time" and "finds out immediately"
-is large. Go-to-definition and find-references similarly replace expensive
-grep-and-read trips with precise single answers: budget again.
+within seconds, without compiling and without being told to check, and in
+exactly the event-triggered, bottom-of-array form that steering needs. It
+closes the same feedback loop a human closes by seeing red squiggles, and
+the difference in agent quality between "finds out at test time" and
+"finds out immediately" is large. Go-to-definition and find-references
+similarly replace expensive grep-and-read trips with precise single
+answers, which saves budget again.
 
 **Git as an organ.** The terminal already lets the agent run git. The
 harness goes further, leaning on git *itself*: it snapshots state so chapter
@@ -93,13 +94,13 @@ Beyond these come the coding-specific deployments of everything else you
 have seen: read-tracking reflexes on edits (chapter 13's file tracker),
 project memory files with build commands and conventions (chapter 6),
 plan-then-execute modes for large changes (Appendix C). None of it is a new
-mechanism. That is the point of a case study: the domain body is the
+mechanism, and that is the point of a case study: the domain body is the
 generic patterns, filled in with domain knowledge.
 
 ## The counterargument: a terminal is all you need
 
-Now the argument that deserves its own section, because a real school of
-practitioners holds it and ships on it:
+A real group of practitioners makes the opposite argument and ships
+products on it:
 
 > Give the model `bash` and nothing else. Reading is `cat`, searching is
 > `grep` and `find`, editing is `sed` or a heredoc, diagnostics is running
@@ -108,19 +109,20 @@ practitioners holds it and ships on it:
 > a million shell transcripts, and every organ above is redundant plumbing
 > that will age badly as models improve.
 
-The strong points are genuinely strong. First: it's general. The terminal
-handles the long tail (awk one-liners, docker, obscure build systems) that
-no finite tool list covers. Every curated toolset eventually meets a task
-its designer didn't plan for, and the shell is always the escape hatch.
-Second, it matches the training: chapter 2 says the model has seen vastly
-more `grep` usage than usage of your bespoke `search_files` schema. And the trend argument has
-history on its side: this series has already recorded harness machinery
-dissolving into model capability twice (ReAct into tool training, chapter
-4; elaborate chains into long contexts, chapter 10). Betting that
-edit-snippet tools and diagnostic injection also dissolve is not crazy.
+The argument's strong points are genuinely strong, and the first is that
+it's general. The terminal handles the long tail (awk one-liners, docker,
+obscure build systems) that no finite tool list covers. Every curated
+toolset eventually meets a task its designer didn't plan for, and the shell
+is always there as the fallback. Second, it matches the training: chapter 2
+says the model has seen vastly more `grep` usage than usage of your custom
+`search_files` schema. And the trend argument has history on its side:
+this series has already recorded harness machinery dissolving into model
+capability twice (ReAct into tool training, chapter 4; elaborate chains
+into long contexts, chapter 10). Betting that edit-snippet tools and
+diagnostic injection also dissolve is not crazy.
 
-Where it breaks down today, and notice each of these is a *body* concern,
-not a smarts concern:
+Where that argument breaks down today is in the body, not in the model's
+intelligence:
 
 - **Permissioning** (chapter 13). A structured `edit_file(path, old, new)`
   can be gated by path, tracked, and diffed. `bash -c "sed -i ..."` is an
@@ -129,24 +131,24 @@ not a smarts concern:
   cord cannot see into.
 - **The feedback loops are real wins.** Nothing in the terminal *pushes*
   diagnostics after an edit; the model must remember to check (probability
-  < 1, chapter 11's hooks lesson). Read-tracking, stale-edit refusal,
-  injected deltas: these caught real mistakes deterministically, and
-  dropping them costs actual quality today.
+  < 1, chapter 11's hooks lesson). Read-tracking, stale-edit refusal, and
+  injected diagnostics catch real mistakes deterministically, so dropping
+  them hurts quality today.
 - **Weaker brains need more body.** On frontier models, terminal-only is
   serviceable. Run the same experiment on a mid-tier model (I have, while
-  testing [One Code](https://github.com/IsuruMaduranga/one-code) against cheap models) and structured tools with tight
-  schemas and loud errors visibly outperform free-form shell: the
-  structure is doing steering work the weak brain cannot do alone.
-  Appendix A returns to this trade.
+  testing [One Code](https://github.com/IsuruMaduranga/one-code) against
+  cheap models) and structured tools with tight schemas and loud errors
+  visibly outperform free-form shell: the structure is doing steering work
+  the weak brain cannot do alone. Appendix A returns to this trade.
 
-So my scorecard, honestly held: terminal-only is pointing in the right
-direction about where value lives (the model, improving) and clearly wrong
-about what today's body still buys: easy-to-check safety, reliable
-feedback, and a higher floor for cheaper models. Production harnesses agree by
-behavior: every major one ships the shell *and* the structured organs, and
-lets the model choose. The synthesis is not a compromise; it is the design:
-**structured tools for the hot paths where shape buys safety and feedback,
-the terminal for the long tail, and guardrails around both.**
+So here is my honest scorecard. The terminal-only camp is right about where
+the value lives (in the model, which keeps improving) and clearly wrong
+about what the body still buys today: easy-to-check safety, reliable
+feedback, and a higher floor for cheaper models. Production harnesses agree
+in practice, since every major one ships both the shell and the structured
+organs, and lets the model choose:
+**structured tools for the common paths where structure gives you safety
+and feedback, the terminal for the long tail, and guardrails around both.**
 
 ## What you now know
 
@@ -160,11 +162,11 @@ the terminal for the long tail, and guardrails around both.**
   long tail, and history favors bodies dissolving into brains. It underrates
   what structure buys *now*: the ability to permission actions, automatic
   feedback, and a floor for weak models.
-- Ship both. Let the model choose. Gate everything.
+- Ship both, let the model choose, and gate everything.
 
 One chapter of the main sequence remains, and it is the retrospective one:
 the pattern this whole series has been circling (put the right data in the
 array at the right time) had a famous name before agents were mainstream.
-Time to demystify RAG.
+That pattern is RAG, which is the subject of chapter 15.
 
 *[Next: Chapter 15 — RAG Was a Harness Pattern All Along](15-rag.md)*

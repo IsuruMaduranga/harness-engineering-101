@@ -15,9 +15,10 @@ transfers anywhere, but the worked example is code.
 
 ## A mode is a body state, not a brain state
 
-The defining property: **a mode changes what the harness will do, not
-what the model is.** Same brain, same array mechanics; different rules at
-the gate. A typical coding-agent dial:
+The defining property is that **a mode changes what the harness will do,
+not what the model is.** The brain and the array mechanics stay the same;
+only the rules at the gate change. Here is a typical set of modes for a
+coding agent:
 
 | Mode | Reads | Edits in project | Shell / risky | Meaning |
 |---|---|---|---|---|
@@ -27,16 +28,17 @@ the gate. A typical coding-agent dial:
 | plan | auto | **refused** | **refused** | think, don't touch |
 
 The implementation is exactly where you would put it: the gate from
-chapter 13 takes the mode as an input. Three engineering notes that make
-modes work in practice:
+chapter 13 takes the mode as an input. Three engineering notes make modes
+work in practice:
 
 - **The brain must be told, on the body's channel.** A mode switch
   mid-session becomes a steering reminder (chapter 8): "the user switched
-  to plan mode; do not modify anything until further notice." Not a system
-  prompt edit, for chapter 5's caching reason. But remember chapter 13's
-  hierarchy: the reminder is *advice* so the model behaves sensibly; the
-  gate is the *enforcement*. Both, always. A mode that exists only in the
-  prompt is a suggestion; only in the gate, a source of baffling refusals.
+  to plan mode; do not modify anything until further notice." It is not a
+  system prompt edit, for chapter 5's caching reason. But remember chapter
+  13's hierarchy: the reminder is *advice* so the model behaves sensibly;
+  the gate is the *enforcement*. You always need both. A mode that exists
+  only in the prompt is a suggestion; a mode that exists only in the gate
+  is a source of baffling refusals.
 - **Switching must be one keystroke.** Modes fight approval fatigue only
   if changing them is cheaper than clicking "yes" repeatedly
   (Claude Code cycles modes on a single hotkey). A buried setting becomes
@@ -52,17 +54,18 @@ modes work in practice:
 ## Plan mode: approve the intention, not the keystrokes
 
 The dial above trades safety against interruptions action by action. Plan
-mode moves the trade to a better place: **separate deciding from doing.**
+mode moves the trade to a better place: it **separates deciding from
+doing.**
 
-The flow: the user poses a substantial task with the body in a read-only
-state. The agent explores freely (reads, searches, subagents: all safe),
-then produces a *plan*: the files it will change, the approach, the
-risks. The plan is presented as a document. The human reviews and
-approves *it*, once. Then the body switches to an execution mode, and the
-loop carries the plan out, usually with edit-level prompts waved through
-because the intention was already reviewed.
+In plan mode, the user poses a substantial task with the body in a
+read-only state. The agent explores freely (reads, searches and subagents
+are all safe), then produces a *plan*: the files it will change, the
+approach, the risks. The plan is presented as a document. The human
+reviews and approves *it*, once. Then the body switches to an execution
+mode, and the loop carries the plan out, usually with edit-level prompts
+waved through because the intention was already reviewed.
 
-Why this is the most valuable mode, in the terms this series built:
+Plan mode is useful for four reasons:
 
 - **Humans are better at judging plans than diffs at 40 actions per
   turn.** One review of "rename the module and update 12 call sites"
@@ -82,10 +85,10 @@ Why this is the most valuable mode, in the terms this series built:
   never mentioned."
 - **Interruption becomes cheap.** Approve-then-execute has a natural
   checkpoint: rejecting the plan costs nothing, versus unwinding a
-  half-applied change. In transaction terms (Appendix B): plan mode makes
-  the intention itself the first transaction.
+  half-applied change. In the transaction terms of Appendix B, plan mode
+  makes the intention itself the first transaction.
 
-The failure mode to design against: **plan-and-forget.** A plan approved
+The failure mode to design against is **plan-and-forget**. A plan approved
 against the codebase as it was ten minutes ago can be invalidated by the
 world (a teammate's push, a failing dependency install). Execution still
 needs chapter 13's reflexes live: the plan authorizes intent, not stale
@@ -100,12 +103,12 @@ once, and execution runs against it.
 
 ## What to remember
 
-Modes are the gate. A trust setting controls them, switching is cheap, and
-the brain hears about it as steering — but the body is what enforces it.
-Plan mode is the standout: make writing impossible, let the agent think at
-full autonomy,
-review the intention once, then execute against the approved plan.
-It converts the human from a click-through checkpoint into a reviewer of
-intentions, which is the job they were always better at.
+A mode is a setting on the permission gate: switching it is fast, the
+model hears about the change as a steering reminder, and the harness
+enforces the rules. Plan mode is the standout: make writing impossible,
+let the agent think at full autonomy, review the intention once, then
+execute against the approved plan. It converts the human from a
+click-through checkpoint into a reviewer of intentions, which is the job
+they were always better at.
 
 *[Series index](index.html)*

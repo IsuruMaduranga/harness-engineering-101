@@ -12,8 +12,7 @@ your users watch a spinner for ninety seconds. This appendix is the
 boring checklist: what fails, what to do about it, how streaming works on
 the wire, and where generic retry advice gets LLM APIs wrong. It is an
 appendix because none of it changes the mental model; it is also the
-difference between a demo and a
-service.
+difference between a demo and a service.
 
 ## The kinds of failure
 
@@ -26,20 +25,21 @@ service.
 | Invalid request | other 400s | **do not retry**: it's your bug; capture it (ch. 12) |
 | Auth / billing | 401/403 | stop, tell the human |
 
-The first discipline is just the split: **temporary vs permanent.**
-Retrying a 529 is correct; retrying a 400 is a loop that burns budget and
-buries the real error. Your wrapper should distinguish them on day one.
+The first discipline is the split between **temporary and permanent**
+failures. Retrying a 529 is correct; retrying a 400 is a loop that burns
+budget and buries the real error. Your wrapper should distinguish them on
+day one.
 
-Standard mechanics, briefly, since they are the same as any API client:
+The standard mechanics are the same as for any API client, so briefly:
 exponential backoff with jitter (1s, 2s, 4s..., randomized so parallel
 subagents don't stampede in sync), honor `retry-after` when present, cap
-total attempts, and surface the *last real error* when giving up, not
+total attempts, and report the *last real error* when giving up, not
 "retries exhausted."
 
 ## How streaming actually works
 
-Chapter 1's sidebar made the architectural claim: streaming is
-presentation. Here is the mechanical half it deferred.
+Chapter 1's sidebar noted that streaming only changes presentation. Here is
+how it works on the wire.
 
 Set `"stream": true` and the provider keeps the HTTP connection open and
 sends **server-sent events** (SSE): a long series of small
@@ -58,8 +58,8 @@ event: message_stop           → the reply is complete
 ```
 
 OpenAI's version is a series of chunks carrying `choices[0].delta`
-fragments; different spelling, same idea. The harness's job is
-**accumulation**: append each delta to the block it belongs to, and when
+fragments; the spelling differs, but the idea is the same. The harness's
+job is **accumulation**: append each delta to the block it belongs to, and when
 the stream ends, you hold *exactly* the assistant message a non-streaming
 call would have returned. You append it to the array and continue the loop
 as if streaming never happened. That is the precise sense in which
@@ -77,8 +77,8 @@ Two wrinkles worth knowing before you meet them:
   which tool is being called while the arguments are still arriving. Never
   execute from a partially assembled call; that is the appendix's earlier
   rule (partial output is not output) in its sharpest form.
-- **Streaming stops being optional as requests grow.** This is the
-  operational surprise: providers enforce timeouts on non-streaming
+- **Streaming stops being optional as requests grow.** The operational
+  surprise is that providers enforce timeouts on non-streaming
   requests, and a big-context, long-output call (exactly what agents make)
   can exceed them. Anthropic requires streaming for large `max_tokens`
   values, and SDKs quietly stream under the hood for long calls. So a
@@ -86,7 +86,7 @@ Two wrinkles worth knowing before you meet them:
   even when no UI wants the deltas. The toy harness gets away without it
   only because its outputs are modest.
 
-The engineering reason to stream even a headless call: **first-token
+The engineering reason to stream even a headless call is that **first-token
 latency becomes your health signal.** A stream that has produced nothing
 for 60 seconds is distinguishable from a model thinking hard (thinking
 deltas and fine-grained events keep arriving); one connection carries both
@@ -94,7 +94,7 @@ the answer and the liveness check.
 
 ## What's LLM-specific
 
-Four things the generic checklist misses:
+Four things make LLM APIs different from ordinary HTTP services:
 
 **Retries are only safe because the API is stateless.** Chapter 1's
 property earns its keep here: a retried request is *identical* in effect
@@ -107,22 +107,22 @@ below the loop, never by re-running a whole round.
 **Rate limits are measured in tokens, not requests.** Providers meter
 tokens per minute (input and output separately), so an agent with a fat
 array exhausts limits at a *request rate that looks tiny*. This couples
-Appendix D to chapter 6: context bloat manifests as 429s. It also means
+Appendix D to chapter 6: context bloat shows up as 429s. It also means
 parallel fan-out (chapter 7) multiplies the pressure by array size. So
 production harnesses cap concurrency and share a token budget above the
-subagent spawner, not just backoff below it.
+subagent spawner, as well as backing off below it.
 
 **A streaming failure is a *mid-reply* failure.** The chapter 1 sidebar
 deferred exactly one real problem: with `"stream": true`, the connection
 can die after you have received half an answer, or half a tool call.
-The rule that keeps this simple: **partial output is not output.** Treat
-a broken stream as a failed request. Discard the fragment: never append it
-to the array as if the model said it. (A truncated tool call executed "best
-effort" is chapter 13's nightmare made of plumbing.) Then retry the whole
-call. Providers make this affordable: on a retry, the prefix
-you already sent is cache-hit (chapter 5), so re-asking costs a fraction
-of the original. Statelessness plus caching is what makes "just retry
-the whole thing" the right architecture rather than a waste.
+The rule that keeps this simple is that **partial output is not output.**
+Treat a broken stream as a failed request. Discard the fragment, and never
+append it to the array as if the model said it. (Executing a truncated
+tool call "best effort" is chapter 13's worst case, caused by plumbing.)
+Then retry the whole call. Providers make this affordable: on a retry, the
+prefix you already sent is cache-hit (chapter 5), so re-asking costs a
+fraction of the original. Statelessness plus caching is what makes "just
+retry the whole thing" the right architecture and not a waste.
 
 **Long requests need long timeouts, and one more distinction.** A
 frontier model thinking hard over a big array can legitimately take
@@ -140,8 +140,9 @@ You do not need a new harness for this. It is the complete harness from the
 epilogue, with one thing different: the line that used to open the connection
 now calls a version that retries. The full runnable file is
 [`harness/appendix-d/harness.py`](https://github.com/IsuruMaduranga/harness-engineering-101/blob/main/src/harness/appendix-d/harness.py), and you run
-it exactly like before — `python3 harness.py` — it just no longer falls over
-on a blip. Two small functions do the work:
+it exactly like before (`python3 harness.py`). The difference is that it no
+longer crashes on a transient network error. Two small functions do the
+work:
 
 ```python
 RETRYABLE_STATUS = {408, 409, 429, 500, 502, 503, 504, 529}
@@ -182,23 +183,23 @@ def call_with_retries(body, max_attempts=6):
             time.sleep(delay)
 ```
 
-`call_once` makes one POST and sorts whatever comes back — a reply, an error
-status, or a dead socket — into either the JSON you wanted or one `ApiError`
+`call_once` makes one POST and sorts whatever comes back (a reply, an error
+status, or a dead socket) into either the JSON you wanted or one `ApiError`
 tagged "try again" or "give up". `call_with_retries` runs it in a loop and
 only retries the ones worth retrying. Inside the harness, `call_llm` still
 builds the body, sets the cache breakpoint, and prints the usage line; its one
 network call is now `call_with_retries(body)` instead of a bare `urlopen`.
 
-Two lines are easy to get wrong. The first is `retryable`. A network drop, or
-one of the `RETRYABLE_STATUS` codes, is worth another go; a 400 or a 401 is
-your bug or your key, so it raises on the first try instead of wasting five
-attempts and hiding the real error. The second is the `except` line: it
-catches `http.client.HTTPException`, not just `urllib.error.URLError`. The most
-common real drop — a `RemoteDisconnected` in the middle of a reply — is the
-first kind and not the second. Catch only `URLError` and you sail right past
-the exact crash you wrote this to prevent.
+Two lines are easy to get wrong, and the first is `retryable`. A network
+drop, or one of the `RETRYABLE_STATUS` codes, is worth another go; a 400 or
+a 401 is your bug or your key, so it raises on the first try instead of
+wasting five attempts and hiding the real error. The second is the `except`
+line: it catches `http.client.HTTPException`, not only
+`urllib.error.URLError`. The most common real drop (`RemoteDisconnected` in
+the middle of a reply) is an `HTTPException`, not a `URLError`, so catching
+only `URLError` misses the crash you wrote the retry loop to handle.
 
-Plus the two policies that don't fit in a function: a token-aware
+Then there are the two policies that don't fit in a function: a token-aware
 concurrency cap above your fan-out, and "discard partial streams, retry
 whole." That is the entire subject. SDKs and gateways will happily do the
 function part for you (a fine use of chapter 10's plumbing category);
@@ -209,8 +210,9 @@ the policies stay yours either way.
 Split temporary failures from permanent ones and only retry the temporary.
 Statelessness makes API-level retries free of side effects; keep them below
 the loop so tools never re-run. Rate limits are measured in tokens, so
-context size and fan-out, not request count, are what exhaust them. Partial streamed output
-is not output. And capture failures like you capture requests, because
-"the model is being weird" is sometimes a half-dead socket.
+context size and fan-out, not request count, are what exhaust them.
+Partial streamed output is not output. And capture failures like you
+capture requests, because "the model is being weird" is sometimes a
+half-dead socket.
 
 *[Series index](index.html)*

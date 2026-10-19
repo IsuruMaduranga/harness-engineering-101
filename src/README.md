@@ -2,14 +2,14 @@
 
 *The LLM is the brain. The harness is the body.*
 
-*By [Isuru Wijesiri](https://isuruwijesiri.com). Version 1.0 — September 2026.*
+*By [Isuru Wijesiri](https://isuruwijesiri.com). Version 1.0, September 2026.*
 
 Everyone talks about AI agents like they're a new kind of software: tool calls,
-memory, planning, RAG, MCP, multi-agent orchestration. Stack enough of those
-words together and it sounds like there's a hard machine humming underneath, one
+memory, planning, RAG, MCP, multi-agent orchestration. Put enough of those
+words together and it sounds like there is a complicated system underneath that
 you were supposed to already understand.
 
-There isn't. Here's the whole thing:
+There isn't, and the whole thing fits in one paragraph:
 
 > An LLM API is stateless. Every turn, you send the entire conversation as a
 > JSON array and get text back. A **harness** is the program that builds,
@@ -17,21 +17,22 @@ There isn't. Here's the whole thing:
 > calls "agents" is a set of patches to that one loop, and each patch exists
 > because something concrete broke.
 
-I'm not guessing at this. In 2023 I was building generative AI systems on
-GPT-3.5, when the frontier had no tool calls, no caching, no agents. You sent the
-OpenAI SDK a message array and got formatted text back. Every piece of it was
-added for a reason, and I watched most of it show up one patch at a time.
+I know this firsthand because in 2023 I was building generative AI systems on
+GPT-3.5, when the models had no tool calls, no caching, and no agents. You sent
+the OpenAI SDK a message array and got formatted text back. Every piece that
+came later was added for a reason, and I watched most of it show up one patch
+at a time.
 
-So every chapter has the same shape: here's the failure, here's the minimal
-patch, here's what the patch costs you. A toy harness in plain Python (raw HTTP,
-no SDK) grows alongside the text. By the epilogue you'll have a working mini
-coding agent in about 300 lines, and the durable knowledge that there's no magic
-anywhere in the stack. The full source is on
+So every chapter has the same shape: the failure, the minimal patch, and what
+the patch costs you. A toy harness in plain Python (raw HTTP, no SDK) grows
+alongside the text. By the epilogue you'll have a working mini coding agent in
+about 300 lines, and you'll know that there's no magic anywhere in the stack.
+The full source is on
 [GitHub](https://github.com/IsuruMaduranga/harness-engineering-101).
 
-Learn the patches in the order they were invented, as fixes to real failures,
-and none of it is complicated. No frameworks, no buzzword tour, no architecture
-diagrams with twelve boxes.
+If you learn the patches in the order they were invented, as fixes to real
+failures, none of it is complicated. There are no frameworks here, no buzzword
+tour, and no architecture diagrams with twelve boxes.
 
 ## Reading order
 
@@ -43,7 +44,7 @@ diagrams with twelve boxes.
 | 2 | [The Brain: A Next-Token Black Box](02-the-brain.md) | "Why does it behave like that?" |
 | 3 | [Tools: JSON Mapped to Functions](03-tools.md) | The brain can't touch the world |
 | 4 | [The Agent Loop](04-the-agent-loop.md) | One tool call isn't enough |
-| 5 | [Caching: Why Order Is Load-Bearing](05-caching.md) | Resending the array gets expensive |
+| 5 | [Caching: Why Order Matters](05-caching.md) | Resending the array gets expensive |
 
 ### Part II — Running Long (the array under pressure)
 
@@ -80,10 +81,10 @@ diagrams with twelve boxes.
 
 Standalone pieces. Read them when you need them.
 
-- [A. One Harness, Many Brains](appendix-a-one-harness-many-brains.md) — model routing, prompt tiers, cost engineering
-- [B. Worktrees and Isolation](appendix-b-worktrees-and-isolation.md) — giving parallel agents separate copies of the world
-- [C. Modes and Plan Mode](appendix-c-modes-and-plan-mode.md) — harness-enforced operating states (coding-specific)
-- [D. Retries, Rate Limits, and Streaming](appendix-d-retries-rate-limits-streaming.md) — the unglamorous plumbing, plus how streaming works on the wire
+- [A. One Harness, Many Brains](appendix-a-one-harness-many-brains.md): model routing, prompt tiers, cost engineering
+- [B. Worktrees and Isolation](appendix-b-worktrees-and-isolation.md): giving parallel agents separate copies of the world
+- [C. Modes and Plan Mode](appendix-c-modes-and-plan-mode.md): harness-enforced operating states (coding-specific)
+- [D. Retries, Rate Limits, and Streaming](appendix-d-retries-rate-limits-streaming.md): the unglamorous plumbing, plus how streaming works on the wire
 
 ## The toy harness
 
@@ -91,26 +92,29 @@ The running example lives in
 [`src/harness/`](https://github.com/IsuruMaduranga/harness-engineering-101/tree/main/src/harness)
 on GitHub. Each version is the previous one plus the chapter's patch:
 
-- `harness/v1_chat.py` — chapter 1: the 30-line chat loop
-- `harness/v2_tools.py` — chapter 3: tools bolted on
-- `harness/v3_agent.py` — chapter 4: the agent loop
-- `harness/v4_subagents.py` — chapter 7: forked contexts
-- `harness/harness.py` — epilogue: the complete ~300-line agent
+- `harness/v1_chat.py`: chapter 1, the 30-line chat loop
+- `harness/v2_tools.py`: chapter 3, tools bolted on
+- `harness/v3_agent.py`: chapter 4, the agent loop
+- `harness/v4_subagents.py`: chapter 7, forked contexts
+- `harness/harness.py`: the epilogue, the complete ~300-line agent
 
-Python 3.10+, zero dependencies (raw `urllib`), Anthropic Messages API by
-default. Swapping the wire format for OpenAI's is chapter 1 homework, and the
-point of the whole series is that it's *only* the wire format you'd swap.
+It uses Python 3.10+ with zero dependencies (raw `urllib`) and calls the
+Anthropic Messages API by default. Swapping the wire format for OpenAI's is
+chapter 1 homework, and the point of the whole series is that it's *only* the
+wire format you'd swap.
 
 The toy is deliberately small, so a few chapters reach for a bigger example.
 That is [One Code](https://github.com/IsuruMaduranga/one-code), my
 from-scratch rebuild of Claude Code on a provider-neutral runtime, running
 the same patterns at production scale. The toy harness is what this series
-builds; One Code is where I point when you want to see a patch grown up.
+builds; One Code is where I point when you want to see how a patch looks in
+production.
 
 ## Out of scope
 
-Training or fine-tuning models, TUI implementation, provider billing and
-OAuth plumbing. This series is about the body, not about growing a brain.
+This book does not cover training or fine-tuning models, terminal UI
+implementation, provider billing, or OAuth plumbing. It is about the body, not
+about growing a brain.
 
 ## License
 
