@@ -162,6 +162,15 @@ find yourself injecting the same reminder constantly, move that content
 into the system prompt or a tool description instead. A reminder you need
 all the time points to a design problem, and more steering won't fix it.
 
+My clearest case of over-steering was read-before-write. A harness should
+refuse an edit to a file the model has not read, with a tool error and a
+reminder to read it first. Otherwise the model edits from memory. I once
+applied that rule to every file, including files the model had created a
+moment earlier. So the model would create a file, try to edit it, get
+refused, read back what it had written, and only then edit. Now creating a
+file needs no read, and a file the model just wrote counts as read, so it
+can edit it straight away.
+
 ## What you now know
 
 - The harness talks to a running loop by appending labeled blocks

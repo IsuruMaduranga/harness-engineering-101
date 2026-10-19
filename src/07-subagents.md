@@ -182,6 +182,12 @@ to look, what done looks like, and what to return. Every failure I
 have seen in multi-agent systems that was blamed on "coordination" was a
 bad ticket.
 
+Here is one that happened to me. I asked a subagent to explore a codebase
+and report back, and it started editing files. My task never said "read
+only," and the subagent had an edit tool, so it used it. Now an exploration
+subagent gets a task that says what it must not touch, and a toolset with
+no write tools in it.
+
 One Code's [subagents extension](https://github.com/IsuruMaduranga/one-code/tree/master/extensions/subagents)
 is this chapter at production size: the same recursive loop, with a live
 panel for the running children, a model you can pick per task, and a

@@ -4,12 +4,18 @@
 
 *By [Isuru Wijesiri](https://isuruwijesiri.com). Version 1.0, September 2026.*
 
+> AI usage disclosure: I drafted every chapter myself, from what I learned
+> building the projects described below. I used Claude Code and One Code to reorder each
+> chapter so it leads with the answer (the Minto pyramid), to polish the
+> English, to generate the diagrams, and to write the code that draws the
+> charts.
+
 Everyone talks about AI agents like they're a new kind of software: tool calls,
 memory, planning, RAG, MCP, multi-agent orchestration. Put enough of those
 words together and it sounds like there is a complicated system underneath that
 you were supposed to already understand.
 
-There isn't, and the whole thing fits in one paragraph:
+It isn't that complicated. Here is the whole idea:
 
 > An LLM API is stateless. Every turn, you send the entire conversation as a
 > JSON array and get text back. A **harness** is the program that builds,
@@ -17,11 +23,25 @@ There isn't, and the whole thing fits in one paragraph:
 > calls "agents" is a set of patches to that one loop, and each patch exists
 > because something concrete broke.
 
-I know this firsthand because in 2023 I was building generative AI systems on
-GPT-3.5, when the models had no tool calls, no caching, and no agents. You sent
-the OpenAI SDK a message array and got formatted text back. Every piece that
-came later was added for a reason, and I watched most of it show up one patch
-at a time.
+I learned this by building it. In October 2023 I started
+[WSO2 MI Copilot](https://mi.docs.wso2.com/en/latest/develop/mi-for-vscode/wso2-integrator-copilot/overview/),
+a coding agent for software integration, in the same family as GitHub
+Copilot, Cursor and Claude Code. Developers use it to build integrations in
+Synapse, the XML-based language of WSO2 Micro Integrator. It began as a chat
+assistant inside the VS Code extension. GitHub Copilot Chat had just come
+out, and I wanted the same thing for integration developers. The idea was mine, and I led the work until we shipped
+it at WSO2Con 2024. It ran on GPT-3.5 and GPT-3.5 Turbo, and later GPT-4.
+There were no agents and no prompt caching. Function calling existed, but
+hardly anyone used it. We used the plain OpenAI SDK and sent the user's whole
+project with every chat message. When I wanted tool calls, I described the
+tools as XML schemas in the prompt and made the model answer in that format.
+
+That chat assistant is now a full agent. I now build its sibling,
+[WSO2 BI Copilot](https://wso2.com/integration-platform/docs/saas/editor/copilot),
+which does the same job in the Ballerina programming language.
+I also built [One Code](https://github.com/IsuruMaduranga/one-code), a
+from-scratch rebuild of Claude Code on the open-source pi harness. Many of
+the failures in this book happened to me in one of those three projects.
 
 So every chapter has the same shape: the failure, the minimal patch, and what
 the patch costs you. A toy harness in plain Python (raw HTTP, no SDK) grows
@@ -30,9 +50,9 @@ about 300 lines, and you'll know that there's no magic anywhere in the stack.
 The full source is on
 [GitHub](https://github.com/IsuruMaduranga/harness-engineering-101).
 
-If you learn the patches in the order they were invented, as fixes to real
-failures, none of it is complicated. There are no frameworks here, no buzzword
-tour, and no architecture diagrams with twelve boxes.
+If you learn the patches in the order they appeared, each as a fix for
+something that broke, none of it is complicated. That is also why the book
+uses no frameworks: you see each patch in plain code.
 
 ## Reading order
 
@@ -103,12 +123,8 @@ Anthropic Messages API by default. Swapping the wire format for OpenAI's is
 chapter 1 homework, and the point of the whole series is that it's *only* the
 wire format you'd swap.
 
-The toy is deliberately small, so a few chapters reach for a bigger example.
-That is [One Code](https://github.com/IsuruMaduranga/one-code), my
-from-scratch rebuild of Claude Code on a provider-neutral runtime, running
-the same patterns at production scale. The toy harness is what this series
-builds; One Code is where I point when you want to see how a patch looks in
-production.
+The toy is deliberately small, so a few chapters point to One Code to show
+how a patch looks at production scale.
 
 ## Out of scope
 

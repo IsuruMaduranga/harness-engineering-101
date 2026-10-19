@@ -57,6 +57,13 @@ most harnesses, before any clever mechanism:
   it *does* need, when it needs it. Prefer pull over push. That rule is also
   most of chapter 15, where we look at RAG.
 
+I got truncation wrong the first time. In MI Copilot I added a layer that
+cut long tool results and said nothing about it. The model saw a cut-off
+file with no sign that anything was missing, and you can imagine how
+confused it got. What I do now, a trick I picked up from Claude Code, has
+three steps: cut the result, write the full output to a file, and give the
+model the file path with a reminder not to read the whole thing at once.
+
 ## Compaction: forgetting well
 
 Suppose the session is long anyway and the budget is nearly spent. The

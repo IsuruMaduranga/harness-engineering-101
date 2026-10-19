@@ -135,11 +135,20 @@ intelligence:
   injected diagnostics catch real mistakes deterministically, so dropping
   them hurts quality today.
 - **Weaker brains need more body.** On frontier models, terminal-only is
-  serviceable. Run the same experiment on a mid-tier model (I have, while
-  testing [One Code](https://github.com/IsuruMaduranga/one-code) against
-  cheap models) and structured tools with tight schemas and loud errors
-  visibly outperform free-form shell: the structure is doing steering work
-  the weak brain cannot do alone. Appendix A returns to this trade.
+  serviceable. On cheap models it is not, and I test this often.
+  [One Code](https://github.com/IsuruMaduranga/one-code) has a probe that
+  runs a fixed set of tasks on cheap models such as DeepSeek V4 Flash and
+  GPT-5.6 Luna. The sample project has planted traps: a failing test caused
+  by an off-by-one, a README that disagrees with the code, and a background
+  job ID that does not exist. In the traces, cheap models edit files they
+  never read, make up a cause when a search comes back empty, and let
+  subagents drift off the task. Frontier models do the same things
+  sometimes, only less often. That is why Claude Code steers the model with
+  tool errors and reminders when it happens, and why I built the same
+  steering into One Code. Structured tools with tight schemas and loud
+  errors visibly outperform free-form shell, because the structure does
+  steering work the weak brain cannot do alone. Appendix A returns to this
+  trade.
 
 So here is my honest scorecard. The terminal-only camp is right about where
 the value lives (in the model, which keeps improving) and clearly wrong

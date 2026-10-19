@@ -110,6 +110,11 @@ The rule I follow is that a tool result is either the real output or the
 real error, marked as an error, with enough detail that a person could act
 on it. The model gets the same courtesy.
 
+I learned this while building the agent mode of MI Copilot. A file write
+failed, and the model never found out. It assumed the write had worked and
+kept editing on top of a file that did not hold what it thought. With no
+safeguard to catch it, the model corrupted the files.
+
 The loop does need one limit, a maximum round count (say, 50). A model
 stuck alternating between two failing approaches will happily burn your API
 budget forever. When you hit the cap, stop and tell the user. The cap is a

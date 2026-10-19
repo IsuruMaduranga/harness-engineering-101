@@ -178,7 +178,9 @@ project" in the system prompt and considering the matter handled. Trained
 deference is strong, and you should absolutely state the rules (they steer
 the 97%). But a system-prompt rule is a *preference in a probability
 machine*. It loses to context rot (chapter 6), to injected text pushing the
-other way, and to plain sampling variance. The layers of this chapter give the honest picture: prompts advise,
+other way, and to plain sampling variance. On GPT-3.5 and GPT-4, rules
+like that broke all the time. I still see smaller models break them today,
+once the context is full or has started to rot. The layers of this chapter give the honest picture: prompts advise,
 reflexes enforce, humans approve, classifiers screen, and sandboxes
 contain. Anything that must be true with probability 1 cannot live in the
 prompt.

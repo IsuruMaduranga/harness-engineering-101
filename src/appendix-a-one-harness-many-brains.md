@@ -49,11 +49,17 @@ harmed. The consequence of a mistake sets the floor, not the token count.
 mistake is routing subagent work to the cheapest tier because it is
 "background." Then the search agent returns a confidently wrong answer,
 the main loop builds on it, and you spend frontier tokens debugging a
-haiku-sized mistake. After being burned, my working rule is to route
+haiku-sized mistake. This happened to me while testing One Code, and the
+reason is that the main model usually trusts what its subagent reports.
+Pairing a weak subagent with a strong main model is a bad idea. My working
+rule now is to route
 *down* for jobs whose output you can verify cheaply or whose failure is
 cosmetic, and to stay *up* for anything whose report the main loop will
 trust blindly (chapter 7's whole design is that the parent cannot check
-the child's work).
+the child's work). One Code applies this rule on its own. When the session
+runs on a mid-tier or frontier model, the subagent model it picks
+automatically is never below mid-tier, and it never picks the smallest
+models.
 
 ## Prompt tiers: the body adapts to the brain
 

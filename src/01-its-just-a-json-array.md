@@ -5,9 +5,13 @@
 
 ---
 
-In 2023 I was building generative AI systems on GPT-3.5. There were no
-agents, tool calls or caching. You sent an array of messages to an HTTP
-endpoint and got formatted text back, and that was all.
+In late 2023 I was building
+[WSO2 MI Copilot](https://mi.docs.wso2.com/en/latest/develop/mi-for-vscode/wso2-integrator-copilot/overview/),
+a coding assistant like GitHub Copilot for software integration in WSO2's
+Synapse language. It ran on GPT-3.5. There were no
+agents and no caching, and hardly anyone used tool calls. You sent an array
+of messages to an HTTP endpoint and got formatted text back, and that was
+all. Our array held the user's whole project, sent again with every message.
 
 **That is still all that happens**, and this whole series is built on that
 fact. Every agent you have seen, including the one that edits your code and

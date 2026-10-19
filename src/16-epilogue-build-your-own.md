@@ -107,12 +107,13 @@ counting and compaction (ch. 6), a real permission model with modes and
 remembered grants (ch. 13, Appendix C), streaming for the human's sake
 (Appendix D), model routing for cost (Appendix A), and tests that pin
 the array (ch. 12). None of these will change the skeleton. I have built
-this same shape twice at production scale, once against the frontier and
-once as a from-scratch rebuild of Claude Code's behavior on another
-runtime ([One Code](https://github.com/IsuruMaduranga/one-code), the
-full-size version of the skeleton here), and the skeleton you are holding is
-genuinely the one under both: an array, a loop, a dispatch table, a queue,
-and a gate.
+this same shape three times at production scale: MI Copilot, the Ballerina
+copilot (WSO2 BI Copilot), and
+[One Code](https://github.com/IsuruMaduranga/one-code), a from-scratch
+rebuild of Claude Code's behavior on another runtime and the full-size
+version of the skeleton here. The skeleton you are holding is genuinely the
+one under all three: an array, a loop, a dispatch table, a queue, and a
+gate.
 
 ## The close
 

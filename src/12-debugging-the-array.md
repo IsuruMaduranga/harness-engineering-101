@@ -64,9 +64,9 @@ instruction fell out during compaction, or your reminder never drained from
 the queue, or it is there but buried at token 3,000 of an 8,000-token
 system prompt. If the model misread a file, find the `tool_result`, and
 you'll see your truncation cut the file at exactly the wrong line. In my
-experience the split is roughly a third "it was never in the array," a
-third "it was in the array but mangled or misplaced," and only the last
-third anything like model failure.
+experience, when I blame the model, the cause is often in the array
+instead: the thing was never there, or it was there but mangled or
+misplaced.
 
 ## The vital sign: cache-read tokens
 

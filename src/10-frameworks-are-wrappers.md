@@ -100,7 +100,9 @@ the framework makes the outgoing request easy to see and shape, the price is
 small. If it hides the request as an implementation detail, it makes
 debugging and tuning the harness much harder.
 
-I have built harnesses both ways, and this is my rule:
+I have built harnesses both ways: on the raw OpenAI SDK for MI Copilot, on
+the Vercel AI SDK for the Ballerina copilot, and on top of pi for One Code.
+This is my rule:
 
 > Take small, transparent layers for plumbing (an SDK; a provider-dialect
 > wrapper). Be suspicious of layers that want to own the array. And never

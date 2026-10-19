@@ -70,8 +70,9 @@ price, even if the remaining 80,000 tokens are identical. So the rule is:
 > **Appending is cheap. Editing anything above the append point costs you
 > everything below it.**
 
-This sounds easy to follow, but it's also easy to break. Here are the
-classic accidental cache-busters, all of which I have shipped or reviewed:
+This sounds easy to follow, but it's also easy to break. I have broken it
+many times, including in One Code, and I still do now and then. Here are the
+classic accidental cache-busters:
 
 - **A timestamp in the system prompt.** `Current time: 14:32:07` at the top
   of the array means *no request ever hits the cache*. If the model needs
@@ -105,6 +106,12 @@ visible failure. You pay full price on every request and only notice if you
 track your cache-hit rate. API responses report `cache_read_input_tokens`,
 and that number should account for most of your input tokens on every round
 after the first.
+
+Because I keep breaking it, I don't trust myself here anymore. Before every
+release and pull request, I run a cache probe. It sends a short multi-turn
+conversation to the real API, captures every request, and checks that each
+request reads what the one before it cached. Unit tests can't catch a broken
+cache, because the code still works. It only shows up in the bill.
 
 ## Cache breakpoints (Anthropic) vs automatic (OpenAI)
 
