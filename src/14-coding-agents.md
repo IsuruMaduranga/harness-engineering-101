@@ -1,7 +1,7 @@
 # Chapter 14: Case Study: Coding Agents
 
 *Harness Engineering 101, Part IV — Trust, Domains, and Data.
-[Series index](index.html) · [Prev](13-reflexes-and-guardrails.md) ·
+[Series index](./) · [Prev](13-reflexes-and-guardrails.md) ·
 [Next: RAG](15-rag.md)*
 
 ---

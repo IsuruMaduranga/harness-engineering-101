@@ -1,7 +1,7 @@
 # Appendix D: Retries, Rate Limits, and Streaming
 
 *Harness Engineering 101, Appendix — Advanced Topics.
-[Series index](index.html)*
+[Series index](./)*
 
 ---
 
@@ -215,4 +215,4 @@ Partial streamed output is not output. And capture failures like you
 capture requests, because "the model is being weird" is sometimes a
 half-dead socket.
 
-*[Series index](index.html)*
+*[Series index](./)*

@@ -1,7 +1,7 @@
 # Chapter 5: Caching: Why Order Matters
 
 *Harness Engineering 101, Part I — The Wire.
-[Series index](index.html) · [Prev](04-the-agent-loop.md) ·
+[Series index](./) · [Prev](04-the-agent-loop.md) ·
 [Next: Context Is a Budget](06-context-is-a-budget.md)*
 
 ---

@@ -1,7 +1,7 @@
 # Appendix B: Worktrees and Isolation
 
 *Harness Engineering 101, Appendix — Advanced Topics.
-[Series index](index.html)*
+[Series index](./)*
 
 ---
 
@@ -87,4 +87,4 @@ and they are one rung on a spectrum that ends at VMs. The principle
 underneath is transactions: let agents propose in private, and make the
 integration a visible step a human can approve.
 
-*[Series index](index.html)*
+*[Series index](./)*

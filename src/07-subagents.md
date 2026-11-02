@@ -1,7 +1,7 @@
 # Chapter 7: Subagents: Fork the Context
 
 *Harness Engineering 101, Part II — Running Long.
-[Series index](index.html) · [Prev](06-context-is-a-budget.md) ·
+[Series index](./) · [Prev](06-context-is-a-budget.md) ·
 [Next: Steering](08-steering.md)*
 
 ---

@@ -1,7 +1,7 @@
 # Appendix C: Modes and Plan Mode
 
 *Harness Engineering 101, Appendix — Advanced Topics.
-[Series index](index.html)*
+[Series index](./)*
 
 ---
 
@@ -111,4 +111,4 @@ execute against the approved plan. It converts the human from a
 click-through checkpoint into a reviewer of intentions, which is the job
 they were always better at.
 
-*[Series index](index.html)*
+*[Series index](./)*

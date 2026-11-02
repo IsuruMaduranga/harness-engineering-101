@@ -1,7 +1,7 @@
 # Epilogue: Build Your Own
 
 *Harness Engineering 101.
-[Series index](index.html) · [Prev](15-rag.md) ·
+[Series index](./) · [Prev](15-rag.md) ·
 [Appendix A](appendix-a-one-harness-many-brains.md)*
 
 ---

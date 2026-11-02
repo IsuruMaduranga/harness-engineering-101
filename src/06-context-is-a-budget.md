@@ -1,7 +1,7 @@
 # Chapter 6: Context Is a Budget, Not a Bag
 
 *Harness Engineering 101, Part II — Running Long.
-[Series index](index.html) · [Prev](05-caching.md) ·
+[Series index](./) · [Prev](05-caching.md) ·
 [Next: Subagents](07-subagents.md)*
 
 ---

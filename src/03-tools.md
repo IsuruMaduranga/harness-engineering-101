@@ -1,7 +1,7 @@
 # Chapter 3: Tools: JSON Mapped to Functions
 
 *Harness Engineering 101, Part I — The Wire.
-[Series index](index.html) · [Prev](02-the-brain.md) ·
+[Series index](./) · [Prev](02-the-brain.md) ·
 [Next: The Agent Loop](04-the-agent-loop.md)*
 
 ---

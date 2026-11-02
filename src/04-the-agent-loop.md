@@ -1,7 +1,7 @@
 # Chapter 4: The Agent Loop
 
 *Harness Engineering 101, Part I — The Wire.
-[Series index](index.html) · [Prev](03-tools.md) ·
+[Series index](./) · [Prev](03-tools.md) ·
 [Next: Caching](05-caching.md)*
 
 ---

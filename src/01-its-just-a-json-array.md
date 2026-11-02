@@ -1,6 +1,6 @@
 # Chapter 1: It's Just a JSON Array
 
-*Harness Engineering 101, Part I — The Wire. [Series index](index.html) ·
+*Harness Engineering 101, Part I — The Wire. [Series index](./) ·
 [Next: The Brain](02-the-brain.md)*
 
 ---
